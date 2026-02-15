@@ -21,20 +21,16 @@ let _tagScrollDown = null;
 
 function fitText(tag, fontSize, letterSpacing, lineHeight)
 {
-    //const MARGIN = tag.style.marginLeft + tag.style.marginRight;
-    //const MARGIN_LEFT = tag.style.marginLeft;
-    //const MARGIN_RIGHT = tag.style.marginRight;
-    //console.log("MARGIN = " + MARGIN);
+    const PARENT = tag.parentElement;
     const RATIO_LETTER_SPACING = letterSpacing / fontSize;
     const RATIO_LINE_HEIGHT = lineHeight / fontSize;
-    //const FONT_SIZE = fontSize;
     
     tag.style.visibility = "hidden";
     tag.style.fontSize = fontSize + "px";
     tag.style.letterSpacing = letterSpacing + "px";
     tag.style.lineHeight = lineHeight + "px";
     
-    while(tag.scrollWidth + 60 > window.innerWidth)
+    while(tag.scrollWidth > PARENT.clientWidth)
     {
         fontSize--;
         
@@ -1135,9 +1131,7 @@ function particuleAnimation()
             
             magnitude = Math.min(SAFE_SQRT + Math.sqrt((xBlur * xBlur) + (yBlur * yBlur)), 1);
             
-            //const TIME_DELTA = Math.min((time - timePreviousAbsolute) * 0.001, 0.04);
             fadeIn = (time - timePreviousAbsolute) * 0.001;
-        //   fadeIn = Math.min((time - timePreviousAbsolute) * 0.001, 0.04);
             
             if (fadeIn > 1)
             {
@@ -1200,9 +1194,10 @@ function particuleAnimation()
     requestAnimationFrame(updateAnimation);
 }
 
-function text()
+function textAnimation()
 {
     let timePreviousAbsolute = 0;
+    let fadeIn = 0;
     let fadeInOpacity = 0;
     let fadeInPosition = 0;
     const DURATION_OPACITY = 1;
@@ -1218,17 +1213,18 @@ function text()
     
     function updateAnimation(time)
     {
-    	fadeInOpacity = (time - timePreviousAbsolute) * 0.001;
-       // fadeInOpacity = (time - timePreviousAbsolute) * (1 / (DURATION_OPACITY * 1000));
+        fadeIn = (time - timePreviousAbsolute) * 0.001;
+        
+        fadeInOpacity = fadeIn;
         
         if (fadeInOpacity > 1)
         {
             fadeInOpacity = 1;
         }
         
-        if (time - timePreviousAbsolute <= DURATION_POSITION * 1000)
+        if (fadeIn <= 1)
         {
-            fadeInPosition = 1 - Math.pow(1 - ((time - timePreviousAbsolute) * 0.001), 2);
+            fadeInPosition = 1 - Math.pow(1 - fadeIn, 2);
             
             if (fadeInPosition > 1)
             {
@@ -1259,10 +1255,6 @@ function text()
         {
             requestAnimationFrame(updateAnimation);
         }
-        /*else
-        {
-            console.log("FIN");
-        }*/
     }
     
     requestAnimationFrame(updateAnimation);
@@ -1334,16 +1326,16 @@ function href(index)
 
 async function loading()
 {
-    await document.fonts.load("0px fontA");
+    //await document.fonts.load("0px fontA");
     await document.fonts.load("0px fontB");
-    await document.fonts.load("0px fontC");
-    await document.fonts.load("0px fontD");
+    //await document.fonts.load("0px fontC");
+    //await document.fonts.load("0px fontD");
     await document.fonts.ready;
     
     imu();
-    particuleAnimation();
     
-    text();
+    particuleAnimation();
+    textAnimation();
     
     windowResize();
     screenOrientation();
