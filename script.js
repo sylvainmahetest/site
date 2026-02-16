@@ -1,3 +1,6 @@
+customElements.define("tag-loading-text", class extends HTMLElement{});
+customElements.define("tag-loading-bar", class extends HTMLElement{});
+
 customElements.define("tag-canvas-particule", class extends HTMLElement{});
 
 customElements.define("tag-name", class extends HTMLElement{});
@@ -5,6 +8,11 @@ customElements.define("tag-overtitle", class extends HTMLElement{});
 customElements.define("tag-title", class extends HTMLElement{});
 customElements.define("tag-subtitle", class extends HTMLElement{});
 customElements.define("tag-scroll-down", class extends HTMLElement{});
+
+let _stateLoading = 1;
+
+let _tagLoadingText = null;
+let _tagLoadingBar = null;
 
 let _tagCanvasParticule = null;
 let _webGL = null;
@@ -1194,14 +1202,69 @@ function particuleAnimation()
     requestAnimationFrame(updateAnimation);
 }
 
+function loadingAnimation()
+{
+    let timePreviousAbsolute = 0;
+    let fadeIn = 0;
+    let fadeInLinear = 0;
+    let fadeInQuadratic = 0;
+    
+    _tagLoadingText = document.getElementById("tag-loading-text");
+    _tagLoadingBar = document.getElementById("tag-loading-bar");
+    
+    timePreviousAbsolute = performance.now();
+    
+    function updateAnimation(time)
+    {
+        fadeIn = (time - timePreviousAbsolute) * 0.001;
+        
+        fadeInLinear = fadeIn;
+        
+        if (fadeInLinear > 1)
+        {
+            fadeInLinear = 1;
+        }
+        
+        if (fadeIn <= 1)
+        {
+            fadeInQuadratic = 1 - Math.pow(1 - fadeIn, 2);
+            
+            if (fadeInQuadratic > 1)
+            {
+                fadeInQuadratic = 1;
+            }
+        }
+        else
+        {
+            fadeInQuadratic = 1;
+        }
+        
+        _tagLoadingText.textContent = Math.round(fadeInLinear * 100) + "%";
+        _tagLoadingText.style.opacity = fadeInLinear;
+        
+        _tagLoadingBar.style.opacity = fadeInLinear;
+        _tagLoadingBar.style.left = (50 - (fadeInLinear * 45)) + "dvw";
+        _tagLoadingBar.style.width = (fadeInLinear * 90) + "dvw";
+        
+        if (fadeInLinear !== 1 || fadeInQuadratic !== 1 || _stateLoading !== 2)
+        {
+            requestAnimationFrame(updateAnimation);
+        }
+        else
+        {
+            loading();
+        }
+    }
+    
+    requestAnimationFrame(updateAnimation);
+}
+
 function textAnimation()
 {
     let timePreviousAbsolute = 0;
     let fadeIn = 0;
-    let fadeInOpacity = 0;
-    let fadeInPosition = 0;
-    const DURATION_OPACITY = 1;
-    const DURATION_POSITION = 1;
+    let fadeInLinear = 0;
+    let fadeInQuadratic = 0;
     
     _tagName = document.getElementById("tag-name");
     _tagOvertitle = document.getElementById("tag-overtitle");
@@ -1215,43 +1278,46 @@ function textAnimation()
     {
         fadeIn = (time - timePreviousAbsolute) * 0.001;
         
-        fadeInOpacity = fadeIn;
+        fadeInLinear = fadeIn;
         
-        if (fadeInOpacity > 1)
+        if (fadeInLinear > 1)
         {
-            fadeInOpacity = 1;
+            fadeInLinear = 1;
         }
         
         if (fadeIn <= 1)
         {
-            fadeInPosition = 1 - Math.pow(1 - fadeIn, 2);
+            fadeInQuadratic = 1 - Math.pow(1 - fadeIn, 2);
             
-            if (fadeInPosition > 1)
+            if (fadeInQuadratic > 1)
             {
-                fadeInPosition = 1;
+                fadeInQuadratic = 1;
             }
         }
         else
         {
-            fadeInPosition = 1;
+            fadeInQuadratic = 1;
         }
         
-        _tagName.style.transform = "translate(0px, " + (-50 * (1 - fadeInPosition)) + "px)";
-        _tagName.style.opacity = fadeInOpacity;
+        _tagLoadingText.style.opacity = 1 - fadeInLinear;
+        _tagLoadingBar.style.opacity = 1 - fadeInLinear;
         
-        _tagOvertitle.style.transform = "translate(" + (-10 * (1 - fadeInPosition)) + "px, 0px)";
-        _tagOvertitle.style.opacity = fadeInOpacity;
+        _tagName.style.opacity = fadeInLinear;
+        _tagName.style.transform = "translate(0px, " + (-50 * (1 - fadeInQuadratic)) + "px)";
         
-        _tagTitle.style.transform = "translate(" + (-30 * (1 - fadeInPosition)) + "px, 0px)";
-        _tagTitle.style.opacity = fadeInOpacity;
+        _tagOvertitle.style.opacity = fadeInLinear;
+        _tagOvertitle.style.transform = "translate(" + (-10 * (1 - fadeInQuadratic)) + "px, 0px)";
         
-        _tagSubtitle.style.transform = "translate(" + (-50 * (1 - fadeInPosition)) + "px, 0px)";
-        _tagSubtitle.style.opacity = fadeInOpacity;
+        _tagTitle.style.opacity = fadeInLinear;
+        _tagTitle.style.transform = "translate(" + (-30 * (1 - fadeInQuadratic)) + "px, 0px)";
         
-        _tagScrollDown.style.transform = "translate(" + (-35 * (1 - fadeInPosition)) + "px, " + (-35 * (1 - fadeInPosition)) + "px)";
-        _tagScrollDown.style.opacity = fadeInOpacity;
+        _tagSubtitle.style.opacity = fadeInLinear;
+        _tagSubtitle.style.transform = "translate(" + (-50 * (1 - fadeInQuadratic)) + "px, 0px)";
         
-        if (fadeInOpacity !== 1 && fadeInPosition !== 1)
+        _tagScrollDown.style.opacity = fadeInLinear;
+        _tagScrollDown.style.transform = "translate(" + (-35 * (1 - fadeInQuadratic)) + "px, " + (-35 * (1 - fadeInQuadratic)) + "px)";
+        
+        if (fadeInLinear !== 1 || fadeInQuadratic !== 1)
         {
             requestAnimationFrame(updateAnimation);
         }
@@ -1326,21 +1392,30 @@ function href(index)
 
 async function loading()
 {
-    //await document.fonts.load("0px fontA");
-    await document.fonts.load("0px fontB");
-    //await document.fonts.load("0px fontC");
-    //await document.fonts.load("0px fontD");
-    await document.fonts.ready;
-    
-    imu();
-    
-    particuleAnimation();
-    textAnimation();
-    
-    windowResize();
-    screenOrientation();
-    
-    loaded();
+    if (_stateLoading === 1)
+    {
+        loadingAnimation();
+        
+        //await document.fonts.load("0px fontA");
+        await document.fonts.load("0px fontB");
+        //await document.fonts.load("0px fontC");
+        //await document.fonts.load("0px fontD");
+        await document.fonts.ready;
+        
+        _stateLoading = 2;
+    }
+    else if (_stateLoading === 2)
+    {
+        imu();
+        
+        particuleAnimation();
+        textAnimation();
+        
+        windowResize();
+        screenOrientation();
+        
+        loaded();
+    }
 }
 
 window.addEventListener("load", loading);
