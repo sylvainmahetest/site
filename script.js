@@ -1412,7 +1412,7 @@ function windowResize()
         fitText(_tagTitle, 100, 0, 110);
         
         rectangle = _tagOverlayHeader.getBoundingClientRect();
-        _tagOverlayGallery.style.top = (160 + rectangle.height + 50) + "px";
+        _tagOverlayGallery.style.top = (160 + rectangle.height + 100) + "px";
     }
     
     updateSize();

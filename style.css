@@ -1696,6 +1696,7 @@ body img
   outline-style: none;
   outline-color: transparent;
   object-fit: cover;
+  object-position: 0px 0px;
   image-orientation: none;
   transform-origin: center;
   transform: none;
