@@ -4,10 +4,14 @@ customElements.define("tag-loading-bar", class extends HTMLElement{});
 customElements.define("tag-canvas-particule", class extends HTMLElement{});
 
 customElements.define("tag-name", class extends HTMLElement{});
+
+customElements.define("tag-overlay-header", class extends HTMLElement{});
 customElements.define("tag-overtitle", class extends HTMLElement{});
 customElements.define("tag-title", class extends HTMLElement{});
 customElements.define("tag-subtitle", class extends HTMLElement{});
 customElements.define("tag-scroll-down", class extends HTMLElement{});
+
+customElements.define("tag-overlay-gallery", class extends HTMLElement{});
 
 let _stateLoading = 1;
 
@@ -22,10 +26,14 @@ let _ryAccelerometer = 0;
 let _rzAccelerometer = 0;
 
 let _tagName = null;
+
+let _tagOverlayHeader = null;
 let _tagOvertitle = null;
 let _tagTitle = null;
 let _tagSubtitle = null;
 let _tagScrollDown = null;
+
+let _tagOverlayGallery = null;
 
 function fitText(tag, fontSize, letterSpacing, lineHeight)
 {
@@ -1259,7 +1267,7 @@ function loadingAnimation()
     requestAnimationFrame(updateAnimation);
 }
 
-function textAnimation()
+function headerAnimation()
 {
     let timePreviousAbsolute = 0;
     let fadeIn = 0;
@@ -1267,6 +1275,8 @@ function textAnimation()
     let fadeInQuadratic = 0;
     
     _tagName = document.getElementById("tag-name");
+    
+    _tagOverlayHeader = document.getElementById("tag-overlay-header");
     _tagOvertitle = document.getElementById("tag-overtitle");
     _tagTitle = document.getElementById("tag-title");
     _tagSubtitle = document.getElementById("tag-subtitle");
@@ -1321,6 +1331,59 @@ function textAnimation()
         {
             requestAnimationFrame(updateAnimation);
         }
+        else
+        {
+            _tagLoadingText.style.display = "none";
+            _tagLoadingBar.style.display = "none";
+        }
+    }
+    
+    requestAnimationFrame(updateAnimation);
+}
+
+function galleryAnimation()
+{
+    let timePreviousAbsolute = 0;
+    let fadeIn = 0;
+    let fadeInLinear = 0;
+    let fadeInQuadratic = 0;
+    
+    _tagOverlayGallery = document.getElementById("tag-overlay-gallery");
+    
+    timePreviousAbsolute = performance.now();
+    
+    function updateAnimation(time)
+    {
+        fadeIn = (time - timePreviousAbsolute) * 0.001;
+        
+        fadeInLinear = fadeIn;
+        
+        if (fadeInLinear > 1)
+        {
+            fadeInLinear = 1;
+        }
+        
+        if (fadeIn <= 1)
+        {
+            fadeInQuadratic = 1 - Math.pow(1 - fadeIn, 2);
+            
+            if (fadeInQuadratic > 1)
+            {
+                fadeInQuadratic = 1;
+            }
+        }
+        else
+        {
+            fadeInQuadratic = 1;
+        }
+        
+        _tagOverlayGallery.style.opacity = fadeInLinear;
+        _tagOverlayGallery.style.transform = "translate(0px, " + (100 * (1 - fadeInQuadratic)) + "px)";
+        
+        if (fadeInLinear !== 1 || fadeInQuadratic !== 1)
+        {
+            requestAnimationFrame(updateAnimation);
+        }
     }
     
     requestAnimationFrame(updateAnimation);
@@ -1331,6 +1394,7 @@ function windowResize()
     let hWindow = 0;
     let vWindow = 0;
     let dpr = 0;
+    let rectangle = null;
     
     function updateSize()
     {
@@ -1346,6 +1410,9 @@ function windowResize()
         _webGL.viewport(0, 0, _tagCanvasParticule.width, _tagCanvasParticule.height);
         
         fitText(_tagTitle, 100, 0, 110);
+        
+        rectangle = _tagOverlayHeader.getBoundingClientRect();
+        _tagOverlayGallery.style.top = (160 + rectangle.height + 50) + "px";
     }
     
     updateSize();
@@ -1406,10 +1473,13 @@ async function loading()
     }
     else if (_stateLoading === 2)
     {
+        //tag();
+        
         imu();
         
         particuleAnimation();
-        textAnimation();
+        headerAnimation();
+        galleryAnimation();
         
         windowResize();
         screenOrientation();
