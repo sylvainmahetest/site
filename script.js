@@ -35,6 +35,8 @@ let _tagScrollDown = null;
 
 let _tagOverlayGallery = null;
 
+let _eventScroll = 0;
+
 function fitText(tag, fontSize, letterSpacing, lineHeight)
 {
     const PARENT = tag.parentElement;
@@ -118,6 +120,139 @@ function clampPositiveSymmetricalMinMax(value, minMax)
     }
     
     return valueClamp;
+}
+
+function tag()
+{
+    _tagLoadingText = document.getElementById("tag-loading-text");
+    _tagLoadingBar = document.getElementById("tag-loading-bar");
+    
+    _tagCanvasParticule = document.getElementById("tag-canvas-particule");
+    
+    _tagName = document.getElementById("tag-name");
+    
+    _tagOverlayHeader = document.getElementById("tag-overlay-header");
+    _tagOvertitle = document.getElementById("tag-overtitle");
+    _tagTitle = document.getElementById("tag-title");
+    _tagSubtitle = document.getElementById("tag-subtitle");
+    _tagScrollDown = document.getElementById("tag-scroll-down");
+    
+    _tagOverlayGallery = document.getElementById("tag-overlay-gallery");
+}
+
+function event()
+{
+    let clientY = 0;
+    let deltaY = 0;
+    let yTouchPrevious = 0;
+    let scrollMax = 0;
+    
+    _tagCanvasParticule.addEventListener("touchstart", event =>
+    {
+    	const LENGTH_TOUCH = event.touches.length;
+        if (LENGTH_TOUCH === 1)
+        {
+            //xTouch = (((event.touches[0].clientX - RECTANGLE.left) / RECTANGLE.width) - 0.5) * H_WINDOW;
+            //yTouch = -(((event.touches[0].clientY - RECTANGLE.top) / RECTANGLE.height) - 0.5) * V_WINDOW;
+            clientY = event.touches[0].clientY;
+            
+            
+            yTouchPrevious = clientY;
+        }
+        else if (LENGTH_TOUCH === 2)
+        {
+            //xTouch = (((((event.touches[0].clientX + event.touches[1].clientX) * 0.5) - RECTANGLE.left) / RECTANGLE.width) - 0.5) * H_WINDOW;
+            //yTouch = -(((((event.touches[0].clientY + event.touches[1].clientY) * 0.5) - RECTANGLE.top) / RECTANGLE.height) - 0.5) * V_WINDOW;
+            clientY = (event.touches[0].clientY + event.touches[1].clientY) * 0.5;
+            
+            
+            yTouchPrevious = clientY;
+        }
+        
+        event.preventDefault();
+    },
+    {
+        passive: false
+    });
+    
+    _tagCanvasParticule.addEventListener("touchmove", event =>
+    {
+        const RECTANGLE = _tagOverlayGallery.getBoundingClientRect();
+        const V_WINDOW = window.innerHeight;
+        const LENGTH_TOUCH = event.touches.length;
+        
+        if (LENGTH_TOUCH === 1)
+        {
+            //xTouch = (((event.touches[0].clientX - RECTANGLE.left) / RECTANGLE.width) - 0.5) * H_WINDOW;
+            //yTouch = -(((event.touches[0].clientY - RECTANGLE.top) / RECTANGLE.height) - 0.5) * V_WINDOW;
+            clientY = event.touches[0].clientY;
+            
+            deltaY = clientY - yTouchPrevious;
+            yTouchPrevious = clientY;
+        }
+        else if (LENGTH_TOUCH === 2)
+        {
+            //xTouch = (((((event.touches[0].clientX + event.touches[1].clientX) * 0.5) - RECTANGLE.left) / RECTANGLE.width) - 0.5) * H_WINDOW;
+            //yTouch = -(((((event.touches[0].clientY + event.touches[1].clientY) * 0.5) - RECTANGLE.top) / RECTANGLE.height) - 0.5) * V_WINDOW;
+            clientY = (event.touches[0].clientY + event.touches[1].clientY) * 0.5;
+            
+            deltaY = clientY - yTouchPrevious;
+            yTouchPrevious = clientY;
+        }
+        
+        console.log("deltaY = " + deltaY);
+        
+        if (deltaY < 0)
+        {
+            _eventScroll += deltaY;
+        }
+        else if (deltaY > 0)
+        {
+            _eventScroll += deltaY;
+        }
+        
+        scrollMax = -(RECTANGLE.height + ((V_WINDOW * 0.5) - 100));
+        
+        if (_eventScroll < scrollMax)
+        {
+            _eventScroll = scrollMax;
+        }
+        else if (_eventScroll > 0)
+        {
+            _eventScroll = 0;
+        }
+        
+        event.preventDefault();
+    },
+    {
+        passive: false
+    });
+    
+    _tagCanvasParticule.addEventListener("wheel", event =>
+    {
+        const RECTANGLE = _tagOverlayGallery.getBoundingClientRect();
+        const V_WINDOW = window.innerHeight;
+        
+        if (event.deltaY < 0)
+        {
+            _eventScroll += 40;
+        }
+        else if (event.deltaY > 0)
+        {
+            _eventScroll -= 40;
+        }
+        
+        scrollMax = -(RECTANGLE.height + ((V_WINDOW * 0.5) - 100));
+        
+        if (_eventScroll < scrollMax)
+        {
+            _eventScroll = scrollMax;
+        }
+        else if (_eventScroll > 0)
+        {
+            _eventScroll = 0;
+        }
+    });
 }
 
 function imu()
@@ -325,8 +460,6 @@ function particuleAnimation()
     const HEIGHT_BLUR = 400;
     const Y_OFFSET_BLUR = 300;
     const DIAMETER_BLUR = 7;
-    
-    _tagCanvasParticule = document.getElementById("tag-canvas-particule");
     
     _tagCanvasParticule.addEventListener("touchstart", event =>
     {
@@ -1217,9 +1350,6 @@ function loadingAnimation()
     let fadeInLinear = 0;
     let fadeInQuadratic = 0;
     
-    _tagLoadingText = document.getElementById("tag-loading-text");
-    _tagLoadingBar = document.getElementById("tag-loading-bar");
-    
     timePreviousAbsolute = performance.now();
     
     function updateAnimation(time)
@@ -1254,7 +1384,7 @@ function loadingAnimation()
         _tagLoadingBar.style.left = (50 - (fadeInLinear * 45)) + "dvw";
         _tagLoadingBar.style.width = (fadeInLinear * 90) + "dvw";
         
-        if (fadeInLinear !== 1 || fadeInQuadratic !== 1 || _stateLoading !== 2)
+        if (fadeIn < 1 || _stateLoading !== 2)
         {
             requestAnimationFrame(updateAnimation);
         }
@@ -1269,23 +1399,27 @@ function loadingAnimation()
 
 function headerAnimation()
 {
+    let timePreviousRelative = 0;
     let timePreviousAbsolute = 0;
     let fadeIn = 0;
     let fadeInLinear = 0;
     let fadeInQuadratic = 0;
+    let opacity = 1;
+    let scale = 1;
+    let smoothOpacityScale = 0;
+    const SMOOTH_OPACITY_SCALE = 0.01;
+    let smoothOpacity = 1;
+    let smoothScale = 1;
     
-    _tagName = document.getElementById("tag-name");
-    
-    _tagOverlayHeader = document.getElementById("tag-overlay-header");
-    _tagOvertitle = document.getElementById("tag-overtitle");
-    _tagTitle = document.getElementById("tag-title");
-    _tagSubtitle = document.getElementById("tag-subtitle");
-    _tagScrollDown = document.getElementById("tag-scroll-down");
-    
+    timePreviousRelative = performance.now();
     timePreviousAbsolute = performance.now();
     
     function updateAnimation(time)
     {
+        const TIME_DELTA = Math.min((time - timePreviousRelative) * 0.001, 0.04);
+        
+        timePreviousRelative = time;
+        
         fadeIn = (time - timePreviousAbsolute) * 0.001;
         
         fadeInLinear = fadeIn;
@@ -1308,6 +1442,29 @@ function headerAnimation()
         {
             fadeInQuadratic = 1;
         }
+        
+        if (_eventScroll === 0)
+        {
+            opacity = 1;
+            scale = 1;
+        }
+        else if (_eventScroll < -200)
+        {
+            opacity = 0;
+            scale = 0.75;
+        }
+        else
+        {
+            opacity = 1 + (1 / (200 / _eventScroll));
+            scale = 1 + (0.25 / (200 / _eventScroll));
+        }
+        
+        smoothOpacityScale = 1 - Math.pow(SMOOTH_OPACITY_SCALE, TIME_DELTA);
+        smoothOpacity += (opacity - smoothOpacity) * smoothOpacityScale;
+        smoothScale += (scale - smoothScale) * smoothOpacityScale;
+        
+        _tagOverlayHeader.style.opacity = smoothOpacity;
+        _tagOverlayHeader.style.transform = "scale(" + smoothScale + ")";
         
         _tagLoadingText.style.opacity = 1 - fadeInLinear;
         _tagLoadingBar.style.opacity = 1 - fadeInLinear;
@@ -1327,15 +1484,13 @@ function headerAnimation()
         _tagScrollDown.style.opacity = fadeInLinear;
         _tagScrollDown.style.transform = "translate(" + (-35 * (1 - fadeInQuadratic)) + "px, " + (-35 * (1 - fadeInQuadratic)) + "px)";
         
-        if (fadeInLinear !== 1 || fadeInQuadratic !== 1)
-        {
-            requestAnimationFrame(updateAnimation);
-        }
-        else
+        if (fadeIn >= 1)
         {
             _tagLoadingText.style.display = "none";
             _tagLoadingBar.style.display = "none";
         }
+        
+        requestAnimationFrame(updateAnimation);
     }
     
     requestAnimationFrame(updateAnimation);
@@ -1343,47 +1498,25 @@ function headerAnimation()
 
 function galleryAnimation()
 {
-    let timePreviousAbsolute = 0;
-    let fadeIn = 0;
-    let fadeInLinear = 0;
-    let fadeInQuadratic = 0;
+    let timePreviousRelative = 0;
+    let smoothTranslate = 0;
+    const SMOOTH_TRANSLATE = 0.01;
+    let yTranslateSmooth = 0;
     
-    _tagOverlayGallery = document.getElementById("tag-overlay-gallery");
-    
-    timePreviousAbsolute = performance.now();
+    timePreviousRelative = performance.now();
     
     function updateAnimation(time)
     {
-        fadeIn = (time - timePreviousAbsolute) * 0.001;
+        const TIME_DELTA = Math.min((time - timePreviousRelative) * 0.001, 0.04);
         
-        fadeInLinear = fadeIn;
+        timePreviousRelative = time;
         
-        if (fadeInLinear > 1)
-        {
-            fadeInLinear = 1;
-        }
+        smoothTranslate = 1 - Math.pow(SMOOTH_TRANSLATE, TIME_DELTA);
+        yTranslateSmooth += (_eventScroll - yTranslateSmooth) * smoothTranslate;
         
-        if (fadeIn <= 1)
-        {
-            fadeInQuadratic = 1 - Math.pow(1 - fadeIn, 2);
-            
-            if (fadeInQuadratic > 1)
-            {
-                fadeInQuadratic = 1;
-            }
-        }
-        else
-        {
-            fadeInQuadratic = 1;
-        }
+        _tagOverlayGallery.style.transform = "translate(0px, " + (yTranslateSmooth) + "px)";
         
-        _tagOverlayGallery.style.opacity = fadeInLinear;
-        _tagOverlayGallery.style.transform = "translate(0px, " + (100 * (1 - fadeInQuadratic)) + "px)";
-        
-        if (fadeInLinear !== 1 || fadeInQuadratic !== 1)
-        {
-            requestAnimationFrame(updateAnimation);
-        }
+        requestAnimationFrame(updateAnimation);
     }
     
     requestAnimationFrame(updateAnimation);
@@ -1395,6 +1528,7 @@ function windowResize()
     let vWindow = 0;
     let dpr = 0;
     let rectangle = null;
+    let top = 0;
     
     function updateSize()
     {
@@ -1409,10 +1543,21 @@ function windowResize()
         
         _webGL.viewport(0, 0, _tagCanvasParticule.width, _tagCanvasParticule.height);
         
+        _tagOverlayHeader.style.display = "block";
+        
         fitText(_tagTitle, 100, 0, 110);
         
         rectangle = _tagOverlayHeader.getBoundingClientRect();
-        _tagOverlayGallery.style.top = (160 + rectangle.height + 100) + "px";
+        top = 160 + rectangle.height + 100;
+        
+        if (top < vWindow)
+        {
+            top = vWindow;
+        }
+        
+        _tagOverlayGallery.style.top = top + "px";
+        
+        _tagOverlayGallery.style.display = "flex";
     }
     
     updateSize();
@@ -1461,20 +1606,19 @@ async function loading()
 {
     if (_stateLoading === 1)
     {
+        tag();
+        
+        event();
+        
         loadingAnimation();
         
-        //await document.fonts.load("0px fontA");
         await document.fonts.load("0px fontB");
-        //await document.fonts.load("0px fontC");
-        //await document.fonts.load("0px fontD");
         await document.fonts.ready;
         
         _stateLoading = 2;
     }
     else if (_stateLoading === 2)
     {
-        //tag();
-        
         imu();
         
         particuleAnimation();

@@ -716,7 +716,7 @@ body #tag-overlay-header
   animation-timing-function: linear;
   animation-iteration-count: 0;
   animation-play-state: paused;
-  display: block;
+  display: none;
   visibility: visible;
   opacity: 1;
   position: fixed;
@@ -746,7 +746,7 @@ body #tag-overlay-header
   padding-right: 0px;
   padding-top: 0px;
   padding-bottom: 0px;
-  background-color: transparent;
+  background-color: transparent ;
   background-image: none;
   background-attachment: local;
   background-clip: border-box;
@@ -1279,9 +1279,9 @@ body #tag-overlay-gallery
   animation-timing-function: linear;
   animation-iteration-count: 0;
   animation-play-state: paused;
-  display: flex;
+  display: none;
   visibility: visible;
-  opacity: 0;
+  opacity: 1;
   position: fixed;
   float: none;
   flex-direction: row;
@@ -1309,7 +1309,7 @@ body #tag-overlay-gallery
   padding-right: 0px;
   padding-top: 0px;
   padding-bottom: 0px;
-  background-color: transparent;
+  background-color: transparent ;
   background-image: none;
   background-attachment: local;
   background-clip: border-box;
@@ -1365,7 +1365,7 @@ body #tag-overlay-gallery
   object-fit: fill;
   image-orientation: none;
   transform-origin: center;
-  transform: translate(0px, 100px);
+  transform: none;
   filter: none;
   user-select: none;
   cursor: auto;
@@ -1696,7 +1696,6 @@ body img
   outline-style: none;
   outline-color: transparent;
   object-fit: cover;
-  object-position: 0px 0px;
   image-orientation: none;
   transform-origin: center;
   transform: none;
