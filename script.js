@@ -34,6 +34,8 @@ let _tagSubtitle = null;
 let _tagScrollDown = null;
 
 let _tagOverlayGallery = null;
+let _tagImg = [];
+let _countTagImg = 0;
 
 let _eventScroll = 0;
 
@@ -124,6 +126,9 @@ function clampPositiveSymmetricalMinMax(value, minMax)
 
 function tag()
 {
+    const TAG_ALL_IN_DOCUMENT = document.querySelectorAll("body img");
+    let index = 0;
+    
     _tagLoadingText = document.getElementById("tag-loading-text");
     _tagLoadingBar = document.getElementById("tag-loading-bar");
     
@@ -138,35 +143,36 @@ function tag()
     _tagScrollDown = document.getElementById("tag-scroll-down");
     
     _tagOverlayGallery = document.getElementById("tag-overlay-gallery");
+    
+    TAG_ALL_IN_DOCUMENT.forEach((tag, index) =>
+    {
+        _tagImg[index] = tag;
+        _tagImg[index].dataset.index = index;
+        
+        _countTagImg++;
+    });
 }
 
 function event()
 {
     let clientY = 0;
+    let clientYPrevious = 0;
     let deltaY = 0;
-    let yTouchPrevious = 0;
     let scrollMax = 0;
     
     _tagCanvasParticule.addEventListener("touchstart", event =>
     {
-    	const LENGTH_TOUCH = event.touches.length;
+        const LENGTH_TOUCH = event.touches.length;
+        
         if (LENGTH_TOUCH === 1)
         {
-            //xTouch = (((event.touches[0].clientX - RECTANGLE.left) / RECTANGLE.width) - 0.5) * H_WINDOW;
-            //yTouch = -(((event.touches[0].clientY - RECTANGLE.top) / RECTANGLE.height) - 0.5) * V_WINDOW;
             clientY = event.touches[0].clientY;
-            
-            
-            yTouchPrevious = clientY;
+            clientYPrevious = clientY;
         }
         else if (LENGTH_TOUCH === 2)
         {
-            //xTouch = (((((event.touches[0].clientX + event.touches[1].clientX) * 0.5) - RECTANGLE.left) / RECTANGLE.width) - 0.5) * H_WINDOW;
-            //yTouch = -(((((event.touches[0].clientY + event.touches[1].clientY) * 0.5) - RECTANGLE.top) / RECTANGLE.height) - 0.5) * V_WINDOW;
             clientY = (event.touches[0].clientY + event.touches[1].clientY) * 0.5;
-            
-            
-            yTouchPrevious = clientY;
+            clientYPrevious = clientY;
         }
         
         event.preventDefault();
@@ -183,35 +189,25 @@ function event()
         
         if (LENGTH_TOUCH === 1)
         {
-            //xTouch = (((event.touches[0].clientX - RECTANGLE.left) / RECTANGLE.width) - 0.5) * H_WINDOW;
-            //yTouch = -(((event.touches[0].clientY - RECTANGLE.top) / RECTANGLE.height) - 0.5) * V_WINDOW;
             clientY = event.touches[0].clientY;
             
-            deltaY = clientY - yTouchPrevious;
-            yTouchPrevious = clientY;
+            deltaY = clientY - clientYPrevious;
+            clientYPrevious = clientY;
         }
         else if (LENGTH_TOUCH === 2)
         {
-            //xTouch = (((((event.touches[0].clientX + event.touches[1].clientX) * 0.5) - RECTANGLE.left) / RECTANGLE.width) - 0.5) * H_WINDOW;
-            //yTouch = -(((((event.touches[0].clientY + event.touches[1].clientY) * 0.5) - RECTANGLE.top) / RECTANGLE.height) - 0.5) * V_WINDOW;
             clientY = (event.touches[0].clientY + event.touches[1].clientY) * 0.5;
             
-            deltaY = clientY - yTouchPrevious;
-            yTouchPrevious = clientY;
+            deltaY = clientY - clientYPrevious;
+            clientYPrevious = clientY;
         }
         
-        console.log("deltaY = " + deltaY);
-        
-        if (deltaY < 0)
+        if (deltaY < 0 || deltaY > 0)
         {
-            _eventScroll += deltaY;
-        }
-        else if (deltaY > 0)
-        {
-            _eventScroll += deltaY;
+            _eventScroll += deltaY * 1.5;
         }
         
-        scrollMax = -(RECTANGLE.height + ((V_WINDOW * 0.5) - 100));
+        scrollMax = -(RECTANGLE.height + ((V_WINDOW * 0.5) - 150));
         
         if (_eventScroll < scrollMax)
         {
@@ -235,14 +231,14 @@ function event()
         
         if (event.deltaY < 0)
         {
-            _eventScroll += 40;
+            _eventScroll += 50;
         }
         else if (event.deltaY > 0)
         {
-            _eventScroll -= 40;
+            _eventScroll -= 50;
         }
         
-        scrollMax = -(RECTANGLE.height + ((V_WINDOW * 0.5) - 100));
+        scrollMax = -(RECTANGLE.height + ((V_WINDOW * 0.5) - 150));
         
         if (_eventScroll < scrollMax)
         {
@@ -1448,15 +1444,15 @@ function headerAnimation()
             opacity = 1;
             scale = 1;
         }
-        else if (_eventScroll < -200)
+        else if (_eventScroll < -500)
         {
             opacity = 0;
-            scale = 0.75;
+            scale = 0.85;
         }
         else
         {
-            opacity = 1 + (1 / (200 / _eventScroll));
-            scale = 1 + (0.25 / (200 / _eventScroll));
+            opacity = 1 + (1 / (500 / _eventScroll));
+            scale = 1 + (0.15 / (500 / _eventScroll));
         }
         
         smoothOpacityScale = 1 - Math.pow(SMOOTH_OPACITY_SCALE, TIME_DELTA);
@@ -1502,6 +1498,7 @@ function galleryAnimation()
     let smoothTranslate = 0;
     const SMOOTH_TRANSLATE = 0.01;
     let yTranslateSmooth = 0;
+    let index = 0;
     
     timePreviousRelative = performance.now();
     
@@ -1516,6 +1513,19 @@ function galleryAnimation()
         
         _tagOverlayGallery.style.transform = "translate(0px, " + (yTranslateSmooth) + "px)";
         
+        //IMG
+        //console.log("yTranslateSmooth = " + (-yTranslateSmooth - 50));
+        for (index = 0; index < _countTagImg; index++)
+        {
+            let variable = (((-yTranslateSmooth - 50) - (350 * index)) * 0.1) - 100;
+            if (index === 0)
+            {
+                console.log("variable = " + variable);
+            }
+            _tagImg[index].style.objectPosition = "0px " + variable + "px";
+        }
+        //IMG
+        
         requestAnimationFrame(updateAnimation);
     }
     
@@ -1524,35 +1534,48 @@ function galleryAnimation()
 
 function windowResize()
 {
-    let hWindow = 0;
-    let vWindow = 0;
-    let dpr = 0;
-    let rectangle = null;
     let top = 0;
     
     function updateSize()
     {
-        hWindow = window.innerWidth;
-        vWindow = window.innerHeight;
-        dpr = window.devicePixelRatio || 1;
+        const RECTANGLE = _tagOverlayHeader.getBoundingClientRect();
+        const H_WINDOW = window.innerWidth;
+        const V_WINDOW = window.innerHeight;
+        const DPR = window.devicePixelRatio || 1;
         
-        _tagCanvasParticule.width = Math.floor(hWindow * dpr);
-        _tagCanvasParticule.height = Math.floor(vWindow * dpr);
-        //_tagCanvasParticule.style.width = hWindow + "px";
-        //_tagCanvasParticule.style.height = vWindow + "px";
+        _tagCanvasParticule.width = Math.floor(H_WINDOW * DPR);
+        _tagCanvasParticule.height = Math.floor(V_WINDOW * DPR);
+        //_tagCanvasParticule.style.width = H_WINDOW + "px";
+        //_tagCanvasParticule.style.height = V_WINDOW + "px";
         
         _webGL.viewport(0, 0, _tagCanvasParticule.width, _tagCanvasParticule.height);
+        
+        //WIP
+        /*const RECTANGLE = _tagOverlayGallery.getBoundingClientRect();
+        const V_WINDOW = window.innerHeight;
+        let scrollMax = -(RECTANGLE.height + ((V_WINDOW * 0.5) - 150));
+        
+        if (_eventScroll < scrollMax)
+        {
+            _eventScroll = scrollMax;
+        }
+        else if (_eventScroll > 0)
+        {
+            _eventScroll = 0;
+        }*/
+        
+        //_tagOverlayGallery.style.transform = "translate(0px, " + (_eventScroll) + "px)";
+        //WIP
         
         _tagOverlayHeader.style.display = "block";
         
         fitText(_tagTitle, 100, 0, 110);
         
-        rectangle = _tagOverlayHeader.getBoundingClientRect();
-        top = 160 + rectangle.height + 100;
+        top = 160 + RECTANGLE.height + 100;
         
-        if (top < vWindow)
+        if (top < V_WINDOW)
         {
-            top = vWindow;
+            top = V_WINDOW;
         }
         
         _tagOverlayGallery.style.top = top + "px";
