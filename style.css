@@ -4,8 +4,9 @@
   
   --colorB: rgb(12, 12, 12);
   --colorC: rgba(12, 12, 12, 0.5);
+  --colorD: rgba(12, 12, 12, 0.75);
   
-  --colorD: rgb(150, 150, 150);
+  --colorE: rgb(150, 150, 150);
   
   --colorZ: rgb(255, 255, 255);
 }
@@ -904,7 +905,7 @@ body #tag-overtitle
   text-decoration-color: transparent;
   text-shadow: 0px 10px 7px var(--colorC);
   writing-mode: horizontal-tb;
-  color: var(--colorD);
+  color: var(--colorE);
   caret-color: transparent;
   white-space: pre-wrap;
   word-break: break-word;
@@ -1582,7 +1583,7 @@ body tag-overtitle-img
   text-underline-offset: 0px;
   text-decoration-style: none;
   text-decoration-color: transparent;
-  text-shadow: 0px 0px 7px var(--colorC);
+  text-shadow: 0px 0px 7px var(--colorD);
   writing-mode: horizontal-tb;
   color: var(--colorZ);
   caret-color: transparent;
@@ -1694,7 +1695,7 @@ body tag-title-img
   text-underline-offset: 0px;
   text-decoration-style: none;
   text-decoration-color: transparent;
-  text-shadow: 0px 0px 7px var(--colorC);
+  text-shadow: 0px 0px 7px var(--colorD);
   writing-mode: horizontal-tb;
   color: var(--colorZ);
   caret-color: transparent;
@@ -1806,7 +1807,7 @@ body tag-subtitle-img
   text-underline-offset: 0px;
   text-decoration-style: none;
   text-decoration-color: transparent;
-  text-shadow: 0px 0px 7px var(--colorC);
+  text-shadow: 0px 0px 7px var(--colorD);
   writing-mode: horizontal-tb;
   color: var(--colorZ);
   caret-color: transparent;
@@ -1934,11 +1935,11 @@ body img
   outline-style: none;
   outline-color: transparent;
   object-fit: cover/*contain*/;
-  object-position: center 100%;
+  object-position: 50% 50%;
   image-orientation: none;
   transform-origin: center;
   transform: /*scale(1.5)*/none;
-  filter: /*grayscale(1)*/none;
+  filter: /*grayscale(1)*/grayscale(1);
   user-select: none;
   cursor: auto;
   pointer-events: none;

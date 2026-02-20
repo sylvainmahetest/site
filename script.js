@@ -1573,10 +1573,20 @@ function galleryAnimation()
         
         for (index = 0; index < _countTagMedia; index++)
         {
-            height = Math.min(RECTANGLE_GALLERY.width, 800) * 0.7;
-            offset = 100 - (100 * (((-yTranslateSmooth - 25) - ((25 + height + 25) * index)) / (V_WINDOW + height)));
+            const RECTANGLE_IMG = _tagImg[index].getBoundingClientRect();
             
-            _tagImg[index].style.objectPosition = "center " + offset + "%";
+            height = Math.min(RECTANGLE_GALLERY.width, 800) * 0.35;
+            
+            if (height < V_WINDOW)
+            {
+                offset = 100 * ((RECTANGLE_IMG.top + height) / V_WINDOW);
+            }
+            else
+            {
+                offset = 50;
+            }
+            
+            _tagImg[index].style.objectPosition = "50% " + offset + "%";
         }
         
         requestAnimationFrame(updateAnimation);
