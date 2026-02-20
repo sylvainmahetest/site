@@ -722,9 +722,9 @@ body #tag-overlay-header
   animation-timing-function: linear;
   animation-iteration-count: 0;
   animation-play-state: paused;
-  display: none;
+  display: block;
   visibility: visible;
-  opacity: 1;
+  opacity: 0;
   position: fixed;
   float: none;
   flex-direction: row;
@@ -1290,23 +1290,23 @@ body #tag-overlay-gallery
   animation-timing-function: linear;
   animation-iteration-count: 0;
   animation-play-state: paused;
-  display: none;
+  display: block;
   visibility: visible;
-  opacity: 1;
+  opacity: 0;
   position: fixed;
   float: none;
   flex-direction: row;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   justify-content: center;
   align-items: start;
   vertical-align: top;
   text-align: center;
   text-align-last: center;
-  left: 2.5dvw;
+  left: 5dvw;
   right: auto;
   top: 0px;
   bottom: auto;
-  width: 95dvw;
+  width: 90dvw;
   min-width: auto;
   max-width: auto;
   height: auto;
@@ -1402,7 +1402,7 @@ body tag-media
   animation-timing-function: linear;
   animation-iteration-count: 0;
   animation-play-state: paused;
-  display: inline-block;
+  display: block;
   visibility: visible;
   opacity: 1;
   position: relative;
@@ -1418,16 +1418,16 @@ body tag-media
   right: auto;
   top: 0px;
   bottom: auto;
-  width: 95dvw;
+  width: 100%;
   min-width: auto;
-  max-width: auto;
-  height: 300px;
+  max-width: 800px;
+  height: 0px;
   min-height: auto;
   max-height: auto;
-  margin-left: 2.5dvw;
-  margin-right: 2.5dvw;
-  margin-top: 50px;
-  margin-bottom: 0px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 25px;
+  margin-bottom: 25px;
   padding-left: 0px;
   padding-right: 0px;
   padding-top: 0px;
@@ -1869,7 +1869,7 @@ body img
   width: 100%;
   min-width: auto;
   max-width: auto;
-  height: 300px;
+  height: 100%;
   min-height: auto;
   max-height: auto;
   margin-left: 0px;
@@ -1933,12 +1933,12 @@ body img
   outline-offset: 0px;
   outline-style: none;
   outline-color: transparent;
-  object-fit: cover;
-  object-position: 0px 0px;
+  object-fit: cover/*contain*/;
+  object-position: center 100%;
   image-orientation: none;
   transform-origin: center;
-  transform: none;
-  filter: grayscale(1);
+  transform: /*scale(1.5)*/none;
+  filter: /*grayscale(1)*/none;
   user-select: none;
   cursor: auto;
   pointer-events: none;
@@ -1946,21 +1946,20 @@ body img
   -webkit-touch-callout: none;
 }
 
-
-
-
-@media (max-width: 899px)
+/*@media (max-width: 899px)
 {
-  body tag-media
+  body #tag-overlay-gallery
   {
-    width: 95dvw;
+    left: 5dvw;
+    width: 90dvw;
   }
 }
 
 @media (min-width: 900px)
 {
-  body tag-media
+  body #tag-overlay-gallery
   {
-    width: 42.5dvw;
+    left: 25dvw;
+    width: 50dvw;
   }
-}
+}*/

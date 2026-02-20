@@ -12,6 +12,7 @@ customElements.define("tag-subtitle", class extends HTMLElement{});
 customElements.define("tag-scroll-down", class extends HTMLElement{});
 
 customElements.define("tag-overlay-gallery", class extends HTMLElement{});
+customElements.define("tag-media", class extends HTMLElement{});
 
 let _stateLoading = 1;
 
@@ -34,8 +35,9 @@ let _tagSubtitle = null;
 let _tagScrollDown = null;
 
 let _tagOverlayGallery = null;
+let _tagMedia = [];
 let _tagImg = [];
-let _countTagImg = 0;
+let _countTagMedia = 0;
 
 let _eventScroll = 0;
 
@@ -126,7 +128,8 @@ function clampPositiveSymmetricalMinMax(value, minMax)
 
 function tag()
 {
-    const TAG_ALL_IN_DOCUMENT = document.querySelectorAll("body img");
+    const TAG_MEDIA_IN_DOCUMENT = document.querySelectorAll("body tag-media");
+    const TAG_IMG_IN_DOCUMENT = document.querySelectorAll("body img");
     let index = 0;
     
     _tagLoadingText = document.getElementById("tag-loading-text");
@@ -144,12 +147,15 @@ function tag()
     
     _tagOverlayGallery = document.getElementById("tag-overlay-gallery");
     
-    TAG_ALL_IN_DOCUMENT.forEach((tag, index) =>
+    TAG_MEDIA_IN_DOCUMENT.forEach((tag, index) =>
+    {
+        _tagMedia[index] = tag;
+        _countTagMedia++;
+    });
+    
+    TAG_IMG_IN_DOCUMENT.forEach((tag, index) =>
     {
         _tagImg[index] = tag;
-        _tagImg[index].dataset.index = index;
-        
-        _countTagImg++;
     });
 }
 
@@ -158,6 +164,7 @@ function event()
     let clientY = 0;
     let clientYPrevious = 0;
     let deltaY = 0;
+    let top = 0;
     let scrollMax = 0;
     
     _tagCanvasParticule.addEventListener("touchstart", event =>
@@ -183,9 +190,10 @@ function event()
     
     _tagCanvasParticule.addEventListener("touchmove", event =>
     {
-        const RECTANGLE = _tagOverlayGallery.getBoundingClientRect();
         const V_WINDOW = window.innerHeight;
         const LENGTH_TOUCH = event.touches.length;
+        const RECTANGLE_GALLERY = _tagOverlayGallery.getBoundingClientRect();
+        const RECTANGLE_HEADER = _tagOverlayHeader.getBoundingClientRect();
         
         if (LENGTH_TOUCH === 1)
         {
@@ -207,7 +215,14 @@ function event()
             _eventScroll += deltaY * 1.5;
         }
         
-        scrollMax = -(RECTANGLE.height + ((V_WINDOW * 0.5) - 150));
+        top = 160 + RECTANGLE_HEADER.height + 100;
+        
+        if (top < V_WINDOW)
+        {
+            top = V_WINDOW;
+        }
+        
+        scrollMax = -RECTANGLE_GALLERY.height - (top - V_WINDOW);
         
         if (_eventScroll < scrollMax)
         {
@@ -226,8 +241,9 @@ function event()
     
     _tagCanvasParticule.addEventListener("wheel", event =>
     {
-        const RECTANGLE = _tagOverlayGallery.getBoundingClientRect();
         const V_WINDOW = window.innerHeight;
+        const RECTANGLE_HEADER = _tagOverlayHeader.getBoundingClientRect();
+        const RECTANGLE_GALLERY = _tagOverlayGallery.getBoundingClientRect();
         
         if (event.deltaY < 0)
         {
@@ -238,7 +254,14 @@ function event()
             _eventScroll -= 50;
         }
         
-        scrollMax = -(RECTANGLE.height + ((V_WINDOW * 0.5) - 150));
+        top = 160 + RECTANGLE_HEADER.height + 100;
+        
+        if (top < V_WINDOW)
+        {
+            top = V_WINDOW;
+        }
+        
+        scrollMax = -RECTANGLE_GALLERY.height - (top - V_WINDOW);
         
         if (_eventScroll < scrollMax)
         {
@@ -459,10 +482,10 @@ function particuleAnimation()
     
     _tagCanvasParticule.addEventListener("touchstart", event =>
     {
-        const RECTANGLE = _tagCanvasParticule.getBoundingClientRect();
         const H_WINDOW = window.innerWidth;
         const V_WINDOW = window.innerHeight;
         const LENGTH_TOUCH = event.touches.length;
+        const RECTANGLE = _tagCanvasParticule.getBoundingClientRect();
         
         if (LENGTH_TOUCH === 1)
         {
@@ -491,10 +514,10 @@ function particuleAnimation()
     
     _tagCanvasParticule.addEventListener("touchmove", event =>
     {
-        const RECTANGLE = _tagCanvasParticule.getBoundingClientRect();
         const H_WINDOW = window.innerWidth;
         const V_WINDOW = window.innerHeight;
         const LENGTH_TOUCH = event.touches.length;
+        const RECTANGLE = _tagCanvasParticule.getBoundingClientRect();
         
         if (LENGTH_TOUCH === 1)
         {
@@ -530,9 +553,9 @@ function particuleAnimation()
     
     _tagCanvasParticule.addEventListener("pointerenter", event =>
     {
-        const RECTANGLE = _tagCanvasParticule.getBoundingClientRect();
         const H_WINDOW = window.innerWidth;
         const V_WINDOW = window.innerHeight;
+        const RECTANGLE = _tagCanvasParticule.getBoundingClientRect();
         
         xTouch = (((event.clientX - RECTANGLE.left) / RECTANGLE.width) - 0.5) * H_WINDOW;
         yTouch = -(((event.clientY - RECTANGLE.top) / RECTANGLE.height) - 0.5) * V_WINDOW;
@@ -552,9 +575,9 @@ function particuleAnimation()
     
     _tagCanvasParticule.addEventListener("pointerdown", event =>
     {
-        const RECTANGLE = _tagCanvasParticule.getBoundingClientRect();
         const H_WINDOW = window.innerWidth;
         const V_WINDOW = window.innerHeight;
+        const RECTANGLE = _tagCanvasParticule.getBoundingClientRect();
         
         xTouch = (((event.clientX - RECTANGLE.left) / RECTANGLE.width) - 0.5) * H_WINDOW;
         yTouch = -(((event.clientY - RECTANGLE.top) / RECTANGLE.height) - 0.5) * V_WINDOW;
@@ -570,9 +593,9 @@ function particuleAnimation()
     
     _tagCanvasParticule.addEventListener("pointermove", event =>
     {
-        const RECTANGLE = _tagCanvasParticule.getBoundingClientRect();
         const H_WINDOW = window.innerWidth;
         const V_WINDOW = window.innerHeight;
+        const RECTANGLE = _tagCanvasParticule.getBoundingClientRect();
         
         xTouch = (((event.clientX - RECTANGLE.left) / RECTANGLE.width) - 0.5) * H_WINDOW;
         yTouch = -(((event.clientY - RECTANGLE.top) / RECTANGLE.height) - 0.5) * V_WINDOW;
@@ -1336,7 +1359,8 @@ function particuleAnimation()
     startBufferDiameterGradient();
     startBufferColorAlpha();
     
-    requestAnimationFrame(updateAnimation);
+    updateAnimation(timePreviousRelative);
+    //requestAnimationFrame(updateAnimation);
 }
 
 function loadingAnimation()
@@ -1390,7 +1414,8 @@ function loadingAnimation()
         }
     }
     
-    requestAnimationFrame(updateAnimation);
+    updateAnimation(timePreviousAbsolute);
+    //requestAnimationFrame(updateAnimation);
 }
 
 function headerAnimation()
@@ -1400,6 +1425,7 @@ function headerAnimation()
     let fadeIn = 0;
     let fadeInLinear = 0;
     let fadeInQuadratic = 0;
+    let height = 0;
     let opacity = 1;
     let scale = 1;
     let smoothOpacityScale = 0;
@@ -1413,6 +1439,7 @@ function headerAnimation()
     function updateAnimation(time)
     {
         const TIME_DELTA = Math.min((time - timePreviousRelative) * 0.001, 0.04);
+        const RECTANGLE_HEADER = _tagOverlayHeader.getBoundingClientRect();
         
         timePreviousRelative = time;
         
@@ -1439,20 +1466,22 @@ function headerAnimation()
             fadeInQuadratic = 1;
         }
         
+        height = 160 + RECTANGLE_HEADER.height;
+        
         if (_eventScroll === 0)
         {
             opacity = 1;
             scale = 1;
         }
-        else if (_eventScroll < -500)
+        else if (_eventScroll < -height)
         {
             opacity = 0;
             scale = 0.85;
         }
         else
         {
-            opacity = 1 + (1 / (500 / _eventScroll));
-            scale = 1 + (0.15 / (500 / _eventScroll));
+            opacity = 1 + (1 / (height / _eventScroll));
+            scale = 1 + (0.15 / (height / _eventScroll));
         }
         
         smoothOpacityScale = 1 - Math.pow(SMOOTH_OPACITY_SCALE, TIME_DELTA);
@@ -1489,7 +1518,8 @@ function headerAnimation()
         requestAnimationFrame(updateAnimation);
     }
     
-    requestAnimationFrame(updateAnimation);
+    updateAnimation(timePreviousRelative);
+    //requestAnimationFrame(updateAnimation);
 }
 
 function galleryAnimation()
@@ -1499,49 +1529,76 @@ function galleryAnimation()
     const SMOOTH_TRANSLATE = 0.01;
     let yTranslateSmooth = 0;
     let index = 0;
+    let height = 0;
+    let offset = 0;
     
     timePreviousRelative = performance.now();
     
     function updateAnimation(time)
     {
         const TIME_DELTA = Math.min((time - timePreviousRelative) * 0.001, 0.04);
+        const H_WINDOW = window.innerWidth;
+        const V_WINDOW = window.innerHeight;
+        const RECTANGLE_HEADER = _tagOverlayHeader.getBoundingClientRect();
+        const RECTANGLE_GALLERY = _tagOverlayGallery.getBoundingClientRect();
+        let top = 0;
+        let scrollMax = 0;
         
         timePreviousRelative = time;
+        
+        //WIP
+        top = 160 + RECTANGLE_HEADER.height + 100;
+        
+        if (top < V_WINDOW)
+        {
+            top = V_WINDOW;
+        }
+        
+        scrollMax = -RECTANGLE_GALLERY.height - (top - V_WINDOW);
+        
+        if (_eventScroll < scrollMax)
+        {
+            _eventScroll = scrollMax;
+        }
+        else if (_eventScroll > 0)
+        {
+            _eventScroll = 0;
+        }
+        //WIP
         
         smoothTranslate = 1 - Math.pow(SMOOTH_TRANSLATE, TIME_DELTA);
         yTranslateSmooth += (_eventScroll - yTranslateSmooth) * smoothTranslate;
         
         _tagOverlayGallery.style.transform = "translate(0px, " + (yTranslateSmooth) + "px)";
         
-        //IMG
-        //console.log("yTranslateSmooth = " + (-yTranslateSmooth - 50));
-        for (index = 0; index < _countTagImg; index++)
+        for (index = 0; index < _countTagMedia; index++)
         {
-            let variable = (((-yTranslateSmooth - 50) - (350 * index)) * 0.1) - 100;
-            if (index === 0)
-            {
-                console.log("variable = " + variable);
-            }
-            _tagImg[index].style.objectPosition = "0px " + variable + "px";
+            height = Math.min(RECTANGLE_GALLERY.width, 800) * 0.7;
+            offset = 100 - (100 * (((-yTranslateSmooth - 25) - ((25 + height + 25) * index)) / (V_WINDOW + height)));
+            
+            _tagImg[index].style.objectPosition = "center " + offset + "%";
         }
-        //IMG
         
         requestAnimationFrame(updateAnimation);
     }
     
-    requestAnimationFrame(updateAnimation);
+    updateAnimation(timePreviousRelative);
+    //requestAnimationFrame(updateAnimation);
 }
 
 function windowResize()
 {
     let top = 0;
+    let scrollMax = 0;
+    let index = 0;
     
     function updateSize()
     {
-        const RECTANGLE = _tagOverlayHeader.getBoundingClientRect();
         const H_WINDOW = window.innerWidth;
         const V_WINDOW = window.innerHeight;
         const DPR = window.devicePixelRatio || 1;
+        const RECTANGLE_HEADER = _tagOverlayHeader.getBoundingClientRect();
+        const RECTANGLE_GALLERY = _tagOverlayGallery.getBoundingClientRect();
         
         _tagCanvasParticule.width = Math.floor(H_WINDOW * DPR);
         _tagCanvasParticule.height = Math.floor(V_WINDOW * DPR);
@@ -1550,10 +1607,22 @@ function windowResize()
         
         _webGL.viewport(0, 0, _tagCanvasParticule.width, _tagCanvasParticule.height);
         
+        _tagOverlayHeader.style.opacity = "1";
+        
+        fitText(_tagTitle, 100, 0, 110);
+        
+        top = 160 + RECTANGLE_HEADER.height + 100;
+        
+        if (top < V_WINDOW)
+        {
+            top = V_WINDOW;
+        }
+        
+        _tagOverlayGallery.style.top = top + "px";
+        _tagOverlayGallery.style.opacity = "1";
+        
         //WIP
-        /*const RECTANGLE = _tagOverlayGallery.getBoundingClientRect();
-        const V_WINDOW = window.innerHeight;
-        let scrollMax = -(RECTANGLE.height + ((V_WINDOW * 0.5) - 150));
+        /*scrollMax = -RECTANGLE_GALLERY.height - (top - V_WINDOW);
         
         if (_eventScroll < scrollMax)
         {
@@ -1563,24 +1632,12 @@ function windowResize()
         {
             _eventScroll = 0;
         }*/
-        
-        //_tagOverlayGallery.style.transform = "translate(0px, " + (_eventScroll) + "px)";
         //WIP
         
-        _tagOverlayHeader.style.display = "block";
-        
-        fitText(_tagTitle, 100, 0, 110);
-        
-        top = 160 + RECTANGLE.height + 100;
-        
-        if (top < V_WINDOW)
+        for (index = 0; index < _countTagMedia; index++)
         {
-            top = V_WINDOW;
+            _tagMedia[index].style.height = (Math.min(RECTANGLE_GALLERY.width, 800) * 0.7) + "px";
         }
-        
-        _tagOverlayGallery.style.top = top + "px";
-        
-        _tagOverlayGallery.style.display = "flex";
     }
     
     updateSize();
@@ -1645,11 +1702,12 @@ async function loading()
         imu();
         
         particuleAnimation();
-        headerAnimation();
-        galleryAnimation();
         
         windowResize();
         screenOrientation();
+        
+        headerAnimation();
+        galleryAnimation();
         
         loaded();
     }
