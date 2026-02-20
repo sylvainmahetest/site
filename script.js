@@ -1554,6 +1554,14 @@ function galleryAnimation()
             top = V_WINDOW;
         }
         
+        _tagOverlayGallery.style.top = top + "px";
+        _tagOverlayGallery.style.opacity = "1";
+        
+        for (index = 0; index < _countTagMedia; index++)
+        {
+            _tagMedia[index].style.height = (Math.min(RECTANGLE_GALLERY.width, 800) * 0.7) + "px";
+        }
+        
         scrollMax = -RECTANGLE_GALLERY.height - (top - V_WINDOW);
         
         if (_eventScroll < scrollMax)
@@ -1621,7 +1629,7 @@ function windowResize()
         
         fitText(_tagTitle, 100, 0, 110);
         
-        top = 160 + RECTANGLE_HEADER.height + 100;
+      /*  top = 160 + RECTANGLE_HEADER.height + 100;
         
         if (top < V_WINDOW)
         {
@@ -1629,7 +1637,7 @@ function windowResize()
         }
         
         _tagOverlayGallery.style.top = top + "px";
-        _tagOverlayGallery.style.opacity = "1";
+        _tagOverlayGallery.style.opacity = "1";*/
         
         //WIP
         /*scrollMax = -RECTANGLE_GALLERY.height - (top - V_WINDOW);
