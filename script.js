@@ -1567,10 +1567,12 @@ function galleryAnimation()
         if (_eventScroll < scrollMax)
         {
             _eventScroll = scrollMax;
+            yTranslateSmooth = scrollMax;
         }
         else if (_eventScroll > 0)
         {
             _eventScroll = 0;
+            yTranslateSmooth = 0;
         }
         //WIP
         
@@ -1606,17 +1608,17 @@ function galleryAnimation()
 
 function windowResize()
 {
-    let top = 0;
-    let scrollMax = 0;
-    let index = 0;
+    //let top = 0;
+    //let scrollMax = 0;
+    //let index = 0;
     
     function updateSize()
     {
         const H_WINDOW = window.innerWidth;
         const V_WINDOW = window.innerHeight;
         const DPR = window.devicePixelRatio || 1;
-        const RECTANGLE_HEADER = _tagOverlayHeader.getBoundingClientRect();
-        const RECTANGLE_GALLERY = _tagOverlayGallery.getBoundingClientRect();
+        //const RECTANGLE_HEADER = _tagOverlayHeader.getBoundingClientRect();
+        //const RECTANGLE_GALLERY = _tagOverlayGallery.getBoundingClientRect();
         
         _tagCanvasParticule.width = Math.floor(H_WINDOW * DPR);
         _tagCanvasParticule.height = Math.floor(V_WINDOW * DPR);
@@ -1629,7 +1631,7 @@ function windowResize()
         
         fitText(_tagTitle, 100, 0, 110);
         
-      /*  top = 160 + RECTANGLE_HEADER.height + 100;
+        /*top = 160 + _tagOverlayHeader.clientHeight + 100;
         
         if (top < V_WINDOW)
         {
@@ -1637,10 +1639,10 @@ function windowResize()
         }
         
         _tagOverlayGallery.style.top = top + "px";
-        _tagOverlayGallery.style.opacity = "1";*/
+        _tagOverlayGallery.style.opacity = "1";
         
         //WIP
-        /*scrollMax = -RECTANGLE_GALLERY.height - (top - V_WINDOW);
+        scrollMax = -_tagOverlayGallery.clientHeight - (top - V_WINDOW);
         
         if (_eventScroll < scrollMax)
         {
@@ -1649,13 +1651,13 @@ function windowResize()
         else if (_eventScroll > 0)
         {
             _eventScroll = 0;
-        }*/
+        }
         //WIP
         
         for (index = 0; index < _countTagMedia; index++)
         {
-            _tagMedia[index].style.height = (Math.min(RECTANGLE_GALLERY.width, 800) * 0.7) + "px";
-        }
+            _tagMedia[index].style.height = (Math.min(_tagOverlayGallery.clientWidth, 800) * 0.7) + "px";
+        }*/
     }
     
     updateSize();
