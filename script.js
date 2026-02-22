@@ -1435,6 +1435,9 @@ function nameAnimation()
     let yTranslateSmooth = 0;
     let height = 0;
     
+    let state = 1;
+    let timeStart = 0;
+    
     timePreviousRelative = performance.now();
     timePreviousAbsolute = performance.now();
     
@@ -1477,49 +1480,40 @@ function nameAnimation()
         height = 160 + RECTANGLE_HEADER.height;
         
         //WIP
-        for (index = 0; index < _countTagLetter; index++)
+        //if (yTranslateSmooth < -height - (40 * (_countTagLetter - index)))
+        if (yTranslateSmooth < /*-height*/-height && state === 1)
         {
-            //if (yTranslateSmooth < -height - (40 * (_countTagLetter - index)))
-            //{
-                //if (index === 13)
-                //{
-                    let azerty = 1 - ((-yTranslateSmooth - 0) / (100 + (50 * (_countTagLetter - index))));
-                    
-                    if (azerty < 0)
-                    {
-                        azerty = 0;
-                    }
-                    else if (azerty > 1)
-                    {
-                        azerty = 1;
-                    }
-                    
-                    let azerty2 = _widthLetter[index] * azerty;
-                    //_widthLetter[index] + 
-                    //(height + 100) - (100 * ((height + 100) - magnitude));
-                    
-                    /*if (azerty < 0)
-                    {
-                        azerty = 0;
-                    }
-                    else if (azerty > 1)
-                    {
-                        azerty = 1;
-                    }*/
-                    //_widthLetter[index]
-                    console.log("azerty = " + azerty/* + " azerty2 = " + azerty2*/);
-                    _tagLetter[index].style.opacity = azerty;
-                    _tagLetter[index].style.width = azerty2 + "px";
-                //}
-                //_tagLetter[index].style.opacity = "0";
+            timeStart = time;
+            state = 2;
+        }
+        
+        if (state === 2)
+        {
+            for (index = 0; index < _countTagLetter; index++)
+            {
+                //let azerty = 1 - ((-yTranslateSmooth - height) / (100 + (5 * (_countTagLetter - index))));
+                let azerty = 1 - ((time - timeStart) / (10 + (30 * (_countTagLetter - index))));
                 
+                if (azerty < 0)
+                {
+                    azerty = 0;
+                    //state = 3;
+                }
+                else if (azerty > 1)
+                {
+                    azerty = 1;
+                }
+                //console.log("azerty = " + azerty);
+                let azerty2 = _widthLetter[index] * azerty;
                 
-            //}
-            //else
-            //{
-                //_tagLetter[index].style.opacity = "1";
-            //    _tagLetter[index].style.width = "auto";
-            //}
+                _tagLetter[index].style.opacity = azerty;
+                _tagLetter[index].style.width = azerty2 + "px";
+            }
+            
+            /*if (azerty === 0 && state === 2)
+            {
+                state = 3;
+            }*/
         }
         //WIP
         
