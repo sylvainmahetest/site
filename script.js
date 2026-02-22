@@ -4,6 +4,7 @@ customElements.define("tag-loading-bar", class extends HTMLElement{});
 customElements.define("tag-canvas-particule", class extends HTMLElement{});
 
 customElements.define("tag-name", class extends HTMLElement{});
+customElements.define("tag-letter", class extends HTMLElement{});
 
 customElements.define("tag-overlay-header", class extends HTMLElement{});
 customElements.define("tag-overtitle", class extends HTMLElement{});
@@ -27,6 +28,9 @@ let _ryAccelerometer = 0;
 let _rzAccelerometer = 0;
 
 let _tagName = null;
+let _tagLetter = [];
+let _widthLetter = [];
+let _countTagLetter = 0;
 
 let _tagOverlayHeader = null;
 let _tagOvertitle = null;
@@ -37,7 +41,7 @@ let _tagScrollDown = null;
 let _tagOverlayGallery = null;
 let _tagMedia = [];
 let _tagImg = [];
-let _countTagMedia = 0;
+let _countTagMediaImg = 0;
 
 let _eventScroll = 0;
 
@@ -63,17 +67,6 @@ function fitText(tag, fontSize, letterSpacing, lineHeight)
         tag.style.letterSpacing = letterSpacing + "px";
         tag.style.lineHeight = lineHeight + "px";
     }
-    
-    /*if (fontSize !== FONT_SIZE)
-    {
-        tag.style.textAlign = "left";
-        tag.style.textAlignLast = "left";
-    }
-    else
-    {
-        tag.style.textAlign = "center";
-        tag.style.textAlignLast = "center";
-    }*/
     
     tag.style.visibility = "visible";
 }
@@ -128,6 +121,7 @@ function clampPositiveSymmetricalMinMax(value, minMax)
 
 function tag()
 {
+    const TAG_LETTER_IN_DOCUMENT = document.querySelectorAll("body tag-letter");
     const TAG_MEDIA_IN_DOCUMENT = document.querySelectorAll("body tag-media");
     const TAG_IMG_IN_DOCUMENT = document.querySelectorAll("body img");
     let index = 0;
@@ -138,6 +132,17 @@ function tag()
     _tagCanvasParticule = document.getElementById("tag-canvas-particule");
     
     _tagName = document.getElementById("tag-name");
+    
+    TAG_LETTER_IN_DOCUMENT.forEach((tag, index) =>
+    {
+        const RECTANGLE_LETTER = tag.getBoundingClientRect();
+        
+        _tagLetter[index] = tag;
+        _widthLetter[index] = RECTANGLE_LETTER.width;
+        
+        _countTagLetter++;
+        //console.log("_tagLetter[" + index + "].width = " + RECTANGLE_LETTER.width);
+    });
     
     _tagOverlayHeader = document.getElementById("tag-overlay-header");
     _tagOvertitle = document.getElementById("tag-overtitle");
@@ -150,7 +155,7 @@ function tag()
     TAG_MEDIA_IN_DOCUMENT.forEach((tag, index) =>
     {
         _tagMedia[index] = tag;
-        _countTagMedia++;
+        _countTagMediaImg++;
     });
     
     TAG_IMG_IN_DOCUMENT.forEach((tag, index) =>
@@ -1418,6 +1423,113 @@ function loadingAnimation()
     //requestAnimationFrame(updateAnimation);
 }
 
+function nameAnimation()
+{
+    let timePreviousRelative = 0;
+    let timePreviousAbsolute = 0;
+    let fadeIn = 0;
+    let fadeInLinear = 0;
+    let fadeInQuadratic = 0;
+    let smoothLetter = 0;
+    const SMOOTH_LETTER = 0.01;
+    let yTranslateSmooth = 0;
+    let height = 0;
+    
+    timePreviousRelative = performance.now();
+    timePreviousAbsolute = performance.now();
+    
+    function updateAnimation(time)
+    {
+        const TIME_DELTA = Math.min((time - timePreviousRelative) * 0.001, 0.04);
+        const RECTANGLE_HEADER = _tagOverlayHeader.getBoundingClientRect();
+        
+        timePreviousRelative = time;
+        
+        fadeIn = (time - timePreviousAbsolute) * 0.001;
+        
+        fadeInLinear = fadeIn;
+        
+        if (fadeInLinear > 1)
+        {
+            fadeInLinear = 1;
+        }
+        
+        if (fadeIn <= 1)
+        {
+            fadeInQuadratic = 1 - Math.pow(1 - fadeIn, 2);
+            
+            if (fadeInQuadratic > 1)
+            {
+                fadeInQuadratic = 1;
+            }
+        }
+        else
+        {
+            fadeInQuadratic = 1;
+        }
+        
+        _tagName.style.opacity = fadeInLinear;
+        _tagName.style.transform = "translate(0px, " + (-50 * (1 - fadeInQuadratic)) + "px)";
+        
+        smoothLetter = 1 - Math.pow(SMOOTH_LETTER, TIME_DELTA);
+        yTranslateSmooth += (_eventScroll - yTranslateSmooth) * smoothLetter;
+        
+        height = 160 + RECTANGLE_HEADER.height;
+        
+        //WIP
+        for (index = 0; index < _countTagLetter; index++)
+        {
+            //if (yTranslateSmooth < -height - (40 * (_countTagLetter - index)))
+            //{
+                //if (index === 13)
+                //{
+                    let azerty = 1 - ((-yTranslateSmooth - 0) / (100 + (50 * (_countTagLetter - index))));
+                    
+                    if (azerty < 0)
+                    {
+                        azerty = 0;
+                    }
+                    else if (azerty > 1)
+                    {
+                        azerty = 1;
+                    }
+                    
+                    let azerty2 = _widthLetter[index] * azerty;
+                    //_widthLetter[index] + 
+                    //(height + 100) - (100 * ((height + 100) - magnitude));
+                    
+                    /*if (azerty < 0)
+                    {
+                        azerty = 0;
+                    }
+                    else if (azerty > 1)
+                    {
+                        azerty = 1;
+                    }*/
+                    //_widthLetter[index]
+                    console.log("azerty = " + azerty/* + " azerty2 = " + azerty2*/);
+                    _tagLetter[index].style.opacity = azerty;
+                    _tagLetter[index].style.width = azerty2 + "px";
+                //}
+                //_tagLetter[index].style.opacity = "0";
+                
+                
+            //}
+            //else
+            //{
+                //_tagLetter[index].style.opacity = "1";
+            //    _tagLetter[index].style.width = "auto";
+            //}
+        }
+        //WIP
+        
+        requestAnimationFrame(updateAnimation);
+    }
+    
+    updateAnimation(timePreviousAbsolute);
+    //requestAnimationFrame(updateAnimation);
+}
+
 function headerAnimation()
 {
     let timePreviousRelative = 0;
@@ -1432,6 +1544,7 @@ function headerAnimation()
     const SMOOTH_OPACITY_SCALE = 0.01;
     let smoothOpacity = 1;
     let smoothScale = 1;
+    let index = 0;
     
     timePreviousRelative = performance.now();
     timePreviousAbsolute = performance.now();
@@ -1494,9 +1607,6 @@ function headerAnimation()
         _tagLoadingText.style.opacity = 1 - fadeInLinear;
         _tagLoadingBar.style.opacity = 1 - fadeInLinear;
         
-        _tagName.style.opacity = fadeInLinear;
-        _tagName.style.transform = "translate(0px, " + (-50 * (1 - fadeInQuadratic)) + "px)";
-        
         _tagOvertitle.style.opacity = fadeInLinear;
         _tagOvertitle.style.transform = "translate(" + (-10 * (1 - fadeInQuadratic)) + "px, 0px)";
         
@@ -1557,7 +1667,7 @@ function galleryAnimation()
         _tagOverlayGallery.style.top = top + "px";
         _tagOverlayGallery.style.opacity = "1";
         
-        for (index = 0; index < _countTagMedia; index++)
+        for (index = 0; index < _countTagMediaImg; index++)
         {
             _tagMedia[index].style.height = (Math.min(RECTANGLE_GALLERY.width, 800) * 0.7) + "px";
         }
@@ -1581,7 +1691,7 @@ function galleryAnimation()
         
         _tagOverlayGallery.style.transform = "translate(0px, " + (yTranslateSmooth) + "px)";
         
-        for (index = 0; index < _countTagMedia; index++)
+        for (index = 0; index < _countTagMediaImg; index++)
         {
             const RECTANGLE_IMG = _tagImg[index].getBoundingClientRect();
             
@@ -1654,7 +1764,7 @@ function windowResize()
         }
         //WIP
         
-        for (index = 0; index < _countTagMedia; index++)
+        for (index = 0; index < _countTagMediaImg; index++)
         {
             _tagMedia[index].style.height = (Math.min(_tagOverlayGallery.clientWidth, 800) * 0.7) + "px";
         }*/
@@ -1726,6 +1836,7 @@ async function loading()
         windowResize();
         screenOrientation();
         
+        nameAnimation();
         headerAnimation();
         galleryAnimation();
         

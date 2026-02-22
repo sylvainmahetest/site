@@ -683,9 +683,9 @@ body #tag-name
   writing-mode: horizontal-tb;
   color: var(--colorA);
   caret-color: transparent;
-  white-space: pre-wrap;
-  word-break: break-word;
-  overflow-wrap: break-word;
+  white-space: /*pre-wrap*/pre;
+  word-break: /*break-word*/keep-all;
+  overflow-wrap: /*break-word*/normal;
   overflow-x: visible;
   overflow-y: visible;
   scrollbar-width: auto;
@@ -705,6 +705,14 @@ body #tag-name
   pointer-events: none;
   -webkit-tap-highlight-color: transparent;
   -webkit-touch-callout: none;
+}
+
+body #tag-name tag-letter
+{
+  display: inline-block;
+  /*transform: scaleX(0.5);*/
+  /*opacity: 0;*/
+  /*width: 0px;*/
 }
 
 body #tag-overlay-header
@@ -1043,8 +1051,9 @@ body #tag-title
   -webkit-touch-callout: none;
 }
 
-body #tag-title bold
+body #tag-title tag-bold
 {
+  display: inline-block;
   background-color: var(--colorZ);
   box-shadow: 0px 15px 7px var(--colorC);
   text-shadow: none;
@@ -1811,9 +1820,9 @@ body tag-title-img
   writing-mode: horizontal-tb;
   color: var(--colorZ);
   caret-color: transparent;
-  white-space: pre-wrap;
-  word-break: break-word;
-  overflow-wrap: break-word;
+  white-space: pre;
+  word-break: keep-all;
+  overflow-wrap: normal;
   overflow-x: visible;
   overflow-y: visible;
   scrollbar-width: auto;
@@ -1923,9 +1932,9 @@ body tag-subtitle-img
   writing-mode: horizontal-tb;
   color: var(--colorZ);
   caret-color: transparent;
-  white-space: pre-wrap;
-  word-break: break-word;
-  overflow-wrap: break-word;
+  white-space: pre;
+  word-break: keep-all;
+  overflow-wrap: normal;
   overflow-x: visible;
   overflow-y: visible;
   scrollbar-width: auto;
