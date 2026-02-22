@@ -1481,7 +1481,7 @@ function nameAnimation()
         
         //WIP
         //if (yTranslateSmooth < -height - (40 * (_countTagLetter - index)))
-        if (yTranslateSmooth < /*-height*/-height && state === 1)
+        if (yTranslateSmooth < /*-height*/-650 && state === 1)
         {
             timeStart = time;
             state = 2;
