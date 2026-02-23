@@ -1,48 +1,38 @@
 customElements.define("tag-loading-text", class extends HTMLElement{});
 customElements.define("tag-loading-bar", class extends HTMLElement{});
-
 customElements.define("tag-canvas-particule", class extends HTMLElement{});
-
 customElements.define("tag-name", class extends HTMLElement{});
 customElements.define("tag-letter", class extends HTMLElement{});
-
 customElements.define("tag-overlay-header", class extends HTMLElement{});
 customElements.define("tag-overtitle", class extends HTMLElement{});
 customElements.define("tag-title", class extends HTMLElement{});
 customElements.define("tag-subtitle", class extends HTMLElement{});
 customElements.define("tag-scroll-down", class extends HTMLElement{});
-
 customElements.define("tag-overlay-gallery", class extends HTMLElement{});
 customElements.define("tag-media", class extends HTMLElement{});
 
 let _stateLoading = 1;
-
 let _tagLoadingText = null;
 let _tagLoadingBar = null;
-
 let _tagCanvasParticule = null;
 let _webGL = null;
 let _orientationScreen = 1;
 let _rxAccelerometer = 0;
 let _ryAccelerometer = 0;
 let _rzAccelerometer = 0;
-
 let _tagName = null;
 let _tagLetter = [];
 let _widthLetter = [];
 let _countTagLetter = 0;
-
 let _tagOverlayHeader = null;
 let _tagOvertitle = null;
 let _tagTitle = null;
 let _tagSubtitle = null;
 let _tagScrollDown = null;
-
 let _tagOverlayGallery = null;
 let _tagMedia = [];
 let _tagImg = [];
 let _countTagMediaImg = 0;
-
 let _eventScroll = 0;
 
 function fitText(tag, fontSize, letterSpacing, lineHeight)
@@ -141,7 +131,6 @@ function tag()
         _widthLetter[index] = RECTANGLE_LETTER.width;
         
         _countTagLetter++;
-        //console.log("_tagLetter[" + index + "].width = " + RECTANGLE_LETTER.width);
     });
     
     _tagOverlayHeader = document.getElementById("tag-overlay-header");
@@ -169,7 +158,7 @@ function event()
     let clientY = 0;
     let clientYPrevious = 0;
     let deltaY = 0;
-    let top = 0;
+    let topGallery = 0;
     let scrollMax = 0;
     
     _tagCanvasParticule.addEventListener("touchstart", event =>
@@ -220,14 +209,14 @@ function event()
             _eventScroll += deltaY * 1.5;
         }
         
-        top = 160 + RECTANGLE_HEADER.height + 100;
+        topGallery = 160 + RECTANGLE_HEADER.height + 50;
         
-        if (top < V_WINDOW)
+        if (topGallery < V_WINDOW)
         {
-            top = V_WINDOW;
+            topGallery = V_WINDOW;
         }
         
-        scrollMax = -RECTANGLE_GALLERY.height - (top - V_WINDOW);
+        scrollMax = -RECTANGLE_GALLERY.height - (topGallery - V_WINDOW);
         
         if (_eventScroll < scrollMax)
         {
@@ -259,14 +248,14 @@ function event()
             _eventScroll -= 50;
         }
         
-        top = 160 + RECTANGLE_HEADER.height + 100;
+        topGallery = 160 + RECTANGLE_HEADER.height + 50;
         
-        if (top < V_WINDOW)
+        if (topGallery < V_WINDOW)
         {
-            top = V_WINDOW;
+            topGallery = V_WINDOW;
         }
         
-        scrollMax = -RECTANGLE_GALLERY.height - (top - V_WINDOW);
+        scrollMax = -RECTANGLE_GALLERY.height - (topGallery - V_WINDOW);
         
         if (_eventScroll < scrollMax)
         {
@@ -1365,7 +1354,6 @@ function particuleAnimation()
     startBufferColorAlpha();
     
     updateAnimation(timePreviousRelative);
-    //requestAnimationFrame(updateAnimation);
 }
 
 function loadingAnimation()
@@ -1420,125 +1408,33 @@ function loadingAnimation()
     }
     
     updateAnimation(timePreviousAbsolute);
-    //requestAnimationFrame(updateAnimation);
 }
 
-function nameAnimation()
+function interfaceAnimation()
 {
     let timePreviousRelative = 0;
     let timePreviousAbsolute = 0;
     let fadeIn = 0;
     let fadeInLinear = 0;
     let fadeInQuadratic = 0;
-    let smoothLetter = 0;
-    const SMOOTH_LETTER = 0.01;
+    let index = 0;
+    let smoothTranslate = 0;
+    const SMOOTH_TRANSLATE = 0.01;
     let yTranslateSmooth = 0;
-    let height = 0;
-    
-    let state = 1;
-    let timeStart = 0;
-    
-    timePreviousRelative = performance.now();
-    timePreviousAbsolute = performance.now();
-    
-    function updateAnimation(time)
-    {
-        const TIME_DELTA = Math.min((time - timePreviousRelative) * 0.001, 0.04);
-        const RECTANGLE_HEADER = _tagOverlayHeader.getBoundingClientRect();
-        
-        timePreviousRelative = time;
-        
-        fadeIn = (time - timePreviousAbsolute) * 0.001;
-        
-        fadeInLinear = fadeIn;
-        
-        if (fadeInLinear > 1)
-        {
-            fadeInLinear = 1;
-        }
-        
-        if (fadeIn <= 1)
-        {
-            fadeInQuadratic = 1 - Math.pow(1 - fadeIn, 2);
-            
-            if (fadeInQuadratic > 1)
-            {
-                fadeInQuadratic = 1;
-            }
-        }
-        else
-        {
-            fadeInQuadratic = 1;
-        }
-        
-        _tagName.style.opacity = fadeInLinear;
-        _tagName.style.transform = "translate(0px, " + (-50 * (1 - fadeInQuadratic)) + "px)";
-        
-        smoothLetter = 1 - Math.pow(SMOOTH_LETTER, TIME_DELTA);
-        yTranslateSmooth += (_eventScroll - yTranslateSmooth) * smoothLetter;
-        
-        height = 160 + RECTANGLE_HEADER.height;
-        
-        //WIP
-        //if (yTranslateSmooth < -height - (40 * (_countTagLetter - index)))
-        if (yTranslateSmooth < /*-height*/-650 && state === 1)
-        {
-            timeStart = time;
-            state = 2;
-        }
-        
-        if (state === 2)
-        {
-            for (index = 0; index < _countTagLetter; index++)
-            {
-                //let azerty = 1 - ((-yTranslateSmooth - height) / (100 + (5 * (_countTagLetter - index))));
-                let azerty = 1 - ((time - timeStart) / (10 + (30 * (_countTagLetter - index))));
-                
-                if (azerty < 0)
-                {
-                    azerty = 0;
-                    //state = 3;
-                }
-                else if (azerty > 1)
-                {
-                    azerty = 1;
-                }
-                //console.log("azerty = " + azerty);
-                let azerty2 = _widthLetter[index] * azerty;
-                
-                _tagLetter[index].style.opacity = azerty;
-                _tagLetter[index].style.width = azerty2 + "px";
-            }
-            
-            /*if (azerty === 0 && state === 2)
-            {
-                state = 3;
-            }*/
-        }
-        //WIP
-        
-        requestAnimationFrame(updateAnimation);
-    }
-    
-    updateAnimation(timePreviousAbsolute);
-    //requestAnimationFrame(updateAnimation);
-}
-
-function headerAnimation()
-{
-    let timePreviousRelative = 0;
-    let timePreviousAbsolute = 0;
-    let fadeIn = 0;
-    let fadeInLinear = 0;
-    let fadeInQuadratic = 0;
-    let height = 0;
-    let opacity = 1;
-    let scale = 1;
     let smoothOpacityScale = 0;
     const SMOOTH_OPACITY_SCALE = 0.01;
     let smoothOpacity = 1;
     let smoothScale = 1;
-    let index = 0;
+    let scrollMax = 0;
+    let heightHeader = 0;
+    let heightGallery = 0;
+    let topGallery = 0;
+    let opacity = 1;
+    let scale = 1;
+    let offsetImg = 0;
+    let widthPerLetter = 0;
+    let opacityLetter = 0;
+    let widthLetter = 0;
     
     timePreviousRelative = performance.now();
     timePreviousAbsolute = performance.now();
@@ -1546,7 +1442,9 @@ function headerAnimation()
     function updateAnimation(time)
     {
         const TIME_DELTA = Math.min((time - timePreviousRelative) * 0.001, 0.04);
+        const V_WINDOW = window.innerHeight;
         const RECTANGLE_HEADER = _tagOverlayHeader.getBoundingClientRect();
+        const RECTANGLE_GALLERY = _tagOverlayGallery.getBoundingClientRect();
         
         timePreviousRelative = time;
         
@@ -1573,33 +1471,89 @@ function headerAnimation()
             fadeInQuadratic = 1;
         }
         
-        height = 160 + RECTANGLE_HEADER.height;
+        heightHeader = 160 + RECTANGLE_HEADER.height;
+        topGallery = heightHeader + 50;
+        
+        if (topGallery < V_WINDOW)
+        {
+            topGallery = V_WINDOW;
+        }
+        
+        scrollMax = -RECTANGLE_GALLERY.height - (topGallery - V_WINDOW);
+        
+        if (_eventScroll < scrollMax)
+        {
+            _eventScroll = scrollMax;
+            yTranslateSmooth = scrollMax;
+        }
+        else if (_eventScroll > 0)
+        {
+            _eventScroll = 0;
+            yTranslateSmooth = 0;
+        }
         
         if (_eventScroll === 0)
         {
             opacity = 1;
             scale = 1;
         }
-        else if (_eventScroll < -height)
+        else if (_eventScroll < -heightHeader)
         {
             opacity = 0;
             scale = 0.85;
         }
         else
         {
-            opacity = 1 + (1 / (height / _eventScroll));
-            scale = 1 + (0.15 / (height / _eventScroll));
+            opacity = 1 + (1 / (heightHeader / _eventScroll));
+            scale = 1 + (0.15 / (heightHeader / _eventScroll));
         }
+        
+        //SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH
+        smoothTranslate = 1 - Math.pow(SMOOTH_TRANSLATE, TIME_DELTA);
+        yTranslateSmooth += (_eventScroll - yTranslateSmooth) * smoothTranslate;
         
         smoothOpacityScale = 1 - Math.pow(SMOOTH_OPACITY_SCALE, TIME_DELTA);
         smoothOpacity += (opacity - smoothOpacity) * smoothOpacityScale;
         smoothScale += (scale - smoothScale) * smoothOpacityScale;
+        //SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH
+        
+        //TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG
+        if (fadeIn < 1)
+        {
+            _tagLoadingText.style.opacity = 1 - fadeInLinear;
+            _tagLoadingBar.style.opacity = 1 - fadeInLinear;
+        }
+        else
+        {
+            _tagLoadingText.style.display = "none";
+            _tagLoadingBar.style.display = "none";
+        }
+        
+        for (index = 0; index < _countTagLetter; index++)
+        {
+            widthPerLetter = heightHeader / _countTagLetter;
+            opacityLetter = 1 - (-yTranslateSmooth / (widthPerLetter + (widthPerLetter * (_countTagLetter - index))));
+            
+            if (opacityLetter < 0)
+            {
+                opacityLetter = 0;
+            }
+            else if (opacityLetter > 1)
+            {
+                opacityLetter = 1;
+            }
+            
+            widthLetter = _widthLetter[index] * opacityLetter;
+            
+            _tagLetter[index].style.opacity = opacityLetter;
+            _tagLetter[index].style.width = widthLetter + "px";
+        }
+        
+        _tagName.style.opacity = fadeInLinear;
+        _tagName.style.transform = "translate(0px, " + (-50 * (1 - fadeInQuadratic)) + "px)";
         
         _tagOverlayHeader.style.opacity = smoothOpacity;
         _tagOverlayHeader.style.transform = "scale(" + smoothScale + ")";
-        
-        _tagLoadingText.style.opacity = 1 - fadeInLinear;
-        _tagLoadingBar.style.opacity = 1 - fadeInLinear;
         
         _tagOvertitle.style.opacity = fadeInLinear;
         _tagOvertitle.style.transform = "translate(" + (-10 * (1 - fadeInQuadratic)) + "px, 0px)";
@@ -1613,155 +1567,57 @@ function headerAnimation()
         _tagScrollDown.style.opacity = fadeInLinear;
         _tagScrollDown.style.transform = "translate(" + (-35 * (1 - fadeInQuadratic)) + "px, " + (-35 * (1 - fadeInQuadratic)) + "px)";
         
-        if (fadeIn >= 1)
-        {
-            _tagLoadingText.style.display = "none";
-            _tagLoadingBar.style.display = "none";
-        }
-        
-        requestAnimationFrame(updateAnimation);
-    }
-    
-    updateAnimation(timePreviousRelative);
-    //requestAnimationFrame(updateAnimation);
-}
-
-function galleryAnimation()
-{
-    let timePreviousRelative = 0;
-    let smoothTranslate = 0;
-    const SMOOTH_TRANSLATE = 0.01;
-    let yTranslateSmooth = 0;
-    let index = 0;
-    let height = 0;
-    let offset = 0;
-    
-    timePreviousRelative = performance.now();
-    
-    function updateAnimation(time)
-    {
-        const TIME_DELTA = Math.min((time - timePreviousRelative) * 0.001, 0.04);
-        const H_WINDOW = window.innerWidth;
-        const V_WINDOW = window.innerHeight;
-        const RECTANGLE_HEADER = _tagOverlayHeader.getBoundingClientRect();
-        const RECTANGLE_GALLERY = _tagOverlayGallery.getBoundingClientRect();
-        let top = 0;
-        let scrollMax = 0;
-        
-        timePreviousRelative = time;
-        
-        //WIP
-        top = 160 + RECTANGLE_HEADER.height + 100;
-        
-        if (top < V_WINDOW)
-        {
-            top = V_WINDOW;
-        }
-        
-        _tagOverlayGallery.style.top = top + "px";
+        _tagOverlayGallery.style.top = topGallery + "px";
         _tagOverlayGallery.style.opacity = "1";
+        
+        _tagOverlayGallery.style.transform = "translate(0px, " + (yTranslateSmooth) + "px)";
         
         for (index = 0; index < _countTagMediaImg; index++)
         {
             _tagMedia[index].style.height = (Math.min(RECTANGLE_GALLERY.width, 800) * 0.7) + "px";
         }
         
-        scrollMax = -RECTANGLE_GALLERY.height - (top - V_WINDOW);
-        
-        if (_eventScroll < scrollMax)
-        {
-            _eventScroll = scrollMax;
-            yTranslateSmooth = scrollMax;
-        }
-        else if (_eventScroll > 0)
-        {
-            _eventScroll = 0;
-            yTranslateSmooth = 0;
-        }
-        //WIP
-        
-        smoothTranslate = 1 - Math.pow(SMOOTH_TRANSLATE, TIME_DELTA);
-        yTranslateSmooth += (_eventScroll - yTranslateSmooth) * smoothTranslate;
-        
-        _tagOverlayGallery.style.transform = "translate(0px, " + (yTranslateSmooth) + "px)";
-        
         for (index = 0; index < _countTagMediaImg; index++)
         {
             const RECTANGLE_IMG = _tagImg[index].getBoundingClientRect();
             
-            height = Math.min(RECTANGLE_GALLERY.width, 800) * 0.35;
+            heightGallery = Math.min(RECTANGLE_GALLERY.width, 800) * 0.35;
             
-            if (height < V_WINDOW)
+            if (heightGallery < V_WINDOW)
             {
-                offset = 100 * ((RECTANGLE_IMG.top + height) / V_WINDOW);
+                offsetImg = 100 * ((RECTANGLE_IMG.top + heightGallery) / V_WINDOW);
             }
             else
             {
-                offset = 50;
+                offsetImg = 50;
             }
             
-            _tagImg[index].style.objectPosition = "50% " + offset + "%";
+            _tagImg[index].style.objectPosition = "50% " + offsetImg + "%";
         }
+        //TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG
         
         requestAnimationFrame(updateAnimation);
     }
     
     updateAnimation(timePreviousRelative);
-    //requestAnimationFrame(updateAnimation);
 }
 
 function windowResize()
 {
-    //let top = 0;
-    //let scrollMax = 0;
-    //let index = 0;
-    
     function updateSize()
     {
         const H_WINDOW = window.innerWidth;
         const V_WINDOW = window.innerHeight;
         const DPR = window.devicePixelRatio || 1;
-        //const RECTANGLE_HEADER = _tagOverlayHeader.getBoundingClientRect();
-        //const RECTANGLE_GALLERY = _tagOverlayGallery.getBoundingClientRect();
         
         _tagCanvasParticule.width = Math.floor(H_WINDOW * DPR);
         _tagCanvasParticule.height = Math.floor(V_WINDOW * DPR);
-        //_tagCanvasParticule.style.width = H_WINDOW + "px";
-        //_tagCanvasParticule.style.height = V_WINDOW + "px";
         
         _webGL.viewport(0, 0, _tagCanvasParticule.width, _tagCanvasParticule.height);
         
         _tagOverlayHeader.style.opacity = "1";
         
         fitText(_tagTitle, 100, 0, 110);
-        
-        /*top = 160 + _tagOverlayHeader.clientHeight + 100;
-        
-        if (top < V_WINDOW)
-        {
-            top = V_WINDOW;
-        }
-        
-        _tagOverlayGallery.style.top = top + "px";
-        _tagOverlayGallery.style.opacity = "1";
-        
-        //WIP
-        scrollMax = -_tagOverlayGallery.clientHeight - (top - V_WINDOW);
-        
-        if (_eventScroll < scrollMax)
-        {
-            _eventScroll = scrollMax;
-        }
-        else if (_eventScroll > 0)
-        {
-            _eventScroll = 0;
-        }
-        //WIP
-        
-        for (index = 0; index < _countTagMediaImg; index++)
-        {
-            _tagMedia[index].style.height = (Math.min(_tagOverlayGallery.clientWidth, 800) * 0.7) + "px";
-        }*/
     }
     
     updateSize();
@@ -1830,9 +1686,7 @@ async function loading()
         windowResize();
         screenOrientation();
         
-        nameAnimation();
-        headerAnimation();
-        galleryAnimation();
+        interfaceAnimation();
         
         loaded();
     }
