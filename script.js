@@ -10,6 +10,11 @@ customElements.define("tag-subtitle", class extends HTMLElement{});
 customElements.define("tag-scroll-down", class extends HTMLElement{});
 customElements.define("tag-overlay-gallery", class extends HTMLElement{});
 customElements.define("tag-media", class extends HTMLElement{});
+customElements.define("tag-overlay-footer", class extends HTMLElement{});
+customElements.define("tag-line", class extends HTMLElement{});
+customElements.define("tag-contact", class extends HTMLElement{});
+customElements.define("tag-input-contact", class extends HTMLElement{});
+customElements.define("tag-submit-contact", class extends HTMLElement{});
 
 let _stateLoading = 1;
 let _tagLoadingText = null;
@@ -34,6 +39,11 @@ let _tagMedia = [];
 let _tagImg = [];
 let _countTagMediaImg = 0;
 let _eventScroll = 0;
+let _tagOverlayFooter = null;
+let _tagLine = null;
+let _tagContact = null;
+let _tagInputContact = null;
+let _tagSubmitContact = null;
 
 function fitText(tag, fontSize, letterSpacing, lineHeight)
 {
@@ -151,6 +161,12 @@ function tag()
     {
         _tagImg[index] = tag;
     });
+    
+    _tagOverlayFooter = document.getElementById("tag-overlay-footer");
+    _tagLine = document.getElementById("tag-line");
+    _tagContact = document.getElementById("tag-contact");
+    _tagInputContact = document.getElementById("tag-input-contact");
+    _tagSubmitContact = document.getElementById("tag-submit-contact");
 }
 
 function event()
@@ -188,6 +204,7 @@ function event()
         const LENGTH_TOUCH = event.touches.length;
         const RECTANGLE_GALLERY = _tagOverlayGallery.getBoundingClientRect();
         const RECTANGLE_HEADER = _tagOverlayHeader.getBoundingClientRect();
+        const RECTANGLE_FOOTER = _tagOverlayFooter.getBoundingClientRect();
         
         if (LENGTH_TOUCH === 1)
         {
@@ -209,14 +226,14 @@ function event()
             _eventScroll += deltaY * 1.5;
         }
         
-        topGallery = 160 + RECTANGLE_HEADER.height + 50;
+        /*topGallery = 160 + RECTANGLE_HEADER.height + 50;
         
         if (topGallery < V_WINDOW)
         {
             topGallery = V_WINDOW;
         }
         
-        scrollMax = -RECTANGLE_GALLERY.height - (topGallery - V_WINDOW);
+        scrollMax = -(RECTANGLE_GALLERY.height - ((topGallery - (30 + RECTANGLE_FOOTER.height + 200)) - V_WINDOW));
         
         if (_eventScroll < scrollMax)
         {
@@ -225,7 +242,7 @@ function event()
         else if (_eventScroll > 0)
         {
             _eventScroll = 0;
-        }
+        }*/
         
         event.preventDefault();
     },
@@ -238,6 +255,7 @@ function event()
         const V_WINDOW = window.innerHeight;
         const RECTANGLE_HEADER = _tagOverlayHeader.getBoundingClientRect();
         const RECTANGLE_GALLERY = _tagOverlayGallery.getBoundingClientRect();
+        const RECTANGLE_FOOTER = _tagOverlayFooter.getBoundingClientRect();
         
         if (event.deltaY < 0)
         {
@@ -248,14 +266,14 @@ function event()
             _eventScroll -= 50;
         }
         
-        topGallery = 160 + RECTANGLE_HEADER.height + 50;
+        /*topGallery = 160 + RECTANGLE_HEADER.height + 50;
         
         if (topGallery < V_WINDOW)
         {
             topGallery = V_WINDOW;
         }
         
-        scrollMax = -RECTANGLE_GALLERY.height - (topGallery - V_WINDOW);
+        scrollMax = -(RECTANGLE_GALLERY.height - ((topGallery - (30 + RECTANGLE_FOOTER.height + 200)) - V_WINDOW));
         
         if (_eventScroll < scrollMax)
         {
@@ -264,7 +282,7 @@ function event()
         else if (_eventScroll > 0)
         {
             _eventScroll = 0;
-        }
+        }*/
     });
 }
 
@@ -1410,6 +1428,54 @@ function loadingAnimation()
     updateAnimation(timePreviousAbsolute);
 }
 
+function windowResize()
+{
+    function updateSize()
+    {
+        const H_WINDOW = window.innerWidth;
+        const V_WINDOW = window.innerHeight;
+        const DPR = window.devicePixelRatio || 1;
+        
+        _tagCanvasParticule.width = Math.floor(H_WINDOW * DPR);
+        _tagCanvasParticule.height = Math.floor(V_WINDOW * DPR);
+        
+        _webGL.viewport(0, 0, _tagCanvasParticule.width, _tagCanvasParticule.height);
+        
+        fitText(_tagTitle, 100, 0, 110);
+    }
+    
+    updateSize();
+    window.addEventListener("resize", updateSize);
+}
+
+function screenOrientation()
+{
+    function updateOrientation()
+    {
+        const ORIENTATION_SCREEN = screen.orientation.type || "portrait-primary";
+        
+        if (ORIENTATION_SCREEN === "portrait-primary")
+        {
+            _orientationScreen = 1;
+        }
+        else if (ORIENTATION_SCREEN === "portrait-secondary")
+        {
+            _orientationScreen = 2;
+        }
+        else if (ORIENTATION_SCREEN === "landscape-primary")
+        {
+            _orientationScreen = 3;
+        }
+        else if (ORIENTATION_SCREEN === "landscape-secondary")
+        {
+            _orientationScreen = 4;
+        }
+    }
+    
+    updateOrientation();
+    screen.orientation.addEventListener("change", updateOrientation);
+}
+
 function interfaceAnimation()
 {
     let timePreviousRelative = 0;
@@ -1418,15 +1484,13 @@ function interfaceAnimation()
     let fadeInLinear = 0;
     let fadeInQuadratic = 0;
     let index = 0;
-    let smoothTranslate = 0;
-    const SMOOTH_TRANSLATE = 0.01;
+    let smoothAll = 0;
+    const SMOOTH_ALL = 0.01;
     let yTranslateSmooth = 0;
-    let smoothOpacityScale = 0;
-    const SMOOTH_OPACITY_SCALE = 0.01;
-    let smoothOpacity = 1;
-    let smoothScale = 1;
+    let opacitySmooth = 1;
+    let scaleSmooth = 1;
     let scrollMax = 0;
-    let heightHeader = 0;
+    let bottomHeader = 0;
     let heightGallery = 0;
     let topGallery = 0;
     let opacity = 1;
@@ -1439,12 +1503,17 @@ function interfaceAnimation()
     timePreviousRelative = performance.now();
     timePreviousAbsolute = performance.now();
     
+    //smoothqsdfghj
+    let smoothqsdfghj = 0;
+    //smoothqsdfghj
+    
     function updateAnimation(time)
     {
         const TIME_DELTA = Math.min((time - timePreviousRelative) * 0.001, 0.04);
         const V_WINDOW = window.innerHeight;
         const RECTANGLE_HEADER = _tagOverlayHeader.getBoundingClientRect();
         const RECTANGLE_GALLERY = _tagOverlayGallery.getBoundingClientRect();
+        const RECTANGLE_FOOTER = _tagOverlayFooter.getBoundingClientRect();
         
         timePreviousRelative = time;
         
@@ -1471,25 +1540,20 @@ function interfaceAnimation()
             fadeInQuadratic = 1;
         }
         
-        heightHeader = 160 + RECTANGLE_HEADER.height;
-        topGallery = heightHeader + 50;
+        scrollMax = -(RECTANGLE_GALLERY.height + 100 + RECTANGLE_FOOTER.height + 30);
         
-        if (topGallery < V_WINDOW)
-        {
-            topGallery = V_WINDOW;
-        }
+        bottomHeader = 160 + RECTANGLE_HEADER.height;
+        topGallery = V_WINDOW;
         
-        scrollMax = -RECTANGLE_GALLERY.height - (topGallery - V_WINDOW);
-        
-        if (_eventScroll < scrollMax)
-        {
-            _eventScroll = scrollMax;
-            yTranslateSmooth = scrollMax;
-        }
-        else if (_eventScroll > 0)
+        if (_eventScroll > 0)
         {
             _eventScroll = 0;
-            yTranslateSmooth = 0;
+            //yTranslateSmooth = 0;
+        }
+        else if (_eventScroll < scrollMax)
+        {
+            _eventScroll = scrollMax;
+            //yTranslateSmooth = scrollMax;
         }
         
         if (_eventScroll === 0)
@@ -1497,24 +1561,22 @@ function interfaceAnimation()
             opacity = 1;
             scale = 1;
         }
-        else if (_eventScroll < -heightHeader)
+        else if (_eventScroll < -bottomHeader)
         {
             opacity = 0;
             scale = 0.85;
         }
         else
         {
-            opacity = 1 + (1 / (heightHeader / _eventScroll));
-            scale = 1 + (0.15 / (heightHeader / _eventScroll));
+            opacity = 1 + (1 / (bottomHeader / _eventScroll));
+            scale = 1 + (0.15 / (bottomHeader / _eventScroll));
         }
         
         //SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH
-        smoothTranslate = 1 - Math.pow(SMOOTH_TRANSLATE, TIME_DELTA);
-        yTranslateSmooth += (_eventScroll - yTranslateSmooth) * smoothTranslate;
-        
-        smoothOpacityScale = 1 - Math.pow(SMOOTH_OPACITY_SCALE, TIME_DELTA);
-        smoothOpacity += (opacity - smoothOpacity) * smoothOpacityScale;
-        smoothScale += (scale - smoothScale) * smoothOpacityScale;
+        smoothAll = 1 - Math.pow(SMOOTH_ALL, TIME_DELTA);
+        yTranslateSmooth += (_eventScroll - yTranslateSmooth) * smoothAll;
+        opacitySmooth += (opacity - opacitySmooth) * smoothAll;
+        scaleSmooth += (scale - scaleSmooth) * smoothAll;
         //SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH
         
         //TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG
@@ -1531,7 +1593,7 @@ function interfaceAnimation()
         
         for (index = 0; index < _countTagLetter; index++)
         {
-            widthPerLetter = heightHeader / _countTagLetter;
+            widthPerLetter = bottomHeader / _countTagLetter;
             opacityLetter = 1 - (-yTranslateSmooth / (widthPerLetter + (widthPerLetter * (_countTagLetter - index))));
             
             if (opacityLetter < 0)
@@ -1552,8 +1614,8 @@ function interfaceAnimation()
         _tagName.style.opacity = fadeInLinear;
         _tagName.style.transform = "translate(0px, " + (-50 * (1 - fadeInQuadratic)) + "px)";
         
-        _tagOverlayHeader.style.opacity = smoothOpacity;
-        _tagOverlayHeader.style.transform = "scale(" + smoothScale + ")";
+        _tagOverlayHeader.style.opacity = opacitySmooth;
+        _tagOverlayHeader.style.transform = "scale(" + scaleSmooth + ")";
         
         _tagOvertitle.style.opacity = fadeInLinear;
         _tagOvertitle.style.transform = "translate(" + (-10 * (1 - fadeInQuadratic)) + "px, 0px)";
@@ -1594,7 +1656,43 @@ function interfaceAnimation()
             
             _tagImg[index].style.objectPosition = "50% " + offsetImg + "%";
         }
-        //TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG
+        
+        //TAG FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER
+        //TAG FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER
+        //TAG FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER
+        //TAG FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER
+        let azerty = 0;
+        let topFooter = RECTANGLE_FOOTER.height + 30;
+        let qsdfghj = 0;
+        
+        if (_eventScroll >= -((RECTANGLE_GALLERY.height - 25) + topFooter))
+        {
+            qsdfghj = 0;
+        }
+        else
+        {
+            azerty = (RECTANGLE_GALLERY.height + 100 + RECTANGLE_FOOTER.height + 30);
+            qsdfghj = 1 - ((azerty + _eventScroll) / (25 + 100));
+        }
+        
+        //SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH
+        smoothqsdfghj += (qsdfghj - smoothqsdfghj) * smoothAll;
+        //SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH
+        
+        //if (qsdfghj >
+        
+        //console.log("[qsdfghj = " + smoothqsdfghj + "] [azerty = " + azerty + "]");
+        
+        _tagLine.style.opacity = smoothqsdfghj;
+        //_tagLine.style.width = (smoothqsdfghj * 100) + "%";
+        _tagLine.style.transform = "translate(0px, " + ((1 - smoothqsdfghj) * 20) + "px) scaleX(" + smoothqsdfghj + ")";
+        
+        _tagContact.style.opacity = smoothqsdfghj;
+        _tagContact.style.transform = "translate(0px, " + ((1 - smoothqsdfghj) * 100) + "px)";
+        //TAG FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER
+        //TAG FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER
+        //TAG FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER
+        //TAG FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER
         
         requestAnimationFrame(updateAnimation);
     }
@@ -1602,54 +1700,14 @@ function interfaceAnimation()
     updateAnimation(timePreviousRelative);
 }
 
-function windowResize()
+function input()
 {
-    function updateSize()
+    _tagSubmitContact.addEventListener("click", () =>
     {
-        const H_WINDOW = window.innerWidth;
-        const V_WINDOW = window.innerHeight;
-        const DPR = window.devicePixelRatio || 1;
-        
-        _tagCanvasParticule.width = Math.floor(H_WINDOW * DPR);
-        _tagCanvasParticule.height = Math.floor(V_WINDOW * DPR);
-        
-        _webGL.viewport(0, 0, _tagCanvasParticule.width, _tagCanvasParticule.height);
-        
-        _tagOverlayHeader.style.opacity = "1";
-        
-        fitText(_tagTitle, 100, 0, 110);
-    }
-    
-    updateSize();
-    window.addEventListener("resize", updateSize);
-}
-
-function screenOrientation()
-{
-    function updateOrientation()
-    {
-        const ORIENTATION_SCREEN = screen.orientation.type || "portrait-primary";
-        
-        if (ORIENTATION_SCREEN === "portrait-primary")
-        {
-            _orientationScreen = 1;
-        }
-        else if (ORIENTATION_SCREEN === "portrait-secondary")
-        {
-            _orientationScreen = 2;
-        }
-        else if (ORIENTATION_SCREEN === "landscape-primary")
-        {
-            _orientationScreen = 3;
-        }
-        else if (ORIENTATION_SCREEN === "landscape-secondary")
-        {
-            _orientationScreen = 4;
-        }
-    }
-    
-    updateOrientation();
-    screen.orientation.addEventListener("change", updateOrientation);
+        //_tagInputContact.value
+        console.log("_tagInputContact.value = " + _tagInputContact.value);
+        _tagInputContact.value = "";
+    });
 }
 
 function loaded()
@@ -1687,6 +1745,8 @@ async function loading()
         screenOrientation();
         
         interfaceAnimation();
+        
+        input();
         
         loaded();
     }
