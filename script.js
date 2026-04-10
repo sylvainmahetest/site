@@ -515,7 +515,7 @@ event.preventDefault();
         activeTouchA = true;
         activeTouchB = true;
         
-        //event.preventDefault();
+        event.preventDefault();
     },
     {
         passive: false
