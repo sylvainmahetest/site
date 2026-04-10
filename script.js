@@ -174,8 +174,8 @@ function event()
     let clientYPrevious = 0;
     let deltaY = 0;
     
-    _tagCanvasParticule.addEventListener("touchstart", event =>
-    //document.body.addEventListener("touchstart", event =>
+    //_tagCanvasParticule.addEventListener("touchstart", event =>
+    document.addEventListener("touchstart", event =>
     {
         const LENGTH_TOUCH = event.touches.length;
         
@@ -196,8 +196,8 @@ function event()
         passive: false
     });
     
-    _tagCanvasParticule.addEventListener("touchmove", event =>
-    //document.body.addEventListener("touchmove", event =>
+    //_tagCanvasParticule.addEventListener("touchmove", event =>
+    document.addEventListener("touchmove", event =>
     {
         const LENGTH_TOUCH = event.touches.length;
         
@@ -228,7 +228,7 @@ function event()
     });
     
     //_tagCanvasParticule.addEventListener("wheel", event =>
-    document.body.addEventListener("wheel", event =>
+    document.addEventListener("wheel", event =>
     {
         if (event.deltaY < 0)
         {
@@ -439,7 +439,7 @@ function particuleAnimation()
     const DIAMETER_BLUR = 7;
     
     _tagCanvasParticule.addEventListener("touchstart", event =>
-    //document.body.addEventListener("touchstart", event =>
+    //document.addEventListener("touchstart", event =>
     {
         const H_WINDOW = window.innerWidth;
         const V_WINDOW = window.innerHeight;
@@ -476,7 +476,7 @@ function particuleAnimation()
     });
     
     _tagCanvasParticule.addEventListener("touchmove", event =>
-    //document.body.addEventListener("touchmove", event =>
+    //document.addEventListener("touchmove", event =>
     {
         const H_WINDOW = window.innerWidth;
         const V_WINDOW = window.innerHeight;
@@ -508,21 +508,21 @@ function particuleAnimation()
     });
     
     _tagCanvasParticule.addEventListener("touchend", () =>
-    //document.body.addEventListener("touchend", () =>
+    //document.addEventListener("touchend", () =>
     {
         activeTouchA = false;
         activeTouchB = false;
     });
     
     _tagCanvasParticule.addEventListener("touchcancel", () =>
-    //document.body.addEventListener("touchcancel", () =>
+    //document.addEventListener("touchcancel", () =>
     {
         activeTouchA = false;
         activeTouchB = false;
     });
     
     //_tagCanvasParticule.addEventListener("pointerenter", event =>
-    document.body.addEventListener("pointerenter", event =>
+    document.addEventListener("pointerenter", event =>
     {
         const H_WINDOW = window.innerWidth;
         const V_WINDOW = window.innerHeight;
@@ -547,7 +547,7 @@ function particuleAnimation()
     });
     
     //_tagCanvasParticule.addEventListener("pointerdown", event =>
-    document.body.addEventListener("pointerdown", event =>
+    document.addEventListener("pointerdown", event =>
     {
         const H_WINDOW = window.innerWidth;
         const V_WINDOW = window.innerHeight;
@@ -568,7 +568,7 @@ function particuleAnimation()
     });
     
     //_tagCanvasParticule.addEventListener("pointermove", event =>
-    document.body.addEventListener("pointermove", event =>
+    document.addEventListener("pointermove", event =>
     {
         const H_WINDOW = window.innerWidth;
         const V_WINDOW = window.innerHeight;
@@ -588,20 +588,20 @@ function particuleAnimation()
     });
     
     //_tagCanvasParticule.addEventListener("pointerup", () =>
-    document.body.addEventListener("pointerup", () =>
+    document.addEventListener("pointerup", () =>
     {
         activeTouchB = false;
     });
     
     //_tagCanvasParticule.addEventListener("pointerleave", () =>
-    document.body.addEventListener("pointerleave", () =>
+    document.addEventListener("pointerleave", () =>
     {
         activeTouchA = false;
         activeTouchB = false;
     });
     
     //_tagCanvasParticule.addEventListener("pointercancel", () =>
-    document.body.addEventListener("pointercancel", () =>
+    document.addEventListener("pointercancel", () =>
     {
         activeTouchA = false;
         activeTouchB = false;
