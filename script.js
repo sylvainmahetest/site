@@ -56,7 +56,7 @@ function fitText(tag, fontSize, letterSpacing, lineHeight)
     tag.style.letterSpacing = letterSpacing + "px";
     tag.style.lineHeight = lineHeight + "px";
     
-    while(tag.scrollWidth > PARENT.clientWidth)
+    while (tag.scrollWidth > PARENT.clientWidth)
     {
         fontSize--;
         
@@ -174,10 +174,9 @@ function event()
     let clientY = 0;
     let clientYPrevious = 0;
     let deltaY = 0;
-    let topGallery = 0;
-    let scrollMax = 0;
     
-    _tagCanvasParticule.addEventListener("touchstart", event =>
+    //_tagCanvasParticule.addEventListener("touchstart", event =>
+    document.body.addEventListener("touchstart", event =>
     {
         const LENGTH_TOUCH = event.touches.length;
         
@@ -198,7 +197,8 @@ function event()
         passive: false
     });
     
-    _tagCanvasParticule.addEventListener("touchmove", event =>
+    //_tagCanvasParticule.addEventListener("touchmove", event =>
+    document.body.addEventListener("touchmove", event =>
     {
         const V_WINDOW = window.innerHeight;
         const LENGTH_TOUCH = event.touches.length;
@@ -226,31 +226,14 @@ function event()
             _eventScroll += deltaY * 1.5;
         }
         
-        /*topGallery = 160 + RECTANGLE_HEADER.height + 50;
-        
-        if (topGallery < V_WINDOW)
-        {
-            topGallery = V_WINDOW;
-        }
-        
-        scrollMax = -(RECTANGLE_GALLERY.height - ((topGallery - (30 + RECTANGLE_FOOTER.height + 200)) - V_WINDOW));
-        
-        if (_eventScroll < scrollMax)
-        {
-            _eventScroll = scrollMax;
-        }
-        else if (_eventScroll > 0)
-        {
-            _eventScroll = 0;
-        }*/
-        
         event.preventDefault();
     },
     {
         passive: false
     });
     
-    _tagCanvasParticule.addEventListener("wheel", event =>
+    //_tagCanvasParticule.addEventListener("wheel", event =>
+    document.body.addEventListener("wheel", event =>
     {
         const V_WINDOW = window.innerHeight;
         const RECTANGLE_HEADER = _tagOverlayHeader.getBoundingClientRect();
@@ -265,24 +248,6 @@ function event()
         {
             _eventScroll -= 50;
         }
-        
-        /*topGallery = 160 + RECTANGLE_HEADER.height + 50;
-        
-        if (topGallery < V_WINDOW)
-        {
-            topGallery = V_WINDOW;
-        }
-        
-        scrollMax = -(RECTANGLE_GALLERY.height - ((topGallery - (30 + RECTANGLE_FOOTER.height + 200)) - V_WINDOW));
-        
-        if (_eventScroll < scrollMax)
-        {
-            _eventScroll = scrollMax;
-        }
-        else if (_eventScroll > 0)
-        {
-            _eventScroll = 0;
-        }*/
     });
 }
 
@@ -406,8 +371,6 @@ function particuleAnimation()
     let timeTouch2 = 0;
     let timeAttractorRandom1 = 0;
     let timeAttractorRandom2 = 0;
-    
-    //EN COURS DE TRI
     let xJitterTouch = 0;
     let yJitterTouch = 0;
     let widthRingTouch = 1;
@@ -444,7 +407,6 @@ function particuleAnimation()
     let hTeleport = 0;
     let vTeleport = 0;
     let fadeIn = 0;
-    
     const LOGO = document.createElement("canvas");
     let ctxLogo = null;
     let measureLogo = null;
@@ -457,17 +419,11 @@ function particuleAnimation()
     let yPixelLogo = [];
     let lenghtPixel = 0;
     let randomLogo = 0;
-    
-    //EN COURS DE TRI
     const SAFE_SQRT = 0.000001;
-    
-    //const TEXT_LOGO = String.fromCodePoint(0x88fd);//FABRICATION
-    //const TEXT_LOGO = String.fromCodePoint(0x85dd);//ARTISANAT
     const TEXT_LOGO = "S";
-    const FONT_LOGO = "fontB";
+    const FONT_LOGO = "fontA";
     const SIZE_LOGO = 700;
     const WEIGHT_LOGO = 200;
-    
     const COUNT_PARTICLE = 10000;
     const COUNT_PARTICLE_SHAPE = 7500;
     const SIZE_X_SPIN_SHAPE = 1000;
@@ -492,22 +448,27 @@ function particuleAnimation()
     const Y_OFFSET_BLUR = 300;
     const DIAMETER_BLUR = 7;
     
-    _tagCanvasParticule.addEventListener("touchstart", event =>
+    //_tagCanvasParticule.addEventListener("touchstart", event =>
+    document.body.addEventListener("touchstart", event =>
     {
         const H_WINDOW = window.innerWidth;
         const V_WINDOW = window.innerHeight;
         const LENGTH_TOUCH = event.touches.length;
-        const RECTANGLE = _tagCanvasParticule.getBoundingClientRect();
+        //const RECTANGLE = _tagCanvasParticule.getBoundingClientRect();
         
         if (LENGTH_TOUCH === 1)
         {
-            xTouch = (((event.touches[0].clientX - RECTANGLE.left) / RECTANGLE.width) - 0.5) * H_WINDOW;
-            yTouch = -(((event.touches[0].clientY - RECTANGLE.top) / RECTANGLE.height) - 0.5) * V_WINDOW;
+            //xTouch = (((event.touches[0].clientX - RECTANGLE.left) / RECTANGLE.width) - 0.5) * H_WINDOW;
+            //yTouch = -(((event.touches[0].clientY - RECTANGLE.top) / RECTANGLE.height) - 0.5) * V_WINDOW;
+            xTouch = ((event.touches[0].clientX / H_WINDOW) - 0.5) * H_WINDOW;
+            yTouch = -((event.touches[0].clientY / V_WINDOW) - 0.5) * V_WINDOW;
         }
         else if (LENGTH_TOUCH === 2)
         {
-            xTouch = (((((event.touches[0].clientX + event.touches[1].clientX) * 0.5) - RECTANGLE.left) / RECTANGLE.width) - 0.5) * H_WINDOW;
-            yTouch = -(((((event.touches[0].clientY + event.touches[1].clientY) * 0.5) - RECTANGLE.top) / RECTANGLE.height) - 0.5) * V_WINDOW;
+            //xTouch = (((((event.touches[0].clientX + event.touches[1].clientX) * 0.5) - RECTANGLE.left) / RECTANGLE.width) - 0.5) * H_WINDOW;
+            //yTouch = -(((((event.touches[0].clientY + event.touches[1].clientY) * 0.5) - RECTANGLE.top) / RECTANGLE.height) - 0.5) * V_WINDOW;
+            xTouch = ((((event.touches[0].clientX + event.touches[1].clientX) * 0.5) / H_WINDOW) - 0.5) * H_WINDOW;
+            yTouch = -((((event.touches[0].clientY + event.touches[1].clientY) * 0.5) / V_WINDOW) - 0.5) * V_WINDOW;
         }
         
         xSmoothTouch = xTouch;
@@ -524,22 +485,27 @@ function particuleAnimation()
         passive: false
     });
     
-    _tagCanvasParticule.addEventListener("touchmove", event =>
+    //_tagCanvasParticule.addEventListener("touchmove", event =>
+    document.body.addEventListener("touchmove", event =>
     {
         const H_WINDOW = window.innerWidth;
         const V_WINDOW = window.innerHeight;
         const LENGTH_TOUCH = event.touches.length;
-        const RECTANGLE = _tagCanvasParticule.getBoundingClientRect();
+        //const RECTANGLE = _tagCanvasParticule.getBoundingClientRect();
         
         if (LENGTH_TOUCH === 1)
         {
-            xTouch = (((event.touches[0].clientX - RECTANGLE.left) / RECTANGLE.width) - 0.5) * H_WINDOW;
-            yTouch = -(((event.touches[0].clientY - RECTANGLE.top) / RECTANGLE.height) - 0.5) * V_WINDOW;
+            //xTouch = (((event.touches[0].clientX - RECTANGLE.left) / RECTANGLE.width) - 0.5) * H_WINDOW;
+            //yTouch = -(((event.touches[0].clientY - RECTANGLE.top) / RECTANGLE.height) - 0.5) * V_WINDOW;
+            xTouch = ((event.touches[0].clientX / H_WINDOW) - 0.5) * H_WINDOW;
+            yTouch = -((event.touches[0].clientY / V_WINDOW) - 0.5) * V_WINDOW;
         }
         else if (LENGTH_TOUCH === 2)
         {
-            xTouch = (((((event.touches[0].clientX + event.touches[1].clientX) * 0.5) - RECTANGLE.left) / RECTANGLE.width) - 0.5) * H_WINDOW;
-            yTouch = -(((((event.touches[0].clientY + event.touches[1].clientY) * 0.5) - RECTANGLE.top) / RECTANGLE.height) - 0.5) * V_WINDOW;
+            //xTouch = (((((event.touches[0].clientX + event.touches[1].clientX) * 0.5) - RECTANGLE.left) / RECTANGLE.width) - 0.5) * H_WINDOW;
+            //yTouch = -(((((event.touches[0].clientY + event.touches[1].clientY) * 0.5) - RECTANGLE.top) / RECTANGLE.height) - 0.5) * V_WINDOW;
+            xTouch = ((((event.touches[0].clientX + event.touches[1].clientX) * 0.5) / H_WINDOW) - 0.5) * H_WINDOW;
+            yTouch = -((((event.touches[0].clientY + event.touches[1].clientY) * 0.5) / V_WINDOW) - 0.5) * V_WINDOW;
         }
         
         activeTouchA = true;
@@ -551,26 +517,31 @@ function particuleAnimation()
         passive: false
     });
     
-    _tagCanvasParticule.addEventListener("touchend", () =>
+    //_tagCanvasParticule.addEventListener("touchend", () =>
+    document.body.addEventListener("touchend", () =>
     {
         activeTouchA = false;
         activeTouchB = false;
     });
     
-    _tagCanvasParticule.addEventListener("touchcancel", () =>
+    //_tagCanvasParticule.addEventListener("touchcancel", () =>
+    document.body.addEventListener("touchcancel", () =>
     {
         activeTouchA = false;
         activeTouchB = false;
     });
     
-    _tagCanvasParticule.addEventListener("pointerenter", event =>
+    //_tagCanvasParticule.addEventListener("pointerenter", event =>
+    document.body.addEventListener("pointerenter", event =>
     {
         const H_WINDOW = window.innerWidth;
         const V_WINDOW = window.innerHeight;
-        const RECTANGLE = _tagCanvasParticule.getBoundingClientRect();
+        //const RECTANGLE = _tagCanvasParticule.getBoundingClientRect();
         
-        xTouch = (((event.clientX - RECTANGLE.left) / RECTANGLE.width) - 0.5) * H_WINDOW;
-        yTouch = -(((event.clientY - RECTANGLE.top) / RECTANGLE.height) - 0.5) * V_WINDOW;
+        //xTouch = (((event.clientX - RECTANGLE.left) / RECTANGLE.width) - 0.5) * H_WINDOW;
+        //yTouch = -(((event.clientY - RECTANGLE.top) / RECTANGLE.height) - 0.5) * V_WINDOW;
+        xTouch = ((event.clientX / H_WINDOW) - 0.5) * H_WINDOW;
+        yTouch = -((event.clientY / V_WINDOW) - 0.5) * V_WINDOW;
         
         xSmoothTouch = xTouch;
         ySmoothTouch = yTouch;
@@ -585,14 +556,17 @@ function particuleAnimation()
         }
     });
     
-    _tagCanvasParticule.addEventListener("pointerdown", event =>
+    //_tagCanvasParticule.addEventListener("pointerdown", event =>
+    document.body.addEventListener("pointerdown", event =>
     {
         const H_WINDOW = window.innerWidth;
         const V_WINDOW = window.innerHeight;
-        const RECTANGLE = _tagCanvasParticule.getBoundingClientRect();
+        //const RECTANGLE = _tagCanvasParticule.getBoundingClientRect();
         
-        xTouch = (((event.clientX - RECTANGLE.left) / RECTANGLE.width) - 0.5) * H_WINDOW;
-        yTouch = -(((event.clientY - RECTANGLE.top) / RECTANGLE.height) - 0.5) * V_WINDOW;
+        //xTouch = (((event.clientX - RECTANGLE.left) / RECTANGLE.width) - 0.5) * H_WINDOW;
+        //yTouch = -(((event.clientY - RECTANGLE.top) / RECTANGLE.height) - 0.5) * V_WINDOW;
+        xTouch = ((event.clientX / H_WINDOW) - 0.5) * H_WINDOW;
+        yTouch = -((event.clientY / V_WINDOW) - 0.5) * V_WINDOW;
         
         xSmoothTouch = xTouch;
         ySmoothTouch = yTouch;
@@ -603,14 +577,17 @@ function particuleAnimation()
         activeTouchB = true;
     });
     
-    _tagCanvasParticule.addEventListener("pointermove", event =>
+    //_tagCanvasParticule.addEventListener("pointermove", event =>
+    document.body.addEventListener("pointermove", event =>
     {
         const H_WINDOW = window.innerWidth;
         const V_WINDOW = window.innerHeight;
-        const RECTANGLE = _tagCanvasParticule.getBoundingClientRect();
+        //const RECTANGLE = _tagCanvasParticule.getBoundingClientRect();
         
-        xTouch = (((event.clientX - RECTANGLE.left) / RECTANGLE.width) - 0.5) * H_WINDOW;
-        yTouch = -(((event.clientY - RECTANGLE.top) / RECTANGLE.height) - 0.5) * V_WINDOW;
+        //xTouch = (((event.clientX - RECTANGLE.left) / RECTANGLE.width) - 0.5) * H_WINDOW;
+        //yTouch = -(((event.clientY - RECTANGLE.top) / RECTANGLE.height) - 0.5) * V_WINDOW;
+        xTouch = ((event.clientX / H_WINDOW) - 0.5) * H_WINDOW;
+        yTouch = -((event.clientY / V_WINDOW) - 0.5) * V_WINDOW;
         
         activeTouchA = true;
         
@@ -620,18 +597,21 @@ function particuleAnimation()
         }
     });
     
-    _tagCanvasParticule.addEventListener("pointerup", () =>
+    //_tagCanvasParticule.addEventListener("pointerup", () =>
+    document.body.addEventListener("pointerup", () =>
     {
         activeTouchB = false;
     });
     
-    _tagCanvasParticule.addEventListener("pointerleave", () =>
+    //_tagCanvasParticule.addEventListener("pointerleave", () =>
+    document.body.addEventListener("pointerleave", () =>
     {
         activeTouchA = false;
         activeTouchB = false;
     });
     
-    _tagCanvasParticule.addEventListener("pointercancel", () =>
+    //_tagCanvasParticule.addEventListener("pointercancel", () =>
+    document.body.addEventListener("pointercancel", () =>
     {
         activeTouchA = false;
         activeTouchB = false;
@@ -643,7 +623,6 @@ function particuleAnimation()
         _webGL.clearColor(0.05, 0.05, 0.05, 1);
         _webGL.enable(_webGL.BLEND);
         _webGL.blendFunc(_webGL.SRC_ALPHA, _webGL.ONE_MINUS_SRC_ALPHA);
-        //_webGL.enable(_webGL.PROGRAM_POINT_SIZE);
         
         vsSource = `
         precision mediump float;
@@ -769,8 +748,7 @@ function particuleAnimation()
     positionRender = new Float32Array(index2);
     shapeAttractor1 = new Float32Array(index2);
     
-    //CANVAS TEXTE EC
-    
+    //CANVAS TEXTE
     ctxLogo = LOGO.getContext("2d");
     ctxLogo.font = WEIGHT_LOGO + " " + SIZE_LOGO + "px " + FONT_LOGO;
     
@@ -800,7 +778,7 @@ function particuleAnimation()
     }
     
     lenghtPixel = xPixelLogo.length;
-    //CANVAS TEXTE EC
+    //CANVAS TEXTE
     
     for (indexParticule = 0; indexParticule < COUNT_PARTICLE; indexParticule++)
     {
@@ -817,9 +795,9 @@ function particuleAnimation()
         indexBlue = index4 + 2;
         indexAlpha = index4 + 3;
         
-        //CANVAS TEXTE EC
+        //CANVAS TEXTE
         randomLogo = randomInteger(0, lenghtPixel);
-        //CANVAS TEXTE EC
+        //CANVAS TEXTE
         
         if (indexParticule < COUNT_PARTICLE_SHAPE)
         {
@@ -999,7 +977,6 @@ function particuleAnimation()
             directionAttractorRandom = true;
         }
         
-        //directionAttractorRandom = randomBinary(false, true);
         timeAttractorRandom2 = performance.now() + randomInteger(100, 2000);
     }
     
@@ -1213,7 +1190,6 @@ function particuleAnimation()
                     dy /= magnitude;
                     
                     force = magnitudeSmooth * ((magnitudeSmoothScale * FORCE_TOUCH) - magnitude);
-                    //force = magnitudeSmooth * (200 - magnitude);
                     
                     if (force > CLAMP_FORCE)
                     {
@@ -1286,26 +1262,6 @@ function particuleAnimation()
             positionRender[indexParticuleY] = ((xParallax * sinParallax) + (yParallax * cosParallax)) / V_SCALE;
             
             //DIAMETER GRADIENT COLOR ALPHA
-            /*xBlur = clampPositiveSymmetricalMinMax(position[indexParticuleX], WIDTH_BLUR);
-            yBlur = clampPositiveSymmetricalMinMax(position[indexParticuleY] + Y_OFFSET_BLUR, HEIGHT_BLUR);
-            
-            magnitude = Math.min(SAFE_SQRT + Math.sqrt((xBlur * xBlur) + (yBlur * yBlur)), 1);
-            
-            diameterGradient[indexDiameter] = diameterStart[indexParticule] + (diameterStart[indexParticule] * 6 * magnitude);
-            diameterGradient[indexGradient] = gradientStart[indexParticule] - (gradientStart[indexParticule] * magnitude);
-            
-            if (activeTouchA === true)
-            {
-                xBlur = clampPositiveSymmetricalMinMax(position[indexParticuleX] - (xSmoothTouch * H_SCALE), 100);
-                yBlur = clampPositiveSymmetricalMinMax(position[indexParticuleY] - (ySmoothTouch * V_SCALE), 100);
-                
-                magnitude = Math.min(SAFE_SQRT + Math.sqrt((xBlur * xBlur) + (yBlur * yBlur)), 1);
-                
-                //colorAlpha[indexGreen] = 1 - (0.2 * (1 - magnitude));
-                colorAlpha[indexRed] = 1 - (0.2 * (1 - magnitude));
-                //colorAlpha[indexAlpha] = alphaStart[indexParticule] - (alphaStart[indexParticule] * 0.8 * magnitude);
-            }*/
-            
             xBlur = clampPositiveSymmetricalMinMax(position[indexParticuleX], WIDTH_BLUR);
             yBlur = clampPositiveSymmetricalMinMax(position[indexParticuleY] + Y_OFFSET_BLUR, HEIGHT_BLUR);
             
@@ -1329,13 +1285,9 @@ function particuleAnimation()
             
             diameterGradient[indexGradient] = gradientStart[indexParticule] - (gradientStart[indexParticule] * magnitude);
             
-            //colorAlpha[indexRed] = 1 - (0.2 * magnitude);
-            //colorAlpha[indexGreen] = 1 - (0.2 * (1 - magnitude));
-            
             colorAlpha[indexRed] = 1 - (0.25 * magnitude);
             colorAlpha[indexGreen] = 1 - (0.75 * (1 - magnitude));
             colorAlpha[indexAlpha] = (alphaStart[indexParticule] - (alphaStart[indexParticule] * 0.5 * magnitude)) * fadeIn;
-            //////////////////////////(0.1 - (0.1 * 0.5 * 1))
         }
         
         /*if (newRandomizeAttractor === 2)
@@ -1484,28 +1436,27 @@ function interfaceAnimation()
     let fadeInLinear = 0;
     let fadeInQuadratic = 0;
     let index = 0;
+    let bottomHeader = 0;
+    let topGallery = 0;
+    let heightGallery = 0;
+    let topFooter = 0;
+    let scrollMax = 0;
     let smoothAll = 0;
     const SMOOTH_ALL = 0.01;
-    let yTranslateSmooth = 0;
+    let translateSmooth = 0;
     let opacitySmooth = 1;
     let scaleSmooth = 1;
-    let scrollMax = 0;
-    let bottomHeader = 0;
-    let heightGallery = 0;
-    let topGallery = 0;
     let opacity = 1;
     let scale = 1;
     let offsetImg = 0;
     let widthPerLetter = 0;
     let opacityLetter = 0;
     let widthLetter = 0;
+    let opacityTranslateScale = 0;
+    let opacityTranslateScaleSmooth = 0;
     
     timePreviousRelative = performance.now();
     timePreviousAbsolute = performance.now();
-    
-    //smoothqsdfghj
-    let smoothqsdfghj = 0;
-    //smoothqsdfghj
     
     function updateAnimation(time)
     {
@@ -1540,20 +1491,19 @@ function interfaceAnimation()
             fadeInQuadratic = 1;
         }
         
-        scrollMax = -(RECTANGLE_GALLERY.height + 100 + RECTANGLE_FOOTER.height + 30);
-        
         bottomHeader = 160 + RECTANGLE_HEADER.height;
         topGallery = V_WINDOW;
+        topFooter = RECTANGLE_FOOTER.height + 30;
+        
+        scrollMax = RECTANGLE_GALLERY.height + 100 + topFooter;
         
         if (_eventScroll > 0)
         {
             _eventScroll = 0;
-            //yTranslateSmooth = 0;
         }
-        else if (_eventScroll < scrollMax)
+        else if (_eventScroll < -scrollMax)
         {
-            _eventScroll = scrollMax;
-            //yTranslateSmooth = scrollMax;
+            _eventScroll = -scrollMax;
         }
         
         if (_eventScroll === 0)
@@ -1572,12 +1522,10 @@ function interfaceAnimation()
             scale = 1 + (0.15 / (bottomHeader / _eventScroll));
         }
         
-        //SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH
         smoothAll = 1 - Math.pow(SMOOTH_ALL, TIME_DELTA);
-        yTranslateSmooth += (_eventScroll - yTranslateSmooth) * smoothAll;
+        translateSmooth += (_eventScroll - translateSmooth) * smoothAll;
         opacitySmooth += (opacity - opacitySmooth) * smoothAll;
         scaleSmooth += (scale - scaleSmooth) * smoothAll;
-        //SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH
         
         //TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG
         if (fadeIn < 1)
@@ -1594,7 +1542,7 @@ function interfaceAnimation()
         for (index = 0; index < _countTagLetter; index++)
         {
             widthPerLetter = bottomHeader / _countTagLetter;
-            opacityLetter = 1 - (-yTranslateSmooth / (widthPerLetter + (widthPerLetter * (_countTagLetter - index))));
+            opacityLetter = 1 - (-translateSmooth / (widthPerLetter + (widthPerLetter * (_countTagLetter - index))));
             
             if (opacityLetter < 0)
             {
@@ -1632,7 +1580,7 @@ function interfaceAnimation()
         _tagOverlayGallery.style.top = topGallery + "px";
         _tagOverlayGallery.style.opacity = "1";
         
-        _tagOverlayGallery.style.transform = "translate(0px, " + (yTranslateSmooth) + "px)";
+        _tagOverlayGallery.style.transform = "translate(0px, " + (translateSmooth) + "px)";
         
         for (index = 0; index < _countTagMediaImg; index++)
         {
@@ -1658,40 +1606,22 @@ function interfaceAnimation()
         }
         
         //TAG FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER
-        //TAG FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER
-        //TAG FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER
-        //TAG FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER
-        let azerty = 0;
-        let topFooter = RECTANGLE_FOOTER.height + 30;
-        let qsdfghj = 0;
-        
         if (_eventScroll >= -((RECTANGLE_GALLERY.height - 25) + topFooter))
         {
-            qsdfghj = 0;
+            opacityTranslateScale = 0;
         }
         else
         {
-            azerty = (RECTANGLE_GALLERY.height + 100 + RECTANGLE_FOOTER.height + 30);
-            qsdfghj = 1 - ((azerty + _eventScroll) / (25 + 100));
+            opacityTranslateScale = 1 - ((scrollMax + _eventScroll) / (25 + 100));
         }
         
-        //SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH
-        smoothqsdfghj += (qsdfghj - smoothqsdfghj) * smoothAll;
-        //SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH SMOOTH
+        opacityTranslateScaleSmooth += (opacityTranslateScale - opacityTranslateScaleSmooth) * smoothAll;
         
-        //if (qsdfghj >
+        _tagLine.style.opacity = opacityTranslateScaleSmooth;
+        _tagLine.style.transform = "translate(0px, " + (20 * (1 - opacityTranslateScaleSmooth)) + "px) scaleX(" + opacityTranslateScaleSmooth + ")";
         
-        //console.log("[qsdfghj = " + smoothqsdfghj + "] [azerty = " + azerty + "]");
-        
-        _tagLine.style.opacity = smoothqsdfghj;
-        //_tagLine.style.width = (smoothqsdfghj * 100) + "%";
-        _tagLine.style.transform = "translate(0px, " + ((1 - smoothqsdfghj) * 20) + "px) scaleX(" + smoothqsdfghj + ")";
-        
-        _tagContact.style.opacity = smoothqsdfghj;
-        _tagContact.style.transform = "translate(0px, " + ((1 - smoothqsdfghj) * 100) + "px)";
-        //TAG FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER
-        //TAG FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER
-        //TAG FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER
+        _tagContact.style.opacity = opacityTranslateScaleSmooth;
+        _tagContact.style.transform = "translate(0px, " + (100 * (1 - opacityTranslateScaleSmooth)) + "px)";
         //TAG FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER
         
         requestAnimationFrame(updateAnimation);
@@ -1730,7 +1660,7 @@ async function loading()
         
         loadingAnimation();
         
-        await document.fonts.load("0px fontB");
+        await document.fonts.load("0px fontA");
         await document.fonts.ready;
         
         _stateLoading = 2;
