@@ -175,8 +175,8 @@ function event()
     let clientYPrevious = 0;
     let deltaY = 0;
     
-    //_tagCanvasParticule.addEventListener("touchstart", event =>
-    document.body.addEventListener("touchstart", event =>
+    _tagCanvasParticule.addEventListener("touchstart", event =>
+    //document.body.addEventListener("touchstart", event =>
     {
         const LENGTH_TOUCH = event.touches.length;
         
@@ -197,8 +197,8 @@ function event()
         passive: false
     });
     
-    //_tagCanvasParticule.addEventListener("touchmove", event =>
-    document.body.addEventListener("touchmove", event =>
+    _tagCanvasParticule.addEventListener("touchmove", event =>
+    //document.body.addEventListener("touchmove", event =>
     {
         const V_WINDOW = window.innerHeight;
         const LENGTH_TOUCH = event.touches.length;
@@ -448,7 +448,43 @@ function particuleAnimation()
     const Y_OFFSET_BLUR = 300;
     const DIAMETER_BLUR = 7;
     
-
+    //_tagCanvasParticule.addEventListener("touchstart", event =>
+    document.body.addEventListener("touchstart", event =>
+    {
+        const H_WINDOW = window.innerWidth;
+        const V_WINDOW = window.innerHeight;
+        const LENGTH_TOUCH = event.touches.length;
+        //const RECTANGLE = _tagCanvasParticule.getBoundingClientRect();
+        
+        if (LENGTH_TOUCH === 1)
+        {
+            //xTouch = (((event.touches[0].clientX - RECTANGLE.left) / RECTANGLE.width) - 0.5) * H_WINDOW;
+            //yTouch = -(((event.touches[0].clientY - RECTANGLE.top) / RECTANGLE.height) - 0.5) * V_WINDOW;
+            xTouch = ((event.touches[0].clientX / H_WINDOW) - 0.5) * H_WINDOW;
+            yTouch = -((event.touches[0].clientY / V_WINDOW) - 0.5) * V_WINDOW;
+        }
+        else if (LENGTH_TOUCH === 2)
+        {
+            //xTouch = (((((event.touches[0].clientX + event.touches[1].clientX) * 0.5) - RECTANGLE.left) / RECTANGLE.width) - 0.5) * H_WINDOW;
+            //yTouch = -(((((event.touches[0].clientY + event.touches[1].clientY) * 0.5) - RECTANGLE.top) / RECTANGLE.height) - 0.5) * V_WINDOW;
+            xTouch = ((((event.touches[0].clientX + event.touches[1].clientX) * 0.5) / H_WINDOW) - 0.5) * H_WINDOW;
+            yTouch = -((((event.touches[0].clientY + event.touches[1].clientY) * 0.5) / V_WINDOW) - 0.5) * V_WINDOW;
+        }
+        
+        xSmoothTouch = xTouch;
+        ySmoothTouch = yTouch;
+        xSmoothTouchPrevious = xTouch;
+        ySmoothTouchPrevious = yTouch;
+        
+        activeTouchA = true;
+        activeTouchB = true;
+        
+        event.preventDefault();
+    },
+    {
+        passive: false
+    });
+    
     //_tagCanvasParticule.addEventListener("touchmove", event =>
     document.body.addEventListener("touchmove", event =>
     {
