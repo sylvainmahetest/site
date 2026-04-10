@@ -486,7 +486,7 @@ function particuleAnimation()
     });
     
     //_tagCanvasParticule.addEventListener("touchmove", event =>
-    _tagCanvasParticule.addEventListener("touchmove", event =>
+    document.body.addEventListener("touchmove", event =>
     {
         const H_WINDOW = window.innerWidth;
         const V_WINDOW = window.innerHeight;
