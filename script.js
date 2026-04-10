@@ -124,7 +124,6 @@ function tag()
     const TAG_LETTER_IN_DOCUMENT = document.querySelectorAll("body tag-letter");
     const TAG_MEDIA_IN_DOCUMENT = document.querySelectorAll("body tag-media");
     const TAG_IMG_IN_DOCUMENT = document.querySelectorAll("body img");
-    let index = 0;
     
     _tagLoadingText = document.getElementById("tag-loading-text");
     _tagLoadingBar = document.getElementById("tag-loading-bar");
@@ -176,7 +175,7 @@ function event()
     let deltaY = 0;
     
     _tagCanvasParticule.addEventListener("touchstart", event =>
-    //_tagCanvasParticule.addEventListener("touchstart", event =>
+    //document.body.addEventListener("touchstart", event =>
     {
         const LENGTH_TOUCH = event.touches.length;
         
@@ -198,13 +197,9 @@ function event()
     });
     
     _tagCanvasParticule.addEventListener("touchmove", event =>
-    //_tagCanvasParticule.addEventListener("touchmove", event =>
+    //document.body.addEventListener("touchmove", event =>
     {
-        const V_WINDOW = window.innerHeight;
         const LENGTH_TOUCH = event.touches.length;
-        const RECTANGLE_GALLERY = _tagOverlayGallery.getBoundingClientRect();
-        const RECTANGLE_HEADER = _tagOverlayHeader.getBoundingClientRect();
-        const RECTANGLE_FOOTER = _tagOverlayFooter.getBoundingClientRect();
         
         if (LENGTH_TOUCH === 1)
         {
@@ -233,13 +228,8 @@ function event()
     });
     
     //_tagCanvasParticule.addEventListener("wheel", event =>
-    _tagCanvasParticule.addEventListener("wheel", event =>
+    document.body.addEventListener("wheel", event =>
     {
-        const V_WINDOW = window.innerHeight;
-        const RECTANGLE_HEADER = _tagOverlayHeader.getBoundingClientRect();
-        const RECTANGLE_GALLERY = _tagOverlayGallery.getBoundingClientRect();
-        const RECTANGLE_FOOTER = _tagOverlayFooter.getBoundingClientRect();
-        
         if (event.deltaY < 0)
         {
             _eventScroll += 50;
@@ -448,8 +438,8 @@ function particuleAnimation()
     const Y_OFFSET_BLUR = 300;
     const DIAMETER_BLUR = 7;
     
-    //_tagCanvasParticule.addEventListener("touchstart", event =>
-    document.body.addEventListener("touchstart", event =>
+    _tagCanvasParticule.addEventListener("touchstart", event =>
+    //document.body.addEventListener("touchstart", event =>
     {
         const H_WINDOW = window.innerWidth;
         const V_WINDOW = window.innerHeight;
@@ -485,8 +475,8 @@ function particuleAnimation()
         passive: false
     });
     
-    //_tagCanvasParticule.addEventListener("touchmove", event =>
-    document.body.addEventListener("touchmove", event =>
+    _tagCanvasParticule.addEventListener("touchmove", event =>
+    //document.body.addEventListener("touchmove", event =>
     {
         const H_WINDOW = window.innerWidth;
         const V_WINDOW = window.innerHeight;
@@ -517,22 +507,22 @@ function particuleAnimation()
         passive: false
     });
     
-    //_tagCanvasParticule.addEventListener("touchend", () =>
     _tagCanvasParticule.addEventListener("touchend", () =>
+    //document.body.addEventListener("touchend", () =>
     {
         activeTouchA = false;
         activeTouchB = false;
     });
     
-    //_tagCanvasParticule.addEventListener("touchcancel", () =>
     _tagCanvasParticule.addEventListener("touchcancel", () =>
+    //document.body.addEventListener("touchcancel", () =>
     {
         activeTouchA = false;
         activeTouchB = false;
     });
     
     //_tagCanvasParticule.addEventListener("pointerenter", event =>
-    _tagCanvasParticule.addEventListener("pointerenter", event =>
+    document.body.addEventListener("pointerenter", event =>
     {
         const H_WINDOW = window.innerWidth;
         const V_WINDOW = window.innerHeight;
@@ -557,7 +547,7 @@ function particuleAnimation()
     });
     
     //_tagCanvasParticule.addEventListener("pointerdown", event =>
-    _tagCanvasParticule.addEventListener("pointerdown", event =>
+    document.body.addEventListener("pointerdown", event =>
     {
         const H_WINDOW = window.innerWidth;
         const V_WINDOW = window.innerHeight;
@@ -598,20 +588,20 @@ function particuleAnimation()
     });
     
     //_tagCanvasParticule.addEventListener("pointerup", () =>
-    _tagCanvasParticule.addEventListener("pointerup", () =>
+    document.body.addEventListener("pointerup", () =>
     {
         activeTouchB = false;
     });
     
     //_tagCanvasParticule.addEventListener("pointerleave", () =>
-    _tagCanvasParticule.addEventListener("pointerleave", () =>
+    document.body.addEventListener("pointerleave", () =>
     {
         activeTouchA = false;
         activeTouchB = false;
     });
     
     //_tagCanvasParticule.addEventListener("pointercancel", () =>
-    _tagCanvasParticule.addEventListener("pointercancel", () =>
+    document.body.addEventListener("pointercancel", () =>
     {
         activeTouchA = false;
         activeTouchB = false;
@@ -1630,6 +1620,26 @@ function interfaceAnimation()
     updateAnimation(timePreviousRelative);
 }
 
+function href()
+{
+    let index = 0;
+    
+    for (index = 0; index < _countTagMediaImg; index++)
+    {
+        const INDEX = index;
+        
+        _tagMedia[INDEX].addEventListener("click", () =>
+        {
+            console.log("_tagMedia[index] INDEX = " + INDEX);
+            
+            setTimeout(() =>
+            {
+                window.location.href = "index.html";
+            }, 1000);
+        });
+    }
+}
+
 function input()
 {
     _tagSubmitContact.addEventListener("click", () =>
@@ -1640,15 +1650,15 @@ function input()
     });
 }
 
-function loaded()
+/*function loaded()
 {
     
-}
+}*/
 
-function href(index)
+/*function href(index)
 {
     
-}
+}*/
 
 async function loading()
 {
@@ -1676,9 +1686,10 @@ async function loading()
         
         interfaceAnimation();
         
+        href();
         input();
         
-        loaded();
+        //loaded();
     }
 }
 
