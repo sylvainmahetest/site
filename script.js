@@ -189,12 +189,14 @@ function event()
             clientY = (event.touches[0].clientY + event.touches[1].clientY) * 0.5;
             clientYPrevious = clientY;
         }
-        
-        //event.preventDefault();
+        else
+{
+        event.preventDefault();
+}
     },
     {
-      //  passive: false
-        passive: true
+        passive: false
+        
     });
     
   //  _tagCanvasParticule.addEventListener("touchmove", event =>
@@ -220,13 +222,14 @@ function event()
         if (deltaY < 0 || deltaY > 0)
         {
             _eventScroll += deltaY * 1.5;
+event.preventDefault();
         }
         
         //event.preventDefault();
     },
     {
-        //passive: false
-        passive: true
+        passive: false
+        
     });
     
     //////////////////////////////////////////////////////////////////////////////////////////
@@ -466,6 +469,10 @@ function particuleAnimation()
             xTouch = ((((event.touches[0].clientX + event.touches[1].clientX) * 0.5) / H_WINDOW) - 0.5) * H_WINDOW;
             yTouch = -((((event.touches[0].clientY + event.touches[1].clientY) * 0.5) / V_WINDOW) - 0.5) * V_WINDOW;
         }
+else
+{
+event.preventDefault();
+}
         
         xSmoothTouch = xTouch;
         ySmoothTouch = yTouch;
@@ -478,8 +485,8 @@ function particuleAnimation()
       //  event.preventDefault();
     },
     {
-        //passive: false
-        passive: true
+        passive: false
+        
     });
     
     //_tagCanvasParticule.addEventListener("touchmove", event =>
@@ -511,8 +518,8 @@ function particuleAnimation()
         //event.preventDefault();
     },
     {
-       // passive: false
-       passive: true
+        passive: false
+       //passive: true
     });
     
  // _tagCanvasParticule.addEventListener("touchend", () =>
