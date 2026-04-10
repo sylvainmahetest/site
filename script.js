@@ -438,8 +438,8 @@ function particuleAnimation()
     const Y_OFFSET_BLUR = 300;
     const DIAMETER_BLUR = 7;
     
-    _tagCanvasParticule.addEventListener("touchstart", event =>
-    //document.addEventListener("touchstart", event =>
+    //_tagCanvasParticule.addEventListener("touchstart", event =>
+    document.addEventListener("touchstart", event =>
     {
         const H_WINDOW = window.innerWidth;
         const V_WINDOW = window.innerHeight;
@@ -475,8 +475,8 @@ function particuleAnimation()
         passive: false
     });
     
-    _tagCanvasParticule.addEventListener("touchmove", event =>
-    //document.addEventListener("touchmove", event =>
+    //_tagCanvasParticule.addEventListener("touchmove", event =>
+    document.addEventListener("touchmove", event =>
     {
         const H_WINDOW = window.innerWidth;
         const V_WINDOW = window.innerHeight;
@@ -507,8 +507,8 @@ function particuleAnimation()
         passive: false
     });
     
-    _tagCanvasParticule.addEventListener("touchend", () =>
-    //document.addEventListener("touchend", () =>
+  //  _tagCanvasParticule.addEventListener("touchend", () =>
+    document.addEventListener("touchend", () =>
     {
         activeTouchA = false;
         activeTouchB = false;
