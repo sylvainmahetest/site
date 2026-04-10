@@ -174,8 +174,8 @@ function event()
     let clientYPrevious = 0;
     let deltaY = 0;
     
-    _tagCanvasParticule.addEventListener("touchstart", event =>
-    //document.addEventListener("touchstart", event =>
+ //   _tagCanvasParticule.addEventListener("touchstart", event =>
+    document.addEventListener("touchstart", event =>
     {
         const LENGTH_TOUCH = event.touches.length;
         
@@ -197,8 +197,8 @@ function event()
         passive: true
     });
     
-    _tagCanvasParticule.addEventListener("touchmove", event =>
-    //document.addEventListener("touchmove", event =>
+  //  _tagCanvasParticule.addEventListener("touchmove", event =>
+    document.addEventListener("touchmove", event =>
     {
         const LENGTH_TOUCH = event.touches.length;
         
@@ -444,8 +444,8 @@ function particuleAnimation()
     const Y_OFFSET_BLUR = 300;
     const DIAMETER_BLUR = 7;
     
-    _tagCanvasParticule.addEventListener("touchstart", event =>
-    //document.addEventListener("touchstart", event =>
+    //_tagCanvasParticule.addEventListener("touchstart", event =>
+    document.addEventListener("touchstart", event =>
     {
         const H_WINDOW = window.innerWidth;
         const V_WINDOW = window.innerHeight;
@@ -482,8 +482,8 @@ function particuleAnimation()
         passive: true
     });
     
-    _tagCanvasParticule.addEventListener("touchmove", event =>
-    //document.addEventListener("touchmove", event =>
+    //_tagCanvasParticule.addEventListener("touchmove", event =>
+    document.addEventListener("touchmove", event =>
     {
         const H_WINDOW = window.innerWidth;
         const V_WINDOW = window.innerHeight;
@@ -515,15 +515,15 @@ function particuleAnimation()
        passive: true
     });
     
-    _tagCanvasParticule.addEventListener("touchend", () =>
-    //document.addEventListener("touchend", () =>
+ // _tagCanvasParticule.addEventListener("touchend", () =>
+    document.addEventListener("touchend", () =>
     {
         activeTouchA = false;
         activeTouchB = false;
     });
     
-    _tagCanvasParticule.addEventListener("touchcancel", () =>
-    //document.addEventListener("touchcancel", () =>
+    //_tagCanvasParticule.addEventListener("touchcancel", () =>
+    document.addEventListener("touchcancel", () =>
     {
         activeTouchA = false;
         activeTouchB = false;
