@@ -190,10 +190,11 @@ function event()
             clientYPrevious = clientY;
         }
         
-        event.preventDefault();
+        //event.preventDefault();
     },
     {
-        passive: false
+      //  passive: false
+        passive: true
     });
     
     _tagCanvasParticule.addEventListener("touchmove", event =>
@@ -221,10 +222,11 @@ function event()
             _eventScroll += deltaY * 1.5;
         }
         
-        event.preventDefault();
+        //event.preventDefault();
     },
     {
-        passive: false
+        //passive: false
+        passive: true
     });
     
     //////////////////////////////////////////////////////////////////////////////////////////
@@ -234,7 +236,58 @@ function event()
     {
         const INDEX = index;
         
+        _tagMedia[INDEX].addEventListener("touchstart", event =>
+        {
+            const LENGTH_TOUCH = event.touches.length;
+            
+            if (LENGTH_TOUCH === 1)
+            {
+                clientY = event.touches[0].clientY;
+                clientYPrevious = clientY;
+            }
+            else if (LENGTH_TOUCH === 2)
+            {
+                clientY = (event.touches[0].clientY + event.touches[1].clientY) * 0.5;
+                clientYPrevious = clientY;
+            }
+            
+          //  event.preventDefault();
+        },
+        {
+            //passive: false
+            passive: true
+        });
         
+        _tagMedia[INDEX].addEventListener("touchmove", event =>
+        {
+            const LENGTH_TOUCH = event.touches.length;
+            
+            if (LENGTH_TOUCH === 1)
+            {
+                clientY = event.touches[0].clientY;
+                
+                deltaY = clientY - clientYPrevious;
+                clientYPrevious = clientY;
+            }
+            else if (LENGTH_TOUCH === 2)
+            {
+                clientY = (event.touches[0].clientY + event.touches[1].clientY) * 0.5;
+                
+                deltaY = clientY - clientYPrevious;
+                clientYPrevious = clientY;
+            }
+            
+            if (deltaY < 0 || deltaY > 0)
+            {
+                _eventScroll += deltaY * 1.5;
+            }
+            
+           // event.preventDefault();
+        },
+        {
+            //passive: false
+            passive: true
+        });
     }
     //////////////////////////////////////////////////////////////////////////////////////////
     
@@ -480,10 +533,11 @@ function particuleAnimation()
         activeTouchA = true;
         activeTouchB = true;
         
-        event.preventDefault();
+      //  event.preventDefault();
     },
     {
-        passive: false
+        //passive: false
+        passive: true
     });
     
     _tagCanvasParticule.addEventListener("touchmove", event =>
@@ -512,10 +566,11 @@ function particuleAnimation()
         activeTouchA = true;
         activeTouchB = true;
         
-        event.preventDefault();
+        //event.preventDefault();
     },
     {
-        passive: false
+       // passive: false
+       passive: true
     });
     
     _tagCanvasParticule.addEventListener("touchend", () =>
