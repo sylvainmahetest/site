@@ -449,7 +449,7 @@ function particuleAnimation()
     const DIAMETER_BLUR = 7;
     
     //_tagCanvasParticule.addEventListener("touchstart", event =>
-    _tagCanvasParticule.addEventListener("touchstart", event =>
+    document.body.addEventListener("touchstart", event =>
     {
         const H_WINDOW = window.innerWidth;
         const V_WINDOW = window.innerHeight;
