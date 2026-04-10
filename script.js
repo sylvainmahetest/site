@@ -578,7 +578,7 @@ function particuleAnimation()
     });
     
     //_tagCanvasParticule.addEventListener("pointermove", event =>
-    _tagCanvasParticule.addEventListener("pointermove", event =>
+    document.body.addEventListener("pointermove", event =>
     {
         const H_WINDOW = window.innerWidth;
         const V_WINDOW = window.innerHeight;
