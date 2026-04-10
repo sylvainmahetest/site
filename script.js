@@ -255,7 +255,7 @@ function event()
             passive: false
         });
         
-        _tagCanvasParticule.addEventListener("touchmove", event =>
+        _tagMedia[INDEX].addEventListener("touchmove", event =>
         {
             const LENGTH_TOUCH = event.touches.length;
             
