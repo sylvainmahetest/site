@@ -176,7 +176,7 @@ function event()
     let deltaY = 0;
     
     _tagCanvasParticule.addEventListener("touchstart", event =>
-    //document.body.addEventListener("touchstart", event =>
+    //_tagCanvasParticule.addEventListener("touchstart", event =>
     {
         const LENGTH_TOUCH = event.touches.length;
         
@@ -198,7 +198,7 @@ function event()
     });
     
     _tagCanvasParticule.addEventListener("touchmove", event =>
-    //document.body.addEventListener("touchmove", event =>
+    //_tagCanvasParticule.addEventListener("touchmove", event =>
     {
         const V_WINDOW = window.innerHeight;
         const LENGTH_TOUCH = event.touches.length;
@@ -233,7 +233,7 @@ function event()
     });
     
     //_tagCanvasParticule.addEventListener("wheel", event =>
-    document.body.addEventListener("wheel", event =>
+    _tagCanvasParticule.addEventListener("wheel", event =>
     {
         const V_WINDOW = window.innerHeight;
         const RECTANGLE_HEADER = _tagOverlayHeader.getBoundingClientRect();
@@ -449,7 +449,7 @@ function particuleAnimation()
     const DIAMETER_BLUR = 7;
     
     //_tagCanvasParticule.addEventListener("touchstart", event =>
-    document.body.addEventListener("touchstart", event =>
+    _tagCanvasParticule.addEventListener("touchstart", event =>
     {
         const H_WINDOW = window.innerWidth;
         const V_WINDOW = window.innerHeight;
@@ -486,7 +486,7 @@ function particuleAnimation()
     });
     
     //_tagCanvasParticule.addEventListener("touchmove", event =>
-    document.body.addEventListener("touchmove", event =>
+    _tagCanvasParticule.addEventListener("touchmove", event =>
     {
         const H_WINDOW = window.innerWidth;
         const V_WINDOW = window.innerHeight;
@@ -518,21 +518,21 @@ function particuleAnimation()
     });
     
     //_tagCanvasParticule.addEventListener("touchend", () =>
-    document.body.addEventListener("touchend", () =>
+    _tagCanvasParticule.addEventListener("touchend", () =>
     {
         activeTouchA = false;
         activeTouchB = false;
     });
     
     //_tagCanvasParticule.addEventListener("touchcancel", () =>
-    document.body.addEventListener("touchcancel", () =>
+    _tagCanvasParticule.addEventListener("touchcancel", () =>
     {
         activeTouchA = false;
         activeTouchB = false;
     });
     
     //_tagCanvasParticule.addEventListener("pointerenter", event =>
-    document.body.addEventListener("pointerenter", event =>
+    _tagCanvasParticule.addEventListener("pointerenter", event =>
     {
         const H_WINDOW = window.innerWidth;
         const V_WINDOW = window.innerHeight;
@@ -557,7 +557,7 @@ function particuleAnimation()
     });
     
     //_tagCanvasParticule.addEventListener("pointerdown", event =>
-    document.body.addEventListener("pointerdown", event =>
+    _tagCanvasParticule.addEventListener("pointerdown", event =>
     {
         const H_WINDOW = window.innerWidth;
         const V_WINDOW = window.innerHeight;
@@ -578,7 +578,7 @@ function particuleAnimation()
     });
     
     //_tagCanvasParticule.addEventListener("pointermove", event =>
-    document.body.addEventListener("pointermove", event =>
+    _tagCanvasParticule.addEventListener("pointermove", event =>
     {
         const H_WINDOW = window.innerWidth;
         const V_WINDOW = window.innerHeight;
@@ -598,20 +598,20 @@ function particuleAnimation()
     });
     
     //_tagCanvasParticule.addEventListener("pointerup", () =>
-    document.body.addEventListener("pointerup", () =>
+    _tagCanvasParticule.addEventListener("pointerup", () =>
     {
         activeTouchB = false;
     });
     
     //_tagCanvasParticule.addEventListener("pointerleave", () =>
-    document.body.addEventListener("pointerleave", () =>
+    _tagCanvasParticule.addEventListener("pointerleave", () =>
     {
         activeTouchA = false;
         activeTouchB = false;
     });
     
     //_tagCanvasParticule.addEventListener("pointercancel", () =>
-    document.body.addEventListener("pointercancel", () =>
+    _tagCanvasParticule.addEventListener("pointercancel", () =>
     {
         activeTouchA = false;
         activeTouchB = false;
