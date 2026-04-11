@@ -174,7 +174,7 @@ function event()
     let clientYPrevious = 0;
     let deltaY = 0;
     
- //   _tagCanvasParticule.addEventListener("touchstart", event =>
+    //_tagCanvasParticule.addEventListener("touchstart", event =>
     document.addEventListener("touchstart", event =>
     {
         const LENGTH_TOUCH = event.touches.length;
@@ -190,16 +190,15 @@ function event()
             clientYPrevious = clientY;
         }
         else
-{
-        event.preventDefault();
-}
+        {
+            event.preventDefault();
+        }
     },
     {
         passive: false
-        
     });
     
-  //  _tagCanvasParticule.addEventListener("touchmove", event =>
+    //_tagCanvasParticule.addEventListener("touchmove", event =>
     document.addEventListener("touchmove", event =>
     {
         const LENGTH_TOUCH = event.touches.length;
@@ -219,21 +218,74 @@ function event()
             clientYPrevious = clientY;
         }
         
-        if (deltaY < 0 || deltaY > 0)
+        if (deltaY != 0)
         {
             _eventScroll += deltaY * 1.5;
-event.preventDefault();
+            event.preventDefault();
         }
-        
-        //event.preventDefault();
     },
     {
         passive: false
-        
     });
     
     //////////////////////////////////////////////////////////////////////////////////////////
+    /*let index = 0;
     
+    for (index = 0; index < _countTagMediaImg; index++)
+    {
+        const INDEX = index;
+        
+        _tagMedia[INDEX].addEventListener("touchstart", event =>
+        {
+            const LENGTH_TOUCH = event.touches.length;
+            
+            if (LENGTH_TOUCH === 1)
+            {
+                clientY = event.touches[0].clientY;
+                clientYPrevious = clientY;
+            }
+            else if (LENGTH_TOUCH === 2)
+            {
+                clientY = (event.touches[0].clientY + event.touches[1].clientY) * 0.5;
+                clientYPrevious = clientY;
+            }
+            
+            event.preventDefault();
+        },
+        {
+            passive: false
+        });
+        
+        _tagMedia[INDEX].addEventListener("touchmove", event =>
+        {
+            const LENGTH_TOUCH = event.touches.length;
+            
+            if (LENGTH_TOUCH === 1)
+            {
+                clientY = event.touches[0].clientY;
+                
+                deltaY = clientY - clientYPrevious;
+                clientYPrevious = clientY;
+            }
+            else if (LENGTH_TOUCH === 2)
+            {
+                clientY = (event.touches[0].clientY + event.touches[1].clientY) * 0.5;
+                
+                deltaY = clientY - clientYPrevious;
+                clientYPrevious = clientY;
+            }
+            
+            if (deltaY < 0 || deltaY > 0)
+            {
+                _eventScroll += deltaY * 1.5;
+            }
+            
+            event.preventDefault();
+        },
+        {
+            passive: false
+        });
+    }*/
     //////////////////////////////////////////////////////////////////////////////////////////
     
     //_tagCanvasParticule.addEventListener("wheel", event =>
@@ -446,6 +498,14 @@ function particuleAnimation()
     const HEIGHT_BLUR = 400;
     const Y_OFFSET_BLUR = 300;
     const DIAMETER_BLUR = 7;
+    //////////////////////////////////////////////////////////////////////////
+    let clientX = 0;
+    let clientY = 0;
+    let clientXPrevious = 0;
+    let clientYPrevious = 0;
+    let deltaX = 0;
+    let deltaY = 0;
+    //////////////////////////////////////////////////////////////////////////
     
     //_tagCanvasParticule.addEventListener("touchstart", event =>
     document.addEventListener("touchstart", event =>
@@ -457,22 +517,32 @@ function particuleAnimation()
         
         if (LENGTH_TOUCH === 1)
         {
+            clientX = event.touches[0].clientX;
+            clientY = event.touches[0].clientY;
+            
+            clientXPrevious = clientX;
+            clientYPrevious = clientY;
             //xTouch = (((event.touches[0].clientX - RECTANGLE.left) / RECTANGLE.width) - 0.5) * H_WINDOW;
             //yTouch = -(((event.touches[0].clientY - RECTANGLE.top) / RECTANGLE.height) - 0.5) * V_WINDOW;
-            xTouch = ((event.touches[0].clientX / H_WINDOW) - 0.5) * H_WINDOW;
-            yTouch = -((event.touches[0].clientY / V_WINDOW) - 0.5) * V_WINDOW;
+            xTouch = ((clientX / H_WINDOW) - 0.5) * H_WINDOW;
+            yTouch = -((clientY / V_WINDOW) - 0.5) * V_WINDOW;
         }
         else if (LENGTH_TOUCH === 2)
         {
+            clientX = (event.touches[0].clientX + event.touches[1].clientX) * 0.5;
+            clientY = (event.touches[0].clientY + event.touches[1].clientY) * 0.5;
+            
+            clientXPrevious = clientX;
+            clientYPrevious = clientY;
             //xTouch = (((((event.touches[0].clientX + event.touches[1].clientX) * 0.5) - RECTANGLE.left) / RECTANGLE.width) - 0.5) * H_WINDOW;
             //yTouch = -(((((event.touches[0].clientY + event.touches[1].clientY) * 0.5) - RECTANGLE.top) / RECTANGLE.height) - 0.5) * V_WINDOW;
-            xTouch = ((((event.touches[0].clientX + event.touches[1].clientX) * 0.5) / H_WINDOW) - 0.5) * H_WINDOW;
-            yTouch = -((((event.touches[0].clientY + event.touches[1].clientY) * 0.5) / V_WINDOW) - 0.5) * V_WINDOW;
+            xTouch = ((clientX / H_WINDOW) - 0.5) * H_WINDOW;
+            yTouch = -((clientY / V_WINDOW) - 0.5) * V_WINDOW;
         }
-else
-{
-event.preventDefault();
-}
+        else
+        {
+            event.preventDefault();
+        }
         
         xSmoothTouch = xTouch;
         ySmoothTouch = yTouch;
@@ -481,12 +551,9 @@ event.preventDefault();
         
         activeTouchA = true;
         activeTouchB = true;
-        
-      //  event.preventDefault();
     },
     {
         passive: false
-        
     });
     
     //_tagCanvasParticule.addEventListener("touchmove", event =>
@@ -499,30 +566,46 @@ event.preventDefault();
         
         if (LENGTH_TOUCH === 1)
         {
+            clientX = event.touches[0].clientX;
+            clientY = event.touches[0].clientY;
+            
+            deltaX = clientX - clientXPrevious;
+            deltaY = clientY - clientYPrevious;
+            clientXPrevious = clientX;
+            clientYPrevious = clientY;
             //xTouch = (((event.touches[0].clientX - RECTANGLE.left) / RECTANGLE.width) - 0.5) * H_WINDOW;
             //yTouch = -(((event.touches[0].clientY - RECTANGLE.top) / RECTANGLE.height) - 0.5) * V_WINDOW;
-            xTouch = ((event.touches[0].clientX / H_WINDOW) - 0.5) * H_WINDOW;
-            yTouch = -((event.touches[0].clientY / V_WINDOW) - 0.5) * V_WINDOW;
+            xTouch = ((clientX / H_WINDOW) - 0.5) * H_WINDOW;
+            yTouch = -((clientY / V_WINDOW) - 0.5) * V_WINDOW;
         }
         else if (LENGTH_TOUCH === 2)
         {
+            clientX = (event.touches[0].clientX + event.touches[1].clientX) * 0.5;
+            clientY = (event.touches[0].clientY + event.touches[1].clientY) * 0.5;
+            
+            deltaX = clientX - clientXPrevious;
+            deltaY = clientY - clientYPrevious;
+            clientXPrevious = clientX;
+            clientYPrevious = clientY;
             //xTouch = (((((event.touches[0].clientX + event.touches[1].clientX) * 0.5) - RECTANGLE.left) / RECTANGLE.width) - 0.5) * H_WINDOW;
             //yTouch = -(((((event.touches[0].clientY + event.touches[1].clientY) * 0.5) - RECTANGLE.top) / RECTANGLE.height) - 0.5) * V_WINDOW;
-            xTouch = ((((event.touches[0].clientX + event.touches[1].clientX) * 0.5) / H_WINDOW) - 0.5) * H_WINDOW;
-            yTouch = -((((event.touches[0].clientY + event.touches[1].clientY) * 0.5) / V_WINDOW) - 0.5) * V_WINDOW;
+            xTouch = ((clientX / H_WINDOW) - 0.5) * H_WINDOW;
+            yTouch = -((clientY / V_WINDOW) - 0.5) * V_WINDOW;
         }
         
         activeTouchA = true;
         activeTouchB = true;
         
-        event.preventDefault();
+        if (deltaX != 0 || deltaY != 0)
+        {
+            event.preventDefault();
+        }
     },
     {
         passive: false
-       //passive: true
     });
     
- // _tagCanvasParticule.addEventListener("touchend", () =>
+    //_tagCanvasParticule.addEventListener("touchend", () =>
     document.addEventListener("touchend", () =>
     {
         activeTouchA = false;
