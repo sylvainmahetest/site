@@ -694,6 +694,118 @@ body #tag-name tag-letter
   display: inline-block;
 }
 
+body #tag-back
+{
+  z-index: 6;
+  transition-behavior: normal;
+  transition-delay: 0s;
+  transition-duration: 0s;
+  transition-property: none;
+  transition-timing-function: linear;
+  animation-name: none;
+  animation-delay: 0s;
+  animation-duration: 0s;
+  animation-direction: normal;
+  animation-fill-mode: forwards;
+  animation-timing-function: linear;
+  animation-iteration-count: 0;
+  animation-play-state: paused;
+  display: block;
+  visibility: visible;
+  opacity: 0;
+  position: fixed;
+  float: none;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: start;
+  vertical-align: top;
+  text-align: right;
+  text-align-last: right;
+  left: auto;
+  right: 5dvw;
+  top: 30px;
+  bottom: auto;
+  width: auto;
+  min-width: auto;
+  max-width: auto;
+  height: auto;
+  min-height: auto;
+  max-height: auto;
+  margin-left: 0px;
+  margin-right: 0px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  padding-left: 0px;
+  padding-right: 0px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  background-color: transparent;
+  background-image: none;
+  background-attachment: local;
+  background-clip: border-box;
+  background-origin: border-box;
+  background-position: left top;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-blend-mode: normal;
+  backdrop-filter: none;
+  border-left: 0px;
+  border-right: 0px;
+  border-top: 0px;
+  border-bottom: 0px;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+  border-left-style: none;
+  border-right-style: none;
+  border-top-style: none;
+  border-bottom-style: none;
+  border-left-color: transparent;
+  border-right-color: transparent;
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+  box-shadow: none;
+  font-family: "fontA";
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0px;
+  line-height: normal;
+  font-style: normal;
+  text-decoration-line: none;
+  text-decoration-thickness: 0px;
+  text-underline-offset: 0px;
+  text-decoration-style: none;
+  text-decoration-color: transparent;
+  text-shadow: 0px 10px 7px var(--colorC);
+  writing-mode: horizontal-tb;
+  color: var(--colorZ);
+  caret-color: transparent;
+  white-space: pre;
+  word-break: keep-all;
+  overflow-wrap: normal;
+  overflow-x: visible;
+  overflow-y: visible;
+  scrollbar-width: none;
+  resize: none;
+  outline-width: 0px;
+  outline-offset: 0px;
+  outline-style: none;
+  outline-color: transparent;
+  object-fit: fill;
+  object-position: 0px 0px;
+  image-orientation: none;
+  transform-origin: center;
+  transform: translate(50px, 0px);
+  filter: none;
+  user-select: none;
+  cursor: pointer;
+  pointer-events: auto;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
 body #tag-overlay-header
 {
   z-index: 1;
@@ -806,7 +918,7 @@ body #tag-overlay-header
   -webkit-touch-callout: none;
 }
 
-body #tag-overtitle
+body #tag-overtitle-header
 {
   z-index: 1;
   transition-behavior: normal;
@@ -918,7 +1030,7 @@ body #tag-overtitle
   -webkit-touch-callout: none;
 }
 
-body #tag-title
+body #tag-title-header
 {
   z-index: 1;
   transition-behavior: normal;
@@ -992,10 +1104,10 @@ body #tag-title
   border-bottom-color: transparent;
   box-shadow: none;
   font-family: "fontA";
-  font-size: 34px;
+  font-size: /*34*/1px;
   font-weight: 400;
   letter-spacing: 0px;
-  line-height: 37px;
+  line-height: /*37*/1px;
   font-style: normal;
   text-decoration-line: none;
   text-decoration-thickness: 0px;
@@ -1030,7 +1142,7 @@ body #tag-title
   -webkit-touch-callout: none;
 }
 
-body #tag-title tag-bold
+body #tag-title-header tag-bold-header
 {
   display: inline-block;
   padding-left: 8px;
@@ -1045,7 +1157,7 @@ body #tag-title tag-bold
   color: var(--colorB);
 }
 
-body #tag-subtitle
+body #tag-subtitle-header
 {
   z-index: 1;
   transition-behavior: normal;
@@ -1157,7 +1269,7 @@ body #tag-subtitle
   -webkit-touch-callout: none;
 }
 
-body #tag-scroll-down
+body #tag-scroll-down-header
 {
   z-index: 1;
   transition-behavior: normal;
@@ -1381,7 +1493,1298 @@ body #tag-overlay-gallery
   -webkit-touch-callout: none;
 }
 
-body tag-media
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+body #tag-overtitle-gallery
+{
+  z-index: 2;
+  transition-behavior: normal;
+  transition-delay: 0s;
+  transition-duration: 0s;
+  transition-property: none;
+  transition-timing-function: linear;
+  animation-name: none;
+  animation-delay: 0s;
+  animation-duration: 0s;
+  animation-direction: normal;
+  animation-fill-mode: forwards;
+  animation-timing-function: linear;
+  animation-iteration-count: 0;
+  animation-play-state: paused;
+  display: block;
+  visibility: visible;
+  opacity: 1;
+  position: relative;
+  float: none;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: start;
+  vertical-align: top;
+  text-align: left;
+  text-align-last: left;
+  left: 0px;
+  right: auto;
+  top: 0px;
+  bottom: auto;
+  width: auto;
+  min-width: auto;
+  max-width: auto;
+  height: auto;
+  min-height: auto;
+  max-height: auto;
+  margin-left: 0px;
+  margin-right: 0px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  padding-left: 0px;
+  padding-right: 0px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  background-color: transparent;
+  background-image: none;
+  background-attachment: local;
+  background-clip: border-box;
+  background-origin: border-box;
+  background-position: left top;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-blend-mode: normal;
+  backdrop-filter: none;
+  border-left: 0px;
+  border-right: 0px;
+  border-top: 0px;
+  border-bottom: 0px;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+  border-left-style: none;
+  border-right-style: none;
+  border-top-style: none;
+  border-bottom-style: none;
+  border-left-color: transparent;
+  border-right-color: transparent;
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+  box-shadow: none;
+  font-family: "fontA";
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  line-height: normal;
+  font-style: normal;
+  text-decoration-line: none;
+  text-decoration-thickness: 0px;
+  text-underline-offset: 0px;
+  text-decoration-style: none;
+  text-decoration-color: transparent;
+  text-shadow: 0px 10px 7px var(--colorC);
+  writing-mode: horizontal-tb;
+  color: var(--colorZ);
+  caret-color: transparent;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  overflow-x: visible;
+  overflow-y: visible;
+  scrollbar-width: none;
+  resize: none;
+  outline-width: 0px;
+  outline-offset: 0px;
+  outline-style: none;
+  outline-color: transparent;
+  object-fit: fill;
+  object-position: 0px 0px;
+  image-orientation: none;
+  transform-origin: center;
+  transform: none;
+  filter: none;
+  user-select: none;
+  cursor: auto;
+  pointer-events: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
+body #tag-title-gallery
+{
+  z-index: 2;
+  transition-behavior: normal;
+  transition-delay: 0s;
+  transition-duration: 0s;
+  transition-property: none;
+  transition-timing-function: linear;
+  animation-name: none;
+  animation-delay: 0s;
+  animation-duration: 0s;
+  animation-direction: normal;
+  animation-fill-mode: forwards;
+  animation-timing-function: linear;
+  animation-iteration-count: 0;
+  animation-play-state: paused;
+  display: block;
+  visibility: visible;
+  opacity: 1;
+  position: relative;
+  float: none;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: start;
+  vertical-align: top;
+  text-align: left;
+  text-align-last: left;
+  left: 0px;
+  right: auto;
+  top: 0px;
+  bottom: auto;
+  width: 100%;
+  min-width: auto;
+  max-width: 800px;
+  height: auto;
+  min-height: auto;
+  max-height: auto;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 40px;
+  margin-bottom: 0px;
+  padding-left: 0px;
+  padding-right: 0px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  background-color: transparent;
+  background-image: none;
+  background-attachment: local;
+  background-clip: border-box;
+  background-origin: border-box;
+  background-position: left top;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-blend-mode: normal;
+  backdrop-filter: none;
+  border-left: 0px;
+  border-right: 0px;
+  border-top: 0px;
+  border-bottom: 0px;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+  border-left-style: none;
+  border-right-style: none;
+  border-top-style: none;
+  border-bottom-style: none;
+  border-left-color: transparent;
+  border-right-color: transparent;
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+  box-shadow: none;
+  font-family: "fontA";
+  font-size: 50px;
+  font-weight: 400;
+  letter-spacing: 0px;
+  line-height: 55px;
+  font-style: normal;
+  text-decoration-line: none;
+  text-decoration-thickness: 0px;
+  text-underline-offset: 0px;
+  text-decoration-style: none;
+  text-decoration-color: transparent;
+  text-shadow: 0px 15px 7px var(--colorC);
+  writing-mode: horizontal-tb;
+  color: var(--colorZ);
+  caret-color: transparent;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  overflow-x: visible;
+  overflow-y: visible;
+  scrollbar-width: none;
+  resize: none;
+  outline-width: 0px;
+  outline-offset: 0px;
+  outline-style: none;
+  outline-color: transparent;
+  object-fit: fill;
+  object-position: 0px 0px;
+  image-orientation: none;
+  transform-origin: center;
+  transform: none;
+  filter: none;
+  user-select: none;
+  cursor: auto;
+  pointer-events: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
+body tag-center-gallery
+{
+  z-index: 2;
+  transition-behavior: normal;
+  transition-delay: 0s;
+  transition-duration: 0s;
+  transition-property: none;
+  transition-timing-function: linear;
+  animation-name: none;
+  animation-delay: 0s;
+  animation-duration: 0s;
+  animation-direction: normal;
+  animation-fill-mode: forwards;
+  animation-timing-function: linear;
+  animation-iteration-count: 0;
+  animation-play-state: paused;
+  display: block;
+  visibility: visible;
+  opacity: 1;
+  position: relative;
+  float: none;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: start;
+  vertical-align: top;
+  text-align: left;
+  text-align-last: left;
+  left: 0px;
+  right: auto;
+  top: 0px;
+  bottom: auto;
+  width: 100%;
+  min-width: auto;
+  max-width: 800px;
+  height: auto;
+  min-height: auto;
+  max-height: auto;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 40px;
+  margin-bottom: 0px;
+  padding-left: 0px;
+  padding-right: 0px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  background-color: transparent;
+  background-image: none;
+  background-attachment: local;
+  background-clip: border-box;
+  background-origin: border-box;
+  background-position: left top;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-blend-mode: normal;
+  backdrop-filter: none;
+  border-left: 0px;
+  border-right: 0px;
+  border-top: 0px;
+  border-bottom: 0px;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+  border-left-style: none;
+  border-right-style: none;
+  border-top-style: none;
+  border-bottom-style: none;
+  border-left-color: transparent;
+  border-right-color: transparent;
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+  box-shadow: none;
+  font-family: unset;
+  font-size: 0px;
+  font-weight: 100;
+  letter-spacing: 0px;
+  line-height: normal;
+  font-style: normal;
+  text-decoration-line: none;
+  text-decoration-thickness: 0px;
+  text-underline-offset: 0px;
+  text-decoration-style: none;
+  text-decoration-color: transparent;
+  text-shadow: none;
+  writing-mode: horizontal-tb;
+  color: transparent;
+  caret-color: transparent;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  overflow-x: visible;
+  overflow-y: visible;
+  scrollbar-width: none;
+  resize: none;
+  outline-width: 0px;
+  outline-offset: 0px;
+  outline-style: none;
+  outline-color: transparent;
+  object-fit: fill;
+  object-position: 0px 0px;
+  image-orientation: none;
+  transform-origin: center;
+  transform: none;
+  filter: none;
+  user-select: none;
+  cursor: auto;
+  pointer-events: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
+body tag-button-gallery
+{
+  z-index: 2;
+  transition-behavior: normal;
+  transition-delay: 0s;
+  transition-duration: 0s;
+  transition-property: none;
+  transition-timing-function: linear;
+  animation-name: none;
+  animation-delay: 0s;
+  animation-duration: 0s;
+  animation-direction: normal;
+  animation-fill-mode: forwards;
+  animation-timing-function: linear;
+  animation-iteration-count: 0;
+  animation-play-state: paused;
+  display: inline-block;
+  visibility: visible;
+  opacity: 1;
+  position: relative;
+  float: none;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: start;
+  vertical-align: top;
+  text-align: left;
+  text-align-last: left;
+  left: 0px;
+  right: auto;
+  top: 0px;
+  bottom: auto;
+  width: auto;
+  min-width: auto;
+  max-width: auto;
+  height: auto;
+  min-height: auto;
+  max-height: auto;
+  margin-left: 0px;
+  margin-right: 0px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  padding-left: 18px;
+  padding-right: 18px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  background-color: var(--colorZ);
+  background-image: none;
+  background-attachment: local;
+  background-clip: border-box;
+  background-origin: border-box;
+  background-position: left top;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-blend-mode: normal;
+  backdrop-filter: none;
+  border-left: 0px;
+  border-right: 0px;
+  border-top: 0px;
+  border-bottom: 0px;
+  border-top-left-radius: 25px;
+  border-top-right-radius: 25px;
+  border-bottom-left-radius: 25px;
+  border-bottom-right-radius: 25px;
+  border-left-style: none;
+  border-right-style: none;
+  border-top-style: none;
+  border-bottom-style: none;
+  border-left-color: transparent;
+  border-right-color: transparent;
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+  box-shadow: 0px 10px 7px var(--colorC);
+  font-family: "fontA";
+  font-size: 17px;
+  font-weight: 400;
+  letter-spacing: 0px;
+  line-height: normal;
+  font-style: normal;
+  text-decoration-line: none;
+  text-decoration-thickness: 0px;
+  text-underline-offset: 0px;
+  text-decoration-style: none;
+  text-decoration-color: transparent;
+  text-shadow: none;
+  writing-mode: horizontal-tb;
+  color: var(--colorB);
+  caret-color: transparent;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  overflow-x: visible;
+  overflow-y: visible;
+  scrollbar-width: none;
+  resize: none;
+  outline-width: 0px;
+  outline-offset: 0px;
+  outline-style: none;
+  outline-color: transparent;
+  object-fit: fill;
+  object-position: 0px 0px;
+  image-orientation: none;
+  transform-origin: center;
+  transform: none;
+  filter: none;
+  user-select: none;
+  cursor: pointer;
+  pointer-events: auto;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
+body tag-button-gallery tag-button-point-gallery
+{
+  display: inline-block;
+  margin-right: 13px;
+  font-size: 19px;
+}
+
+body tag-subtitle1-gallery
+{
+  z-index: 2;
+  transition-behavior: normal;
+  transition-delay: 0s;
+  transition-duration: 0s;
+  transition-property: none;
+  transition-timing-function: linear;
+  animation-name: none;
+  animation-delay: 0s;
+  animation-duration: 0s;
+  animation-direction: normal;
+  animation-fill-mode: forwards;
+  animation-timing-function: linear;
+  animation-iteration-count: 0;
+  animation-play-state: paused;
+  display: block;
+  visibility: visible;
+  opacity: 1;
+  position: relative;
+  float: none;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: start;
+  vertical-align: top;
+  text-align: left;
+  text-align-last: left;
+  left: 0px;
+  right: auto;
+  top: 0px;
+  bottom: auto;
+  width: 100%;
+  min-width: auto;
+  max-width: 800px;
+  height: auto;
+  min-height: auto;
+  max-height: auto;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 100px;
+  margin-bottom: 0px;
+  padding-left: 0px;
+  padding-right: 0px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  background-color: transparent;
+  background-image: none;
+  background-attachment: local;
+  background-clip: border-box;
+  background-origin: border-box;
+  background-position: left top;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-blend-mode: normal;
+  backdrop-filter: none;
+  border-left: 0px;
+  border-right: 0px;
+  border-top: 0px;
+  border-bottom: 0px;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+  border-left-style: none;
+  border-right-style: none;
+  border-top-style: none;
+  border-bottom-style: none;
+  border-left-color: transparent;
+  border-right-color: transparent;
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+  box-shadow: none;
+  font-family: "fontA";
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  line-height: normal;
+  font-style: normal;
+  text-decoration-line: none;
+  text-decoration-thickness: 0px;
+  text-underline-offset: 0px;
+  text-decoration-style: none;
+  text-decoration-color: transparent;
+  text-shadow: 0px 10px 7px var(--colorC);
+  writing-mode: horizontal-tb;
+  color: var(--colorE);
+  caret-color: transparent;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  overflow-x: visible;
+  overflow-y: visible;
+  scrollbar-width: none;
+  resize: none;
+  outline-width: 0px;
+  outline-offset: 0px;
+  outline-style: none;
+  outline-color: transparent;
+  object-fit: fill;
+  object-position: 0px 0px;
+  image-orientation: none;
+  transform-origin: center;
+  transform: none;
+  filter: none;
+  user-select: none;
+  cursor: auto;
+  pointer-events: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
+body tag-subtitle2-gallery
+{
+  z-index: 2;
+  transition-behavior: normal;
+  transition-delay: 0s;
+  transition-duration: 0s;
+  transition-property: none;
+  transition-timing-function: linear;
+  animation-name: none;
+  animation-delay: 0s;
+  animation-duration: 0s;
+  animation-direction: normal;
+  animation-fill-mode: forwards;
+  animation-timing-function: linear;
+  animation-iteration-count: 0;
+  animation-play-state: paused;
+  display: block;
+  visibility: visible;
+  opacity: 1;
+  position: relative;
+  float: none;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: start;
+  vertical-align: top;
+  text-align: left;
+  text-align-last: left;
+  left: 0px;
+  right: auto;
+  top: 0px;
+  bottom: auto;
+  width: 100%;
+  min-width: auto;
+  max-width: 800px;
+  height: auto;
+  min-height: auto;
+  max-height: auto;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 40px;
+  margin-bottom: 0px;
+  padding-left: 0px;
+  padding-right: 0px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  background-color: transparent;
+  background-image: none;
+  background-attachment: local;
+  background-clip: border-box;
+  background-origin: border-box;
+  background-position: left top;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-blend-mode: normal;
+  backdrop-filter: none;
+  border-left: 0px;
+  border-right: 0px;
+  border-top: 0px;
+  border-bottom: 0px;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+  border-left-style: none;
+  border-right-style: none;
+  border-top-style: none;
+  border-bottom-style: none;
+  border-left-color: transparent;
+  border-right-color: transparent;
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+  box-shadow: none;
+  font-family: "fontA";
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  line-height: normal;
+  font-style: normal;
+  text-decoration-line: none;
+  text-decoration-thickness: 0px;
+  text-underline-offset: 0px;
+  text-decoration-style: none;
+  text-decoration-color: transparent;
+  text-shadow: 0px 10px 7px var(--colorC);
+  writing-mode: horizontal-tb;
+  color: var(--colorZ);
+  caret-color: transparent;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  overflow-x: visible;
+  overflow-y: visible;
+  scrollbar-width: none;
+  resize: none;
+  outline-width: 0px;
+  outline-offset: 0px;
+  outline-style: none;
+  outline-color: transparent;
+  object-fit: fill;
+  object-position: 0px 0px;
+  image-orientation: none;
+  transform-origin: center;
+  transform: none;
+  filter: none;
+  user-select: none;
+  cursor: auto;
+  pointer-events: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
+body tag-paratitle-gallery
+{
+  z-index: 2;
+  transition-behavior: normal;
+  transition-delay: 0s;
+  transition-duration: 0s;
+  transition-property: none;
+  transition-timing-function: linear;
+  animation-name: none;
+  animation-delay: 0s;
+  animation-duration: 0s;
+  animation-direction: normal;
+  animation-fill-mode: forwards;
+  animation-timing-function: linear;
+  animation-iteration-count: 0;
+  animation-play-state: paused;
+  display: block;
+  visibility: visible;
+  opacity: 1;
+  position: relative;
+  float: none;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: start;
+  vertical-align: top;
+  text-align: left;
+  text-align-last: left;
+  left: 0px;
+  right: auto;
+  top: 0px;
+  bottom: auto;
+  width: 100%;
+  min-width: auto;
+  max-width: 800px;
+  height: auto;
+  min-height: auto;
+  max-height: auto;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 100px;
+  margin-bottom: 0px;
+  padding-left: 0px;
+  padding-right: 0px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  background-color: transparent;
+  background-image: none;
+  background-attachment: local;
+  background-clip: border-box;
+  background-origin: border-box;
+  background-position: left top;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-blend-mode: normal;
+  backdrop-filter: none;
+  border-left: 0px;
+  border-right: 0px;
+  border-top: 0px;
+  border-bottom: 0px;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+  border-left-style: none;
+  border-right-style: none;
+  border-top-style: none;
+  border-bottom-style: none;
+  border-left-color: transparent;
+  border-right-color: transparent;
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+  box-shadow: none;
+  font-family: "fontA";
+  font-size: 20px;
+  font-weight: 500;
+  letter-spacing: 0px;
+  line-height: 25px;
+  font-style: normal;
+  text-decoration-line: none;
+  text-decoration-thickness: 0px;
+  text-underline-offset: 0px;
+  text-decoration-style: none;
+  text-decoration-color: transparent;
+  text-shadow: 0px 10px 7px var(--colorC);
+  writing-mode: horizontal-tb;
+  color: var(--colorE);
+  caret-color: transparent;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  overflow-x: visible;
+  overflow-y: visible;
+  scrollbar-width: none;
+  resize: none;
+  outline-width: 0px;
+  outline-offset: 0px;
+  outline-style: none;
+  outline-color: transparent;
+  object-fit: fill;
+  object-position: 0px 0px;
+  image-orientation: none;
+  transform-origin: center;
+  transform: none;
+  filter: none;
+  user-select: none;
+  cursor: auto;
+  pointer-events: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
+body tag-paragraph-gallery
+{
+  z-index: 2;
+  transition-behavior: normal;
+  transition-delay: 0s;
+  transition-duration: 0s;
+  transition-property: none;
+  transition-timing-function: linear;
+  animation-name: none;
+  animation-delay: 0s;
+  animation-duration: 0s;
+  animation-direction: normal;
+  animation-fill-mode: forwards;
+  animation-timing-function: linear;
+  animation-iteration-count: 0;
+  animation-play-state: paused;
+  display: block;
+  visibility: visible;
+  opacity: 1;
+  position: relative;
+  float: none;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: start;
+  vertical-align: top;
+  text-align: left;
+  text-align-last: left;
+  left: 0px;
+  right: auto;
+  top: 0px;
+  bottom: auto;
+  width: 100%;
+  min-width: auto;
+  max-width: 800px;
+  height: auto;
+  min-height: auto;
+  max-height: auto;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 40px;
+  margin-bottom: 0px;
+  padding-left: 0px;
+  padding-right: 0px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  background-color: transparent;
+  background-image: none;
+  background-attachment: local;
+  background-clip: border-box;
+  background-origin: border-box;
+  background-position: left top;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-blend-mode: normal;
+  backdrop-filter: none;
+  border-left: 0px;
+  border-right: 0px;
+  border-top: 0px;
+  border-bottom: 0px;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+  border-left-style: none;
+  border-right-style: none;
+  border-top-style: none;
+  border-bottom-style: none;
+  border-left-color: transparent;
+  border-right-color: transparent;
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+  box-shadow: none;
+  font-family: "fontA";
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: 0px;
+  line-height: 30px;
+  font-style: normal;
+  text-decoration-line: none;
+  text-decoration-thickness: 0px;
+  text-underline-offset: 0px;
+  text-decoration-style: none;
+  text-decoration-color: transparent;
+  text-shadow: 0px 10px 7px var(--colorC);
+  writing-mode: horizontal-tb;
+  color: var(--colorZ);
+  caret-color: transparent;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  overflow-x: visible;
+  overflow-y: visible;
+  scrollbar-width: none;
+  resize: none;
+  outline-width: 0px;
+  outline-offset: 0px;
+  outline-style: none;
+  outline-color: transparent;
+  object-fit: fill;
+  object-position: 0px 0px;
+  image-orientation: none;
+  transform-origin: center;
+  transform: none;
+  filter: none;
+  user-select: none;
+  cursor: auto;
+  pointer-events: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
+body #tag-more-gallery
+{
+  z-index: 2;
+  transition-behavior: normal;
+  transition-delay: 0s;
+  transition-duration: 0s;
+  transition-property: none;
+  transition-timing-function: linear;
+  animation-name: none;
+  animation-delay: 0s;
+  animation-duration: 0s;
+  animation-direction: normal;
+  animation-fill-mode: forwards;
+  animation-timing-function: linear;
+  animation-iteration-count: 0;
+  animation-play-state: paused;
+  display: block;
+  visibility: visible;
+  opacity: 1;
+  position: relative;
+  float: none;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: start;
+  vertical-align: top;
+  text-align: left;
+  text-align-last: left;
+  left: 0px;
+  right: auto;
+  top: 0px;
+  bottom: auto;
+  width: 100%;
+  min-width: auto;
+  max-width: 800px;
+  height: auto;
+  min-height: auto;
+  max-height: auto;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 70px;
+  margin-bottom: 0px;
+  padding-left: 0px;
+  padding-right: 0px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  background-color: transparent;
+  background-image: none;
+  background-attachment: local;
+  background-clip: border-box;
+  background-origin: border-box;
+  background-position: left top;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-blend-mode: normal;
+  backdrop-filter: none;
+  border-left: 0px;
+  border-right: 0px;
+  border-top: 0px;
+  border-bottom: 0px;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+  border-left-style: none;
+  border-right-style: none;
+  border-top-style: none;
+  border-bottom-style: none;
+  border-left-color: transparent;
+  border-right-color: transparent;
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+  box-shadow: none;
+  font-family: "fontA";
+  font-size: 30px;
+  font-weight: 400;
+  letter-spacing: 0px;
+  line-height: 35px;
+  font-style: normal;
+  text-decoration-line: none;
+  text-decoration-thickness: 0px;
+  text-underline-offset: 0px;
+  text-decoration-style: none;
+  text-decoration-color: transparent;
+  text-shadow: 0px 15px 7px var(--colorC);
+  writing-mode: horizontal-tb;
+  color: var(--colorZ);
+  caret-color: transparent;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  overflow-x: visible;
+  overflow-y: visible;
+  scrollbar-width: none;
+  resize: none;
+  outline-width: 0px;
+  outline-offset: 0px;
+  outline-style: none;
+  outline-color: transparent;
+  object-fit: fill;
+  object-position: 0px 0px;
+  image-orientation: none;
+  transform-origin: center;
+  transform: none;
+  filter: none;
+  user-select: none;
+  cursor: auto;
+  pointer-events: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
+body #tag-submore-gallery
+{
+  z-index: 2;
+  transition-behavior: normal;
+  transition-delay: 0s;
+  transition-duration: 0s;
+  transition-property: none;
+  transition-timing-function: linear;
+  animation-name: none;
+  animation-delay: 0s;
+  animation-duration: 0s;
+  animation-direction: normal;
+  animation-fill-mode: forwards;
+  animation-timing-function: linear;
+  animation-iteration-count: 0;
+  animation-play-state: paused;
+  display: block;
+  visibility: visible;
+  opacity: 1;
+  position: relative;
+  float: none;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: start;
+  vertical-align: top;
+  text-align: left;
+  text-align-last: left;
+  left: 0px;
+  right: auto;
+  top: 0px;
+  bottom: auto;
+  width: 100%;
+  min-width: auto;
+  max-width: 800px;
+  height: auto;
+  min-height: auto;
+  max-height: auto;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 13px;
+  margin-bottom: 0px;
+  padding-left: 0px;
+  padding-right: 0px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  background-color: transparent;
+  background-image: none;
+  background-attachment: local;
+  background-clip: border-box;
+  background-origin: border-box;
+  background-position: left top;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-blend-mode: normal;
+  backdrop-filter: none;
+  border-left: 0px;
+  border-right: 0px;
+  border-top: 0px;
+  border-bottom: 0px;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+  border-left-style: none;
+  border-right-style: none;
+  border-top-style: none;
+  border-bottom-style: none;
+  border-left-color: transparent;
+  border-right-color: transparent;
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+  box-shadow: none;
+  font-family: "fontA";
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0px;
+  line-height: normal;
+  font-style: normal;
+  text-decoration-line: none;
+  text-decoration-thickness: 0px;
+  text-underline-offset: 0px;
+  text-decoration-style: none;
+  text-decoration-color: transparent;
+  text-shadow: 0px 10px 7px var(--colorC);
+  writing-mode: horizontal-tb;
+  color: var(--colorZ);
+  caret-color: transparent;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  overflow-x: visible;
+  overflow-y: visible;
+  scrollbar-width: none;
+  resize: none;
+  outline-width: 0px;
+  outline-offset: 0px;
+  outline-style: none;
+  outline-color: transparent;
+  object-fit: fill;
+  object-position: 0px 0px;
+  image-orientation: none;
+  transform-origin: center;
+  transform: none;
+  filter: none;
+  user-select: none;
+  cursor: auto;
+  pointer-events: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
+body tag-line-gallery
+{
+  z-index: 2;
+  transition-behavior: normal;
+  transition-delay: 0s;
+  transition-duration: 0s;
+  transition-property: none;
+  transition-timing-function: linear;
+  animation-name: none;
+  animation-delay: 0s;
+  animation-duration: 0s;
+  animation-direction: normal;
+  animation-fill-mode: forwards;
+  animation-timing-function: linear;
+  animation-iteration-count: 0;
+  animation-play-state: paused;
+  display: block;
+  visibility: visible;
+  opacity: 1;
+  position: relative;
+  float: none;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: start;
+  vertical-align: top;
+  text-align: center;
+  text-align-last: center;
+  left: 0px;
+  right: auto;
+  top: 0px;
+  bottom: auto;
+  width: 100%;
+  min-width: auto;
+  max-width: 800px;
+  height: 1px;
+  min-height: auto;
+  max-height: auto;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 70px;
+  margin-bottom: 0px;
+  padding-left: 0px;
+  padding-right: 0px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  background-color: var(--colorE);
+  background-image: none;
+  background-attachment: local;
+  background-clip: border-box;
+  background-origin: border-box;
+  background-position: left top;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-blend-mode: normal;
+  backdrop-filter: none;
+  border-left: 0px;
+  border-right: 0px;
+  border-top: 0px;
+  border-bottom: 0px;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+  border-left-style: none;
+  border-right-style: none;
+  border-top-style: none;
+  border-bottom-style: none;
+  border-left-color: transparent;
+  border-right-color: transparent;
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+  box-shadow: 0px 10px 7px var(--colorC);
+  font-family: unset;
+  font-size: 0px;
+  font-weight: 100;
+  letter-spacing: 0px;
+  line-height: normal;
+  font-style: normal;
+  text-decoration-line: none;
+  text-decoration-thickness: 0px;
+  text-underline-offset: 0px;
+  text-decoration-style: none;
+  text-decoration-color: transparent;
+  text-shadow: none;
+  writing-mode: horizontal-tb;
+  color: transparent;
+  caret-color: transparent;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  overflow-x: visible;
+  overflow-y: visible;
+  scrollbar-width: none;
+  resize: none;
+  outline-width: 0px;
+  outline-offset: 0px;
+  outline-style: none;
+  outline-color: transparent;
+  object-fit: fill;
+  object-position: 0px 0px;
+  image-orientation: none;
+  transform-origin: center;
+  transform: none;
+  filter: none;
+  user-select: none;
+  cursor: auto;
+  pointer-events: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+body tag-media-gallery
 {
   z-index: 2;
   transition-behavior: normal;
@@ -1493,7 +2896,7 @@ body tag-media
   -webkit-touch-callout: none;
 }
 
-body tag-overtitle-img
+body tag-overtitle-img-gallery
 {
   z-index: 3;
   transition-behavior: normal;
@@ -1605,7 +3008,7 @@ body tag-overtitle-img
   -webkit-touch-callout: none;
 }
 
-body tag-point-img
+body tag-point-img-gallery
 {
   z-index: 3;
   transition-behavior: normal;
@@ -1717,7 +3120,7 @@ body tag-point-img
   -webkit-touch-callout: none;
 }
 
-body tag-title-img
+body tag-title-img-gallery
 {
   z-index: 3;
   transition-behavior: normal;
@@ -1829,7 +3232,7 @@ body tag-title-img
   -webkit-touch-callout: none;
 }
 
-body tag-subtitle-img
+body tag-subtitle-img-gallery
 {
   z-index: 3;
   transition-behavior: normal;
@@ -2071,7 +3474,7 @@ body #tag-overlay-footer
   animation-play-state: paused;
   display: block;
   visibility: visible;
-  opacity: /*0*/1;
+  opacity: 1;
   position: fixed;
   float: none;
   flex-direction: row;
@@ -2165,7 +3568,7 @@ body #tag-overlay-footer
   -webkit-touch-callout: none;
 }
 
-body #tag-line
+body #tag-line-footer
 {
   z-index: 4;
   transition-behavior: normal;
@@ -2277,7 +3680,7 @@ body #tag-line
   -webkit-touch-callout: none;
 }
 
-body #tag-contact
+body #tag-contact-footer
 {
   z-index: 4;
   transition-behavior: normal;
@@ -2389,7 +3792,7 @@ body #tag-contact
   -webkit-touch-callout: none;
 }
 
-body #tag-title-contact
+body #tag-title-contact-footer
 {
   z-index: 4;
   transition-behavior: normal;
@@ -2501,14 +3904,14 @@ body #tag-title-contact
   -webkit-touch-callout: none;
 }
 
-body #tag-title-contact tag-note
+body #tag-title-contact-footer tag-note-footer
 {
   display: inline-block;
   margin-left: 10px;
   font-size: 12px;
 }
 
-body #tag-form-contact
+body #tag-form-contact-footer
 {
   z-index: 4;
   transition-behavior: normal;
@@ -2620,7 +4023,7 @@ body #tag-form-contact
   -webkit-touch-callout: none;
 }
 
-body #tag-input-contact
+body #tag-input-contact-footer
 {
   z-index: 4;
   transition-behavior: normal;
@@ -2732,7 +4135,7 @@ body #tag-input-contact
   -webkit-touch-callout: none;
 }
 
-body #tag-submit-contact
+body #tag-submit-contact-footer
 {
   z-index: 4;
   transition-behavior: normal;
@@ -2806,8 +4209,8 @@ body #tag-submit-contact
   border-bottom-color: transparent;
   box-shadow: none;
   font-family: "fontA";
-  font-size: /*16px*/14px;
-  font-weight: /*300*/100;
+  font-size: 14px;
+  font-weight: 100;
   letter-spacing: 0px;
   line-height: normal;
   font-style: normal;

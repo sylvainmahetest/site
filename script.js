@@ -3,18 +3,20 @@ customElements.define("tag-loading-bar", class extends HTMLElement{});
 customElements.define("tag-canvas-particule", class extends HTMLElement{});
 customElements.define("tag-name", class extends HTMLElement{});
 customElements.define("tag-letter", class extends HTMLElement{});
+customElements.define("tag-back", class extends HTMLElement{});
 customElements.define("tag-overlay-header", class extends HTMLElement{});
-customElements.define("tag-overtitle", class extends HTMLElement{});
-customElements.define("tag-title", class extends HTMLElement{});
-customElements.define("tag-subtitle", class extends HTMLElement{});
-customElements.define("tag-scroll-down", class extends HTMLElement{});
+customElements.define("tag-overtitle-header", class extends HTMLElement{});
+customElements.define("tag-title-header", class extends HTMLElement{});
+customElements.define("tag-subtitle-header", class extends HTMLElement{});
+customElements.define("tag-scroll-down-header", class extends HTMLElement{});
 customElements.define("tag-overlay-gallery", class extends HTMLElement{});
-customElements.define("tag-media", class extends HTMLElement{});
+customElements.define("tag-button-gallery", class extends HTMLElement{});
+customElements.define("tag-media-gallery", class extends HTMLElement{});
 customElements.define("tag-overlay-footer", class extends HTMLElement{});
-customElements.define("tag-line", class extends HTMLElement{});
-customElements.define("tag-contact", class extends HTMLElement{});
-customElements.define("tag-input-contact", class extends HTMLElement{});
-customElements.define("tag-submit-contact", class extends HTMLElement{});
+customElements.define("tag-line-footer", class extends HTMLElement{});
+customElements.define("tag-contact-footer", class extends HTMLElement{});
+customElements.define("tag-input-contact-footer", class extends HTMLElement{});
+customElements.define("tag-submit-contact-footer", class extends HTMLElement{});
 
 let _stateLoading = 1;
 let _tagLoadingText = null;
@@ -29,21 +31,27 @@ let _tagName = null;
 let _tagLetter = [];
 let _widthLetter = [];
 let _countTagLetter = 0;
+let _tagBack = null;
 let _tagOverlayHeader = null;
-let _tagOvertitle = null;
-let _tagTitle = null;
-let _tagSubtitle = null;
-let _tagScrollDown = null;
+let _tagOvertitleHeader = null;
+let _tagTitleHeader = null;
+let _tagSubtitleHeader = null;
+let _tagScrollDownHeader = null;
 let _tagOverlayGallery = null;
-let _tagMedia = [];
+let _tagButtonGallery = [];
+let _countTagButton = 0;
+let _tagMediaGallery = [];
 let _tagImg = [];
 let _countTagMediaImg = 0;
 let _eventScroll = 0;
 let _tagOverlayFooter = null;
-let _tagLine = null;
-let _tagContact = null;
-let _tagInputContact = null;
-let _tagSubmitContact = null;
+let _tagLineFooter = null;
+let _tagContactFooter = null;
+let _tagInputContactFooter = null;
+let _tagSubmitContactFooter = null;
+let _foundTagBack = true;
+let _foundTagOverlayHeader = true;
+let _translateSmooth = 0;
 
 function fitText(tag, fontSize, letterSpacing, lineHeight)
 {
@@ -122,7 +130,8 @@ function clampPositiveSymmetricalMinMax(value, minMax)
 function tag()
 {
     const TAG_LETTER_IN_DOCUMENT = document.querySelectorAll("body tag-letter");
-    const TAG_MEDIA_IN_DOCUMENT = document.querySelectorAll("body tag-media");
+    const TAG_BUTTON_IN_DOCUMENT = document.querySelectorAll("body tag-button-gallery");
+    const TAG_MEDIA_IN_DOCUMENT = document.querySelectorAll("body tag-media-gallery");
     const TAG_IMG_IN_DOCUMENT = document.querySelectorAll("body img");
     
     _tagLoadingText = document.getElementById("tag-loading-text");
@@ -142,17 +151,52 @@ function tag()
         _countTagLetter++;
     });
     
+    _tagBack = document.getElementById("tag-back");
+    
+    if (_tagBack === null)
+    {
+        _foundTagBack = false;
+    }
+    
     _tagOverlayHeader = document.getElementById("tag-overlay-header");
-    _tagOvertitle = document.getElementById("tag-overtitle");
-    _tagTitle = document.getElementById("tag-title");
-    _tagSubtitle = document.getElementById("tag-subtitle");
-    _tagScrollDown = document.getElementById("tag-scroll-down");
+    
+    if (_tagOverlayHeader === null)
+    {
+        _foundTagOverlayHeader = false;
+    }
+    else
+    {
+        _tagOvertitleHeader = document.getElementById("tag-overtitle-header");
+        _tagTitleHeader = document.getElementById("tag-title-header");
+        _tagSubtitleHeader = document.getElementById("tag-subtitle-header");
+        _tagScrollDownHeader = document.getElementById("tag-scroll-down-header");
+    }
     
     _tagOverlayGallery = document.getElementById("tag-overlay-gallery");
     
+    TAG_BUTTON_IN_DOCUMENT.forEach((tag, index) =>
+    {
+        _tagButtonGallery[index] = tag;
+        
+        if (_tagButtonGallery[index].getAttribute("href") === null)
+        {
+            _tagButtonGallery[index].style.cursor = "auto";
+            _tagButtonGallery[index].style.pointerEvents = "none";
+        }
+        
+        _countTagButton++;
+    });
+    
     TAG_MEDIA_IN_DOCUMENT.forEach((tag, index) =>
     {
-        _tagMedia[index] = tag;
+        _tagMediaGallery[index] = tag;
+        
+        if (_tagMediaGallery[index].getAttribute("href") === null)
+        {
+            _tagMediaGallery[index].style.cursor = "auto";
+            _tagMediaGallery[index].style.pointerEvents = "none";
+        }
+        
         _countTagMediaImg++;
     });
     
@@ -162,10 +206,10 @@ function tag()
     });
     
     _tagOverlayFooter = document.getElementById("tag-overlay-footer");
-    _tagLine = document.getElementById("tag-line");
-    _tagContact = document.getElementById("tag-contact");
-    _tagInputContact = document.getElementById("tag-input-contact");
-    _tagSubmitContact = document.getElementById("tag-submit-contact");
+    _tagLineFooter = document.getElementById("tag-line-footer");
+    _tagContactFooter = document.getElementById("tag-contact-footer");
+    _tagInputContactFooter = document.getElementById("tag-input-contact-footer");
+    _tagSubmitContactFooter = document.getElementById("tag-submit-contact-footer");
 }
 
 function event()
@@ -227,66 +271,6 @@ function event()
     {
         passive: false
     });
-    
-    //////////////////////////////////////////////////////////////////////////////////////////
-    /*let index = 0;
-    
-    for (index = 0; index < _countTagMediaImg; index++)
-    {
-        const INDEX = index;
-        
-        _tagMedia[INDEX].addEventListener("touchstart", event =>
-        {
-            const LENGTH_TOUCH = event.touches.length;
-            
-            if (LENGTH_TOUCH === 1)
-            {
-                clientY = event.touches[0].clientY;
-                clientYPrevious = clientY;
-            }
-            else if (LENGTH_TOUCH === 2)
-            {
-                clientY = (event.touches[0].clientY + event.touches[1].clientY) * 0.5;
-                clientYPrevious = clientY;
-            }
-            
-            event.preventDefault();
-        },
-        {
-            passive: false
-        });
-        
-        _tagMedia[INDEX].addEventListener("touchmove", event =>
-        {
-            const LENGTH_TOUCH = event.touches.length;
-            
-            if (LENGTH_TOUCH === 1)
-            {
-                clientY = event.touches[0].clientY;
-                
-                deltaY = clientY - clientYPrevious;
-                clientYPrevious = clientY;
-            }
-            else if (LENGTH_TOUCH === 2)
-            {
-                clientY = (event.touches[0].clientY + event.touches[1].clientY) * 0.5;
-                
-                deltaY = clientY - clientYPrevious;
-                clientYPrevious = clientY;
-            }
-            
-            if (deltaY < 0 || deltaY > 0)
-            {
-                _eventScroll += deltaY * 1.5;
-            }
-            
-            event.preventDefault();
-        },
-        {
-            passive: false
-        });
-    }*/
-    //////////////////////////////////////////////////////////////////////////////////////////
     
     //_tagCanvasParticule.addEventListener("wheel", event =>
     document.addEventListener("wheel", event =>
@@ -1257,8 +1241,11 @@ function particuleAnimation()
             //TOUCH
             if (activeTouchA === true && magnitudeSmooth > 0.1)
             {
-                xAttractor = xSmoothTouch + xSmoothJitterTouch - _rxAccelerometer;
-                yAttractor = ySmoothTouch + ySmoothJitterTouch - _ryAccelerometer;
+                //xAttractor = xSmoothTouch + xSmoothJitterTouch - _rxAccelerometer;
+                xAttractor = xSmoothTouch + xSmoothJitterTouch - _rxAccelerometer * proximity[indexParticule];
+                //yAttractor = ySmoothTouch + ySmoothJitterTouch - _ryAccelerometer;
+                yAttractor = ySmoothTouch + ySmoothJitterTouch - _ryAccelerometer - (140 * (1 / (2 / proximity[indexParticule])) * (-_translateSmooth * 0.001));
+                //yAttractor = ySmoothTouch + ySmoothJitterTouch - ((_ryAccelerometer * (1 + (-_translateSmooth * 0.001)))) - 140 * proximity[indexParticule];
                 
                 dx = (xAttractor - px) * widthSmoothRingTouch;
                 dy = (yAttractor - py) * heightSmoothRingTouch;
@@ -1344,7 +1331,8 @@ function particuleAnimation()
             
             //PARALLAX
             xParallax = position[indexParticuleX] + (_rxAccelerometer * proximity[indexParticule]);
-            yParallax = (position[indexParticuleY] + ((_ryAccelerometer + 70) * proximity[indexParticule])) - 140;
+            //yParallax = (position[indexParticuleY] + ((_ryAccelerometer + 70) * proximity[indexParticule])) - 140;
+            yParallax = (position[indexParticuleY] + ((_ryAccelerometer + 70 * (1 + (-_translateSmooth * 0.001))) * proximity[indexParticule])) - 140;
             
             positionRender[indexParticuleX] = ((xParallax * cosParallax) - (yParallax * sinParallax)) / H_SCALE;
             positionRender[indexParticuleY] = ((xParallax * sinParallax) + (yParallax * cosParallax)) / V_SCALE;
@@ -1481,7 +1469,10 @@ function windowResize()
         
         _webGL.viewport(0, 0, _tagCanvasParticule.width, _tagCanvasParticule.height);
         
-        fitText(_tagTitle, 100, 0, 110);
+        if (_foundTagOverlayHeader === true)
+        {
+            fitText(_tagTitleHeader, 100, 0, 110);
+        }
     }
     
     updateSize();
@@ -1531,7 +1522,7 @@ function interfaceAnimation()
     let scrollMax = 0;
     let smoothAll = 0;
     const SMOOTH_ALL = 0.01;
-    let translateSmooth = 0;
+    //let translateSmooth = 0;
     let opacitySmooth = 1;
     let scaleSmooth = 1;
     let opacity = 1;
@@ -1550,7 +1541,7 @@ function interfaceAnimation()
     {
         const TIME_DELTA = Math.min((time - timePreviousRelative) * 0.001, 0.04);
         const V_WINDOW = window.innerHeight;
-        const RECTANGLE_HEADER = _tagOverlayHeader.getBoundingClientRect();
+        //const RECTANGLE_HEADER = _tagOverlayHeader.getBoundingClientRect();
         const RECTANGLE_GALLERY = _tagOverlayGallery.getBoundingClientRect();
         const RECTANGLE_FOOTER = _tagOverlayFooter.getBoundingClientRect();
         
@@ -1579,11 +1570,32 @@ function interfaceAnimation()
             fadeInQuadratic = 1;
         }
         
-        bottomHeader = 160 + RECTANGLE_HEADER.height;
-        topGallery = V_WINDOW;
+        //bottomHeader = 160 + RECTANGLE_HEADER.height;
+        
+        if (_foundTagBack === false)
+        {
+            topGallery = V_WINDOW;//VERSION GALLERY
+        }
+        else
+        {
+            topGallery = 160;//VERSION PAGE
+        }
+        
         topFooter = RECTANGLE_FOOTER.height + 30;
         
-        scrollMax = RECTANGLE_GALLERY.height + 100 + topFooter;
+        if (_foundTagBack === false)
+        {
+            scrollMax = RECTANGLE_GALLERY.height + 100 + topFooter;//VERSION GALLERY
+        }
+        else
+        {
+            scrollMax = ((160 + RECTANGLE_GALLERY.height) - V_WINDOW) + 100 + topFooter;//VERSION PAGE
+        }
+        
+        if (scrollMax < 0)
+        {
+            scrollMax = 0;
+        }
         
         if (_eventScroll > 0)
         {
@@ -1599,21 +1611,26 @@ function interfaceAnimation()
             opacity = 1;
             scale = 1;
         }
-        else if (_eventScroll < -bottomHeader)
+        //else if (_eventScroll < -bottomHeader)
+        else if (_eventScroll < -500)
         {
             opacity = 0;
             scale = 0.85;
         }
         else
         {
-            opacity = 1 + (1 / (bottomHeader / _eventScroll));
-            scale = 1 + (0.15 / (bottomHeader / _eventScroll));
+            //opacity = 1 + (1 / (bottomHeader / _eventScroll));
+            opacity = 1 + (1 / (500 / _eventScroll));
+            //scale = 1 + (0.15 / (bottomHeader / _eventScroll));
+            scale = 1 + (0.15 / (500 / _eventScroll));
         }
         
         smoothAll = 1 - Math.pow(SMOOTH_ALL, TIME_DELTA);
-        translateSmooth += (_eventScroll - translateSmooth) * smoothAll;
+        _translateSmooth += (_eventScroll - _translateSmooth) * smoothAll;
         opacitySmooth += (opacity - opacitySmooth) * smoothAll;
         scaleSmooth += (scale - scaleSmooth) * smoothAll;
+        
+        //_translateSmooth = translateSmooth;
         
         //TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG
         if (fadeIn < 1)
@@ -1629,8 +1646,9 @@ function interfaceAnimation()
         
         for (index = 0; index < _countTagLetter; index++)
         {
-            widthPerLetter = bottomHeader / _countTagLetter;
-            opacityLetter = 1 - (-translateSmooth / (widthPerLetter + (widthPerLetter * (_countTagLetter - index))));
+            //widthPerLetter = bottomHeader / _countTagLetter;
+            widthPerLetter = 500 / _countTagLetter;//VERSION GALLERY ET VERSION PAGE
+            opacityLetter = 1 - (-_translateSmooth / (widthPerLetter + (widthPerLetter * (_countTagLetter - index))));
             
             if (opacityLetter < 0)
             {
@@ -1650,29 +1668,37 @@ function interfaceAnimation()
         _tagName.style.opacity = fadeInLinear;
         _tagName.style.transform = "translate(0px, " + (-50 * (1 - fadeInQuadratic)) + "px)";
         
-        _tagOverlayHeader.style.opacity = opacitySmooth;
-        _tagOverlayHeader.style.transform = "scale(" + scaleSmooth + ")";
+        if (_foundTagBack === true)
+        {
+            _tagBack.style.opacity = fadeInLinear;
+            _tagBack.style.transform = "translate(" + (50 * (1 - fadeInQuadratic)) + "px, 0px)";
+        }
         
-        _tagOvertitle.style.opacity = fadeInLinear;
-        _tagOvertitle.style.transform = "translate(" + (-10 * (1 - fadeInQuadratic)) + "px, 0px)";
-        
-        _tagTitle.style.opacity = fadeInLinear;
-        _tagTitle.style.transform = "translate(" + (-30 * (1 - fadeInQuadratic)) + "px, 0px)";
-        
-        _tagSubtitle.style.opacity = fadeInLinear;
-        _tagSubtitle.style.transform = "translate(" + (-50 * (1 - fadeInQuadratic)) + "px, 0px)";
-        
-        _tagScrollDown.style.opacity = fadeInLinear;
-        _tagScrollDown.style.transform = "translate(" + (-35 * (1 - fadeInQuadratic)) + "px, " + (-35 * (1 - fadeInQuadratic)) + "px)";
+        if (_foundTagOverlayHeader === true)
+        {
+            _tagOverlayHeader.style.opacity = opacitySmooth;
+            _tagOverlayHeader.style.transform = "scale(" + scaleSmooth + ")";
+            
+            _tagOvertitleHeader.style.opacity = fadeInLinear;
+            _tagOvertitleHeader.style.transform = "translate(" + (-10 * (1 - fadeInQuadratic)) + "px, 0px)";
+            
+            _tagTitleHeader.style.opacity = fadeInLinear;
+            _tagTitleHeader.style.transform = "translate(" + (-30 * (1 - fadeInQuadratic)) + "px, 0px)";
+            
+            _tagSubtitleHeader.style.opacity = fadeInLinear;
+            _tagSubtitleHeader.style.transform = "translate(" + (-50 * (1 - fadeInQuadratic)) + "px, 0px)";
+            
+            _tagScrollDownHeader.style.opacity = fadeInLinear;
+            _tagScrollDownHeader.style.transform = "translate(" + (-35 * (1 - fadeInQuadratic)) + "px, " + (-35 * (1 - fadeInQuadratic)) + "px)";
+        }
         
         _tagOverlayGallery.style.top = topGallery + "px";
-        _tagOverlayGallery.style.opacity = "1";
-        
-        _tagOverlayGallery.style.transform = "translate(0px, " + (translateSmooth) + "px)";
+        _tagOverlayGallery.style.opacity = fadeInLinear;
+        _tagOverlayGallery.style.transform = "translate(0px, " + (_translateSmooth) + "px)";
         
         for (index = 0; index < _countTagMediaImg; index++)
         {
-            _tagMedia[index].style.height = (Math.min(RECTANGLE_GALLERY.width, 800) * 0.7) + "px";
+            _tagMediaGallery[index].style.height = (Math.min(RECTANGLE_GALLERY.width, 800) * 0.7) + "px";
         }
         
         for (index = 0; index < _countTagMediaImg; index++)
@@ -1694,22 +1720,23 @@ function interfaceAnimation()
         }
         
         //TAG FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER
-        if (_eventScroll >= -((RECTANGLE_GALLERY.height - 25) + topFooter))
+        if (_eventScroll >= -scrollMax + 100)//VERSION GALLERY ET VERSION PAGE
         {
             opacityTranslateScale = 0;
         }
         else
         {
             opacityTranslateScale = 1 - ((scrollMax + _eventScroll) / (25 + 100));
+            console.log("opacityTranslateScale = " + opacityTranslateScale + " _eventScroll = " + _eventScroll);
         }
         
         opacityTranslateScaleSmooth += (opacityTranslateScale - opacityTranslateScaleSmooth) * smoothAll;
         
-        _tagLine.style.opacity = opacityTranslateScaleSmooth;
-        _tagLine.style.transform = "translate(0px, " + (20 * (1 - opacityTranslateScaleSmooth)) + "px) scaleX(" + opacityTranslateScaleSmooth + ")";
+        _tagLineFooter.style.opacity = opacityTranslateScaleSmooth;
+        _tagLineFooter.style.transform = "translate(0px, " + (20 * (1 - opacityTranslateScaleSmooth)) + "px) scaleX(" + opacityTranslateScaleSmooth + ")";
         
-        _tagContact.style.opacity = opacityTranslateScaleSmooth;
-        _tagContact.style.transform = "translate(0px, " + (100 * (1 - opacityTranslateScaleSmooth)) + "px)";
+        _tagContactFooter.style.opacity = opacityTranslateScaleSmooth;
+        _tagContactFooter.style.transform = "translate(0px, " + (100 * (1 - opacityTranslateScaleSmooth)) + "px)";
         //TAG FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER
         
         requestAnimationFrame(updateAnimation);
@@ -1722,29 +1749,57 @@ function href()
 {
     let index = 0;
     
-    for (index = 0; index < _countTagMediaImg; index++)
+    if (_foundTagBack === true)
     {
-        const INDEX = index;
-        
-        _tagMedia[INDEX].addEventListener("click", () =>
+        _tagBack.addEventListener("click", () =>
         {
-            console.log("_tagMedia[index] INDEX = " + INDEX);
-            
             setTimeout(() =>
             {
                 window.location.href = "index.html";
-            }, 1000);
+            }, 500);
         });
+    }
+    
+    for (index = 0; index < _countTagButton; index++)
+    {
+        const HREF = _tagButtonGallery[index].getAttribute("href");
+        
+        if (HREF != null)
+        {
+            _tagButtonGallery[index].addEventListener("click", () =>
+            {
+                setTimeout(() =>
+                {
+                    window.location.href = HREF;
+                }, 500);
+            });
+        }
+    }
+    
+    for (index = 0; index < _countTagMediaImg; index++)
+    {
+        const HREF = _tagMediaGallery[index].getAttribute("href");
+        
+        if (HREF != null)
+        {
+            _tagMediaGallery[index].addEventListener("click", () =>
+            {
+                setTimeout(() =>
+                {
+                    window.location.href = HREF;
+                }, 500);
+            });
+        }
     }
 }
 
 function input()
 {
-    _tagSubmitContact.addEventListener("click", () =>
+    _tagSubmitContactFooter.addEventListener("click", () =>
     {
-        //_tagInputContact.value
-        console.log("_tagInputContact.value = " + _tagInputContact.value);
-        _tagInputContact.value = "";
+        //_tagInputContactFooter.value
+        console.log("_tagInputContactFooter.value = " + _tagInputContactFooter.value);
+        _tagInputContactFooter.value = "";
     });
 }
 
