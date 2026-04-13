@@ -10,6 +10,8 @@ customElements.define("tag-title-header", class extends HTMLElement{});
 customElements.define("tag-subtitle-header", class extends HTMLElement{});
 customElements.define("tag-scroll-down-header", class extends HTMLElement{});
 customElements.define("tag-overlay-gallery", class extends HTMLElement{});
+customElements.define("tag-overmaintitle-gallery", class extends HTMLElement{});
+customElements.define("tag-maintitle-gallery", class extends HTMLElement{});
 customElements.define("tag-button-gallery", class extends HTMLElement{});
 customElements.define("tag-media-gallery", class extends HTMLElement{});
 customElements.define("tag-overlay-footer", class extends HTMLElement{});
@@ -38,6 +40,8 @@ let _tagTitleHeader = null;
 let _tagSubtitleHeader = null;
 let _tagScrollDownHeader = null;
 let _tagOverlayGallery = null;
+let _tagOvermaintitleGallery = null;
+let _tagMaintitleGallery = null;
 let _tagButtonGallery = [];
 let _countTagButton = 0;
 let _tagMediaGallery = [];
@@ -174,6 +178,12 @@ function tag()
     
     _tagOverlayGallery = document.getElementById("tag-overlay-gallery");
     
+    if (_foundTagBack === true)
+    {
+        _tagOvermaintitleGallery = document.getElementById("tag-overmaintitle-gallery");
+        _tagMaintitleGallery = document.getElementById("tag-maintitle-gallery");
+    }
+    
     TAG_BUTTON_IN_DOCUMENT.forEach((tag, index) =>
     {
         _tagButtonGallery[index] = tag;
@@ -262,7 +272,7 @@ function event()
             clientYPrevious = clientY;
         }
         
-        if (deltaY != 0)
+        if (deltaY !== 0)
         {
             _eventScroll += deltaY * 1.5;
             event.preventDefault();
@@ -580,7 +590,7 @@ function particuleAnimation()
         activeTouchA = true;
         activeTouchB = true;
         
-        if (deltaX != 0 || deltaY != 0)
+        if (deltaX !== 0 || deltaY !== 0)
         {
             event.preventDefault();
         }
@@ -1696,6 +1706,12 @@ function interfaceAnimation()
         _tagOverlayGallery.style.opacity = fadeInLinear;
         _tagOverlayGallery.style.transform = "translate(0px, " + (_translateSmooth) + "px)";
         
+        if (_foundTagBack === true)
+        {
+            _tagOvermaintitleGallery.style.transform = "translate(" + (-10 * (1 - fadeInQuadratic)) + "px, 0px)";
+            _tagMaintitleGallery.style.transform = "translate(" + (-30 * (1 - fadeInQuadratic)) + "px, 0px)";
+        }
+        
         for (index = 0; index < _countTagMediaImg; index++)
         {
             _tagMediaGallery[index].style.height = (Math.min(RECTANGLE_GALLERY.width, 800) * 0.7) + "px";
@@ -1764,7 +1780,7 @@ function href()
     {
         const HREF = _tagButtonGallery[index].getAttribute("href");
         
-        if (HREF != null)
+        if (HREF !== null)
         {
             _tagButtonGallery[index].addEventListener("click", () =>
             {
@@ -1780,7 +1796,7 @@ function href()
     {
         const HREF = _tagMediaGallery[index].getAttribute("href");
         
-        if (HREF != null)
+        if (HREF !== null)
         {
             _tagMediaGallery[index].addEventListener("click", () =>
             {
