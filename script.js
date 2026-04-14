@@ -1755,7 +1755,7 @@ function interfaceAnimation()
         }
         else
         {
-            opacityTranslateScale = 1 - ((scrollMax + _eventScroll) / (25 + 100));
+            opacityTranslateScale = 1 - ((scrollMax + _eventScroll) / 100);
             console.log("opacityTranslateScale = " + opacityTranslateScale + " _eventScroll = " + _eventScroll);
         }
         
