@@ -58,7 +58,8 @@ let _tagResponseContact = null;
 let _foundTagBack = true;
 let _foundTagOverlayHeader = true;
 let _translateSmooth = 0;
-let _stateResponse = 0;
+let _stateResponseAnimation = 0;
+let _stateResponseServer = 0;
 
 function fitText(tag, fontSize, letterSpacing, lineHeight)
 {
@@ -1555,7 +1556,9 @@ function interfaceAnimation()
     let fadeInLinear2 = 0;
     let fadeInQuadratic2 = 0;
     let fadeInQuadratic3 = 0;
+    let timeRetryDuringAnimation = 0;
     //TAG RESPONSE
+    //
     
     timePreviousRelative = performance.now();
     timePreviousAbsolute = performance.now();
@@ -1803,42 +1806,78 @@ function interfaceAnimation()
             fadeInQuadratic3 = 1;
         }
         
-        if (_stateResponse === 1)
+        if (_stateResponseAnimation === 1)
         {
-            timePreviousRelative2 = performance.now();
-            timePreviousAbsolute2 = performance.now();
+            timePreviousRelative2 = performance.now() - timeRetryDuringAnimation;
+            timePreviousAbsolute2 = performance.now() - timeRetryDuringAnimation;
             
-            _stateResponse = 2;
+            //_tagResponseContact.style.opacity = 0;
+            //_tagResponseContact.style.transform = "translate(0px, 50px)";
+            
+            _tagResponseContact.style.backgroundColor = "var(--colorF)";
+            _tagResponseContact.textContent = String.fromCodePoint("8635") + " Proceed, please wait...";
+            
+            _stateResponseAnimation = 2;
         }
-        else if (_stateResponse === 2)
+        else if (_stateResponseAnimation === 2)
         {
             _tagResponseContact.style.opacity = fadeInLinear2 * opacityTranslateScaleSmooth;
-            //_tagResponseContact.style.transform = "translate(0px, " + (50 * (1 - fadeInQuadratic2)) + "px)";
             _tagResponseContact.style.transform = "translate(0px, " + ((50 * (1 - fadeInQuadratic2)) + (100 * (1 - opacityTranslateScaleSmooth))) + "px)";
             
-            if (time - timePreviousAbsolute2 >= 3000)
+            if (time - timePreviousAbsolute2 >= 2000)
             {
+                if (_stateResponseServer === 1)
+                {
+                    _tagInputContactFooter.value = "";
+                    
+                    _tagResponseContact.style.backgroundColor = "var(--colorG)";
+                    _tagResponseContact.textContent = String.fromCodePoint("8594") + " Your email has been sent !";
+                }
+                else if (_stateResponseServer === 2)
+                {
+                    _tagResponseContact.style.backgroundColor = "var(--colorH)";
+                    _tagResponseContact.textContent = String.fromCodePoint("9888") + " An error occured, please try again.";
+                }
+                
+                if (_stateResponseServer === 1 || _stateResponseServer === 2)
+                {
+                    timePreviousRelative2 = performance.now();
+                    timePreviousAbsolute2 = performance.now();
+                    
+                    _stateResponseAnimation = 3;
+                }
+            }
+        }
+        else if (_stateResponseAnimation === 3)
+        {
+            _tagResponseContact.style.opacity = opacityTranslateScaleSmooth;
+            _tagResponseContact.style.transform = "translate(0px, " + (100 * (1 - opacityTranslateScaleSmooth)) + "px)";
+            
+            if (time - timePreviousAbsolute2 >= 1000)
+            {
+                //_tagInputContactFooter.disabled = false;
+                
                 timePreviousRelative2 = performance.now();
                 timePreviousAbsolute2 = performance.now();
                 
-                _stateResponse = 3;
+                _stateResponseAnimation = 4;
             }
         }
-        else if (_stateResponse === 3)
+        else if (_stateResponseAnimation === 4)
         {
             _tagResponseContact.style.opacity = (1 - fadeInLinear2) * opacityTranslateScaleSmooth;
-            //_tagResponseContact.style.transform = "translate(0px, " + (50 * fadeInQuadratic3) + "px)";
             _tagResponseContact.style.transform = "translate(0px, " + ((50 * fadeInQuadratic3) + (100 * (1 - opacityTranslateScaleSmooth))) + "px)";
+            
+            timeRetryDuringAnimation = 1000 - (time - timePreviousAbsolute2);
             
             if (time - timePreviousAbsolute2 >= 1000)
             {
                 _tagResponseContact.style.opacity = 0;
                 _tagResponseContact.style.transform = "translate(0px, 50px)";
                 
-                _stateResponse = 0;
+                _stateResponseAnimation = 0;
             }
         }
-        console.log("fadeInQuadratic2 = " + fadeInQuadratic2);
         //TAG RESPONSE
         
         requestAnimationFrame(updateAnimation);
@@ -1897,10 +1936,14 @@ function href()
 
 function input()
 {
-    _tagSubmitContactFooter.addEventListener("click", () =>
+    function server()
     {
         const FORM_DATA = new FormData();
+        
         FORM_DATA.append ("from", _tagInputContactFooter.value);
+        
+        _stateResponseAnimation = 1;
+        _stateResponseServer = 0;
         
         fetch ("contact.php",
         {
@@ -1912,37 +1955,35 @@ function input()
         {
             if (data === "mail_true")
             {
-                _tagInputContactFooter.value = "";
-                
-                _tagResponseContact.style.backgroundColor = "var(--colorF)";
-                _tagResponseContact.textContent = String.fromCodePoint("8594") + " Your email has been sent !";
-                
-                if (_stateResponse === 0)
-                {
-                    _stateResponse = 1;
-                }
+                _stateResponseServer = 1;
             }
             else
             {
-                _tagResponseContact.style.backgroundColor = "var(--colorG)";
-                _tagResponseContact.textContent = String.fromCodePoint("9888") + " An error occured, please try again.";
-                
-                if (_stateResponse === 0)
-                {
-                    _stateResponse = 1;
-                }
+                _stateResponseServer = 2;
             }
         })
         .catch (error =>
         {
-            _tagResponseContact.style.backgroundColor = "var(--colorG)";
-            _tagResponseContact.textContent = String.fromCodePoint("9888") + " An error occured, please try again.";
-            
-            if (_stateResponse === 0)
-            {
-                _stateResponse = 1;
-            }
+            _stateResponseServer = 2;
         });
+    }
+    
+    _tagInputContactFooter.addEventListener("keydown", (event) =>
+    {
+        if (event.key === "Enter" && (_stateResponseAnimation === 0 || _stateResponseAnimation === 4))
+        {
+            //_tagInputContactFooter.disabled = true;
+            server();
+        }
+    });
+    
+    _tagSubmitContactFooter.addEventListener("click", () =>
+    {
+        if (_stateResponseAnimation === 0 || _stateResponseAnimation === 4)
+        {
+            //_tagInputContactFooter.disabled = true;
+            server();
+        }
     });
 }
 
