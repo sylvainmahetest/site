@@ -235,7 +235,7 @@ function event()
     let deltaY = 0;
     
     //_tagCanvasParticule.addEventListener("touchstart", event =>
-    document.addEventListener("touchstart", event =>
+    document.body.addEventListener("touchstart", event =>
     {
         const LENGTH_TOUCH = event.touches.length;
         
@@ -259,7 +259,7 @@ function event()
     });
     
     //_tagCanvasParticule.addEventListener("touchmove", event =>
-    document.addEventListener("touchmove", event =>
+    document.body.addEventListener("touchmove", event =>
     {
         const LENGTH_TOUCH = event.touches.length;
         
@@ -289,7 +289,7 @@ function event()
     });
     
     //_tagCanvasParticule.addEventListener("wheel", event =>
-    document.addEventListener("wheel", event =>
+    document.body.addEventListener("wheel", event =>
     {
         if (event.deltaY < 0)
         {
@@ -416,8 +416,8 @@ function particuleAnimation()
     let ySmoothTouch = 0;
     let xSmoothJitterTouch = 0;
     let ySmoothJitterTouch = 0;
-    let activeTouchA = false;
-    let activeTouchB = false;
+    let activeTouch = false;
+    //let activeTouchB = false;
     let timeTouch1 = 0;
     let timeTouch2 = 0;
     let timeAttractorRandom1 = 0;
@@ -506,9 +506,12 @@ function particuleAnimation()
     let deltaX = 0;
     let deltaY = 0;
     //////////////////////////////////////////////////////////////////////////
+    //firstPointerMove********************************************************************
+    let firstPointerMove = false;
+    //firstPointerMove********************************************************************
     
     //_tagCanvasParticule.addEventListener("touchstart", event =>
-    document.addEventListener("touchstart", event =>
+    document.body.addEventListener("touchstart", event =>
     {
         const H_WINDOW = window.innerWidth;
         const V_WINDOW = window.innerHeight;
@@ -549,15 +552,17 @@ function particuleAnimation()
         xSmoothTouchPrevious = xTouch;
         ySmoothTouchPrevious = yTouch;
         
-        activeTouchA = true;
-        activeTouchB = true;
+        activeTouch = false;
+        
+        //activeTouch = true;
+        //activeTouchB = true;
     },
     {
         passive: false
     });
     
     //_tagCanvasParticule.addEventListener("touchmove", event =>
-    document.addEventListener("touchmove", event =>
+    document.body.addEventListener("touchmove", event =>
     {
         const H_WINDOW = window.innerWidth;
         const V_WINDOW = window.innerHeight;
@@ -593,11 +598,12 @@ function particuleAnimation()
             yTouch = -((clientY / V_WINDOW) - 0.5) * V_WINDOW;
         }
         
-        activeTouchA = true;
-        activeTouchB = true;
+        //activeTouch = true;
+        //activeTouchB = true;
         
         if (deltaX !== 0 || deltaY !== 0)
         {
+            activeTouch = true;
             event.preventDefault();
         }
     },
@@ -606,21 +612,21 @@ function particuleAnimation()
     });
     
     //_tagCanvasParticule.addEventListener("touchend", () =>
-    document.addEventListener("touchend", () =>
+    document.body.addEventListener("touchend", () =>
     {
-        activeTouchA = false;
-        activeTouchB = false;
+        activeTouch = false;
+        //activeTouchB = false;
     });
     
     //_tagCanvasParticule.addEventListener("touchcancel", () =>
-    document.addEventListener("touchcancel", () =>
+    document.body.addEventListener("touchcancel", () =>
     {
-        activeTouchA = false;
-        activeTouchB = false;
+        activeTouch = false;
+        //activeTouchB = false;
     });
     
     //_tagCanvasParticule.addEventListener("pointerenter", event =>
-    document.addEventListener("pointerenter", event =>
+    document.body.addEventListener("pointerenter", event =>
     {
         const H_WINDOW = window.innerWidth;
         const V_WINDOW = window.innerHeight;
@@ -636,16 +642,17 @@ function particuleAnimation()
         xSmoothTouchPrevious = xTouch;
         ySmoothTouchPrevious = yTouch;
         
-        activeTouchA = true;
+        firstPointerMove = false;
+        activeTouch = false;
         
-        if (event.buttons & 1 === 1)
+        /*if (event.buttons & 1 === 1)
         {
             activeTouchB = true;
-        }
+        }*/
     });
     
     //_tagCanvasParticule.addEventListener("pointerdown", event =>
-    document.addEventListener("pointerdown", event =>
+    /*document.addEventListener("pointerdown", event =>
     {
         const H_WINDOW = window.innerWidth;
         const V_WINDOW = window.innerHeight;
@@ -661,12 +668,12 @@ function particuleAnimation()
         xSmoothTouchPrevious = xTouch;
         ySmoothTouchPrevious = yTouch;
         
-        activeTouchA = true;
-        activeTouchB = true;
-    });
+        //activeTouch = true;
+        //activeTouchB = true;
+    });*/
     
     //_tagCanvasParticule.addEventListener("pointermove", event =>
-    document.addEventListener("pointermove", event =>
+    document.body.addEventListener("pointermove", event =>
     {
         const H_WINDOW = window.innerWidth;
         const V_WINDOW = window.innerHeight;
@@ -676,33 +683,50 @@ function particuleAnimation()
         //yTouch = -(((event.clientY - RECTANGLE.top) / RECTANGLE.height) - 0.5) * V_WINDOW;
         xTouch = ((event.clientX / H_WINDOW) - 0.5) * H_WINDOW;
         yTouch = -((event.clientY / V_WINDOW) - 0.5) * V_WINDOW;
+        //console.log("xTouch = " + xTouch);
         
-        activeTouchA = true;
+        if (firstPointerMove === false)
+        {
+            xSmoothTouch = xTouch;
+            ySmoothTouch = yTouch;
+            xSmoothTouchPrevious = xTouch;
+            ySmoothTouchPrevious = yTouch;
+            
+            firstPointerMove = true;
+        }
+        else
+        {
+            activeTouch = true;
+        }
         
-        if (event.buttons & 1 === 1)
+        //activeTouch = true;
+        
+        /*if (event.buttons & 1 === 1)
         {
             activeTouchB = true;
-        }
+        }*/
     });
     
     //_tagCanvasParticule.addEventListener("pointerup", () =>
-    document.addEventListener("pointerup", () =>
+    /*document.addEventListener("pointerup", () =>
     {
-        activeTouchB = false;
-    });
+        //activeTouchB = false;
+    });*/
     
     //_tagCanvasParticule.addEventListener("pointerleave", () =>
-    document.addEventListener("pointerleave", () =>
+    document.body.addEventListener("pointerleave", () =>
     {
-        activeTouchA = false;
-        activeTouchB = false;
+        firstPointerMove = false;
+        activeTouch = false;
+        //activeTouchB = false;
     });
     
     //_tagCanvasParticule.addEventListener("pointercancel", () =>
-    document.addEventListener("pointercancel", () =>
+    document.body.addEventListener("pointercancel", () =>
     {
-        activeTouchA = false;
-        activeTouchB = false;
+        firstPointerMove = false;
+        activeTouch = false;
+        //activeTouchB = false;
     });
     
     function setupWebGL()
@@ -1255,7 +1279,7 @@ function particuleAnimation()
             }
             
             //TOUCH
-            if (activeTouchA === true && magnitudeSmooth > 0.1)
+            if (activeTouch === true && magnitudeSmooth > 0.1)
             {
                 //xAttractor = xSmoothTouch + xSmoothJitterTouch - _rxAccelerometer;
                 xAttractor = xSmoothTouch + xSmoothJitterTouch - _rxAccelerometer * proximity[indexParticule];
@@ -1859,6 +1883,8 @@ function interfaceAnimation()
                 
                 timePreviousRelative2 = performance.now();
                 timePreviousAbsolute2 = performance.now();
+                
+                timeRetryDuringAnimation = 1000;
                 
                 _stateResponseAnimation = 4;
             }
