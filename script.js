@@ -64,30 +64,57 @@ let _indexButton = 0;
 let _stateResponseAnimation = 0;
 let _stateResponseServer = 0;
 let _stateMediaAnimation = 0;
-let _indexMedia = 0;
+let _indexMediaImg = 0;
 let _inhibitClick = false;
 
-function fitText(tag, fontSize, letterSpacing, lineHeight)
+function fitTextParentWidth(tag, fontSizeMin, fontSizeMax, letterSpacingMax, lineHeightMax)
 {
     const PARENT = tag.parentElement;
-    const RATIO_LETTER_SPACING = letterSpacing / fontSize;
-    const RATIO_LINE_HEIGHT = lineHeight / fontSize;
+    const RATIO_LETTER_SPACING = letterSpacingMax / fontSizeMax;
+    const RATIO_LINE_HEIGHT = lineHeightMax / fontSizeMax;
     
     tag.style.visibility = "hidden";
-    tag.style.fontSize = fontSize + "px";
-    tag.style.letterSpacing = letterSpacing + "px";
-    tag.style.lineHeight = lineHeight + "px";
+    tag.style.fontSize = fontSizeMax + "px";
+    tag.style.letterSpacing = letterSpacingMax + "px";
+    tag.style.lineHeight = lineHeightMax + "px";
     
-    while (tag.scrollWidth > PARENT.clientWidth)
+    while (tag.scrollWidth > PARENT.clientWidth && fontSizeMax > fontSizeMin)
     {
-        fontSize--;
+        fontSizeMax--;
         
-        letterSpacing = fontSize * RATIO_LETTER_SPACING;
-        lineHeight = fontSize * RATIO_LINE_HEIGHT;
+        letterSpacingMax = fontSizeMax * RATIO_LETTER_SPACING;
+        lineHeightMax = fontSizeMax * RATIO_LINE_HEIGHT;
         
-        tag.style.fontSize = fontSize + "px";
-        tag.style.letterSpacing = letterSpacing + "px";
-        tag.style.lineHeight = lineHeight + "px";
+        tag.style.fontSize = fontSizeMax + "px";
+        tag.style.letterSpacing = letterSpacingMax + "px";
+        tag.style.lineHeight = lineHeightMax + "px";
+    }
+    
+    tag.style.visibility = "visible";
+}
+
+function fitTextParentWidthWindowHeight(topTag, tag, bottomTag, fontSizeMin, fontSizeMax, letterSpacingMax, lineHeightMax)
+{
+    const PARENT = tag.parentElement;
+    //const RECTANGLE_HEADER = _tagOverlayHeader.getBoundingClientRect();
+    const RATIO_LETTER_SPACING = letterSpacingMax / fontSizeMax;
+    const RATIO_LINE_HEIGHT = lineHeightMax / fontSizeMax;
+    
+    tag.style.visibility = "hidden";
+    tag.style.fontSize = fontSizeMax + "px";
+    tag.style.letterSpacing = letterSpacingMax + "px";
+    tag.style.lineHeight = lineHeightMax + "px";
+    
+    while ((tag.scrollWidth > PARENT.clientWidth || (topTag + PARENT.clientHeight + bottomTag) > window.innerHeight) && fontSizeMax > fontSizeMin)
+    {
+        fontSizeMax--;
+        
+        letterSpacingMax = fontSizeMax * RATIO_LETTER_SPACING;
+        lineHeightMax = fontSizeMax * RATIO_LINE_HEIGHT;
+        
+        tag.style.fontSize = fontSizeMax + "px";
+        tag.style.letterSpacing = letterSpacingMax + "px";
+        tag.style.lineHeight = lineHeightMax + "px";
     }
     
     tag.style.visibility = "visible";
@@ -1517,7 +1544,7 @@ function windowResize()
         
         if (_foundTagOverlayHeader === true)
         {
-            fitText(_tagTitleHeader, 100, 0, 110);
+            fitTextParentWidthWindowHeight(160, _tagTitleHeader, 30, 20, 100, 0, 110);
         }
     }
     
@@ -1669,44 +1696,65 @@ function interfaceAnimation()
             fadeInQuadratic5 = 1;
         }
         
-        if (_stateMediaAnimation === 1)
+        if (_countTagMediaImg > 0)
         {
-            timePreviousRelative4 = performance.now();
-            timePreviousAbsolute4 = performance.now();
-            
-            _stateMediaAnimation = 2;
-        }
-        else if (_stateMediaAnimation === 2)
-        {
-            if (fadeIn4 < 1)
+            if (_stateMediaAnimation === 0)
             {
-                _tagMediaGallery[_indexMedia].style.opacity = 1 - (0.5 * fadeInLinear4);
-                _tagMediaGallery[_indexMedia].style.transform = "scale(" + (1 - (0.05 * fadeInQuadratic4)) + ")";
+                _tagMediaGallery[_indexMediaImg].style.opacity = 1;
+                _tagMediaGallery[_indexMediaImg].style.transform = "none";
+                
+                _tagImg[_indexMediaImg].style.filter = "grayscale(1)";
             }
-            else
+            else if (_stateMediaAnimation === 1)
             {
-                _tagMediaGallery[_indexMedia].style.opacity = 0.5;
-                _tagMediaGallery[_indexMedia].style.transform = "scale(" + 0.95 + ")";
+                timePreviousRelative4 = performance.now();
+                timePreviousAbsolute4 = performance.now();
+                
+                _stateMediaAnimation = 2;
+            }
+            else if (_stateMediaAnimation === 2)
+            {
+                if (fadeIn4 < 1)
+                {
+                    _tagMediaGallery[_indexMediaImg].style.opacity = 1 - (0.5 * fadeInLinear4);
+                    _tagMediaGallery[_indexMediaImg].style.transform = "scale(" + (1 - (0.05 * fadeInQuadratic4)) + ")";
+                    
+                    _tagImg[_indexMediaImg].style.filter = "grayscale(" + (1 - (0.5 * fadeInLinear4)) + ")";
+                }
+                else
+                {
+                    _tagMediaGallery[_indexMediaImg].style.opacity = 0.5;
+                    _tagMediaGallery[_indexMediaImg].style.transform = "scale(" + 0.95 + ")";
+                    
+                    _tagImg[_indexMediaImg].style.filter = "none";
+                }
             }
         }
         ////////////////////////////////////////////////////////////////////////HREF ANIMATION
         ////////////////////////////////////////BUTTON ANIMATION
-        if (_stateButtonAnimation === 1)
+        if (_countTagButton > 0)
         {
-            timePreviousRelative4 = performance.now();
-            timePreviousAbsolute4 = performance.now();
-            
-            _stateButtonAnimation = 2;
-        }
-        else if (_stateButtonAnimation === 2)
-        {
-            if (fadeIn4 < 1)
+            if (_stateButtonAnimation === 0)
             {
-                _tagButtonGallery[_indexButton].style.transform = "scale(" + (1 + (0.05 * fadeInQuadratic4)) + ")";
+                _tagButtonGallery[_indexButton].style.transform = "none";
             }
-            else
+            else if (_stateButtonAnimation === 1)
             {
-                _tagButtonGallery[_indexButton].style.transform = "scale(" + 1.05 + ")";
+                timePreviousRelative4 = performance.now();
+                timePreviousAbsolute4 = performance.now();
+                
+                _stateButtonAnimation = 2;
+            }
+            else if (_stateButtonAnimation === 2)
+            {
+                if (fadeIn4 < 1)
+                {
+                    _tagButtonGallery[_indexButton].style.transform = "scale(" + (1 + (0.15 * fadeInQuadratic4)) + ")";
+                }
+                else
+                {
+                    _tagButtonGallery[_indexButton].style.transform = "scale(" + 1.15 + ")";
+                }
             }
         }
         ////////////////////////////////////////BUTTON ANIMATION
@@ -1813,7 +1861,11 @@ function interfaceAnimation()
         {
             let varAnimation = 0;
             
-            if (_stateBackAnimation === 1)
+            if (_stateBackAnimation === 0)
+            {
+                varAnimation = 0;
+            }
+            else if (_stateBackAnimation === 1)
             {
                 timePreviousRelative4 = performance.now();
                 timePreviousAbsolute4 = performance.now();
@@ -1822,12 +1874,11 @@ function interfaceAnimation()
             }
             else if (_stateBackAnimation === 2)
             {
-                varAnimation = fadeInQuadratic5;
+                varAnimation = fadeInQuadratic4;
             }
-            console.log ("varAnimation = " + varAnimation);
+            
             _tagBack.style.opacity = fadeInLinear;
-            //_tagBack.style.transform = "translate(" + ((50 * (1 - fadeInQuadratic)) + (25 * (1 - varAnimation))) + "px, 0px)";
-            _tagBack.style.transform = "translate(" + ((50 * (1 - fadeInQuadratic)) + (-25 * varAnimation)) + "px, 0px)";
+            _tagBack.style.transform = "translate(" + ((50 * (1 - fadeInQuadratic)) + (-15 * varAnimation)) + "px, 0px)";
         }
         
         if (_foundTagOverlayHeader === true)
@@ -2080,7 +2131,7 @@ function href()
                 {
                     _inhibitClick = true;
                     
-                    _indexMedia = INDEX;
+                    _indexMediaImg = INDEX;
                     _stateMediaAnimation = 1;
                     
                     setTimeout(() =>
@@ -2162,7 +2213,12 @@ function reset()
     {
         if (event.persisted === true)
         {
-            window.location.reload();
+            //window.location.reload();
+            _stateBackAnimation = 0;
+            _stateButtonAnimation = 0;
+            _stateMediaAnimation = 0;
+            
+            _inhibitClick = false;
         }
     });
 }
