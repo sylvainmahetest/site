@@ -1824,9 +1824,10 @@ function interfaceAnimation()
             {
                 varAnimation = fadeInQuadratic5;
             }
-            
+            console.log ("varAnimation = " + varAnimation);
             _tagBack.style.opacity = fadeInLinear;
-            _tagBack.style.transform = "translate(" + ((50 * (1 - fadeInQuadratic)) + (25 * (1 - varAnimation))) + "px, 0px)";
+            //_tagBack.style.transform = "translate(" + ((50 * (1 - fadeInQuadratic)) + (25 * (1 - varAnimation))) + "px, 0px)";
+            _tagBack.style.transform = "translate(" + ((50 * (1 - fadeInQuadratic)) + (-25 * varAnimation)) + "px, 0px)";
         }
         
         if (_foundTagOverlayHeader === true)
@@ -2155,10 +2156,23 @@ function input()
     
 }*/
 
+function reset()
+{
+    window.addEventListener("pageshow", event =>
+    {
+        if (event.persisted === true)
+        {
+            window.location.reload();
+        }
+    });
+}
+
 async function loading()
 {
     if (_stateLoading === 1)
     {
+        reset();
+        
         tag();
         
         event();
