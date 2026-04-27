@@ -58,8 +58,14 @@ let _tagResponseContact = null;
 let _foundTagBack = true;
 let _foundTagOverlayHeader = true;
 let _translateSmooth = 0;
+let _stateBackAnimation = 0;
+let _stateButtonAnimation = 0;
+let _indexButton = 0;
 let _stateResponseAnimation = 0;
 let _stateResponseServer = 0;
+let _stateMediaAnimation = 0;
+let _indexMedia = 0;
+let _inhibitClick = false;
 
 function fitText(tag, fontSize, letterSpacing, lineHeight)
 {
@@ -468,7 +474,7 @@ function particuleAnimation()
     let yLogo = 0;
     let xPixelLogo = [];
     let yPixelLogo = [];
-    let lenghtPixel = 0;
+    let countPixel = 0;
     let randomLogo = 0;
     const SAFE_SQRT = 0.000001;
     const TEXT_LOGO = "S";
@@ -889,7 +895,7 @@ function particuleAnimation()
         }
     }
     
-    lenghtPixel = xPixelLogo.length;
+    countPixel = xPixelLogo.length;
     //CANVAS TEXTE
     
     for (indexParticule = 0; indexParticule < COUNT_PARTICLE; indexParticule++)
@@ -908,7 +914,7 @@ function particuleAnimation()
         indexAlpha = index4 + 3;
         
         //CANVAS TEXTE
-        randomLogo = randomInteger(0, lenghtPixel);
+        randomLogo = randomInteger(0, countPixel);
         //CANVAS TEXTE
         
         if (indexParticule < COUNT_PARTICLE_SHAPE)
@@ -1462,7 +1468,7 @@ function loadingAnimation()
             fadeInLinear = 1;
         }
         
-        if (fadeIn <= 1)
+        if (fadeIn < 1)
         {
             fadeInQuadratic = 1 - Math.pow(1 - fadeIn, 2);
             
@@ -1557,7 +1563,6 @@ function interfaceAnimation()
     let index = 0;
     let bottomHeader = 0;
     let topGallery = 0;
-    let heightGallery = 0;
     let topFooter = 0;
     let scrollMax = 0;
     let smoothAll = 0;
@@ -1567,6 +1572,8 @@ function interfaceAnimation()
     let scaleSmooth = 1;
     let opacity = 1;
     let scale = 1;
+    let ratioMediaImg1 = 0;
+    let ratioMediaImg2 = 0;
     let offsetImg = 0;
     let widthPerLetter = 0;
     let opacityLetter = 0;
@@ -1582,7 +1589,14 @@ function interfaceAnimation()
     let fadeInQuadratic3 = 0;
     let timeRetryDuringAnimation = 0;
     //TAG RESPONSE
-    //
+    //HREF ANIMATION
+    let timePreviousRelative4 = 0;
+    let timePreviousAbsolute4 = 0;
+    let fadeIn4 = 0;
+    let fadeInLinear4 = 0;
+    let fadeInQuadratic4 = 0;
+    let fadeInQuadratic5 = 0;
+    //HREF ANIMATION
     
     timePreviousRelative = performance.now();
     timePreviousAbsolute = performance.now();
@@ -1606,7 +1620,7 @@ function interfaceAnimation()
             fadeInLinear = 1;
         }
         
-        if (fadeIn <= 1)
+        if (fadeIn < 1)
         {
             fadeInQuadratic = 1 - Math.pow(1 - fadeIn, 2);
             
@@ -1619,6 +1633,83 @@ function interfaceAnimation()
         {
             fadeInQuadratic = 1;
         }
+        
+        ////////////////////////////////////////////////////////////////////////HREF ANIMATION
+        const TIME_DELTA4 = Math.min((time - timePreviousRelative4) * 0.001, 0.04);
+        
+        timePreviousRelative4 = time;
+        
+        fadeIn4 = (time - timePreviousAbsolute4) * 0.001;
+        
+        fadeInLinear4 = fadeIn4;
+        
+        if (fadeInLinear4 > 1)
+        {
+            fadeInLinear4 = 1;
+        }
+        
+        if (fadeIn4 < 1)
+        {
+            fadeInQuadratic4 = 1 - Math.pow(1 - fadeIn4, 2);
+            fadeInQuadratic5 = Math.pow(fadeIn4, 2);
+            
+            if (fadeInQuadratic4 > 1)
+            {
+                fadeInQuadratic4 = 1;
+            }
+            
+            if (fadeInQuadratic5 > 1)
+            {
+                fadeInQuadratic5 = 1;
+            }
+        }
+        else
+        {
+            fadeInQuadratic4 = 1;
+            fadeInQuadratic5 = 1;
+        }
+        
+        if (_stateMediaAnimation === 1)
+        {
+            timePreviousRelative4 = performance.now();
+            timePreviousAbsolute4 = performance.now();
+            
+            _stateMediaAnimation = 2;
+        }
+        else if (_stateMediaAnimation === 2)
+        {
+            if (fadeIn4 < 1)
+            {
+                _tagMediaGallery[_indexMedia].style.opacity = 1 - (0.5 * fadeInLinear4);
+                _tagMediaGallery[_indexMedia].style.transform = "scale(" + (1 - (0.05 * fadeInQuadratic4)) + ")";
+            }
+            else
+            {
+                _tagMediaGallery[_indexMedia].style.opacity = 0.5;
+                _tagMediaGallery[_indexMedia].style.transform = "scale(" + 0.95 + ")";
+            }
+        }
+        ////////////////////////////////////////////////////////////////////////HREF ANIMATION
+        ////////////////////////////////////////BUTTON ANIMATION
+        if (_stateButtonAnimation === 1)
+        {
+            timePreviousRelative4 = performance.now();
+            timePreviousAbsolute4 = performance.now();
+            
+            _stateButtonAnimation = 2;
+        }
+        else if (_stateButtonAnimation === 2)
+        {
+            if (fadeIn4 < 1)
+            {
+                _tagButtonGallery[_indexButton].style.transform = "scale(" + (1 + (0.05 * fadeInQuadratic4)) + ")";
+            }
+            else
+            {
+                _tagButtonGallery[_indexButton].style.transform = "scale(" + 1.05 + ")";
+            }
+        }
+        ////////////////////////////////////////BUTTON ANIMATION
         
         //bottomHeader = 160 + RECTANGLE_HEADER.height;
         
@@ -1720,8 +1811,22 @@ function interfaceAnimation()
         
         if (_foundTagBack === true)
         {
+            let varAnimation = 0;
+            
+            if (_stateBackAnimation === 1)
+            {
+                timePreviousRelative4 = performance.now();
+                timePreviousAbsolute4 = performance.now();
+                
+                _stateBackAnimation = 2;
+            }
+            else if (_stateBackAnimation === 2)
+            {
+                varAnimation = fadeInQuadratic5;
+            }
+            
             _tagBack.style.opacity = fadeInLinear;
-            _tagBack.style.transform = "translate(" + (50 * (1 - fadeInQuadratic)) + "px, 0px)";
+            _tagBack.style.transform = "translate(" + ((50 * (1 - fadeInQuadratic)) + (25 * (1 - varAnimation))) + "px, 0px)";
         }
         
         if (_foundTagOverlayHeader === true)
@@ -1752,20 +1857,22 @@ function interfaceAnimation()
             _tagMaintitleGallery.style.transform = "translate(" + (-30 * (1 - fadeInQuadratic)) + "px, 0px)";
         }
         
+        ratioMediaImg1 = Math.min(RECTANGLE_GALLERY.width, 800) * 0.7;
+        
         for (index = 0; index < _countTagMediaImg; index++)
         {
-            _tagMediaGallery[index].style.height = (Math.min(RECTANGLE_GALLERY.width, 800) * 0.7) + "px";
+            _tagMediaGallery[index].style.height = ratioMediaImg1 + "px";
         }
+        
+        ratioMediaImg2 = ratioMediaImg1 * 0.5;
         
         for (index = 0; index < _countTagMediaImg; index++)
         {
             const RECTANGLE_IMG = _tagImg[index].getBoundingClientRect();
             
-            heightGallery = Math.min(RECTANGLE_GALLERY.width, 800) * 0.35;
-            
-            if (heightGallery < V_WINDOW)
+            if (ratioMediaImg2 < V_WINDOW)
             {
-                offsetImg = 100 * ((RECTANGLE_IMG.top + heightGallery) / V_WINDOW);
+                offsetImg = 100 * ((RECTANGLE_IMG.top + ratioMediaImg2) / V_WINDOW);
             }
             else
             {
@@ -1783,7 +1890,7 @@ function interfaceAnimation()
         else
         {
             opacityTranslateScale = 1 - ((scrollMax + _eventScroll) / 100);
-            console.log("opacityTranslateScale = " + opacityTranslateScale + " _eventScroll = " + _eventScroll);
+            //console.log("opacityTranslateScale = " + opacityTranslateScale + " _eventScroll = " + _eventScroll);
         }
         
         opacityTranslateScaleSmooth += (opacityTranslateScale - opacityTranslateScaleSmooth) * smoothAll;
@@ -1920,25 +2027,41 @@ function href()
     {
         _tagBack.addEventListener("click", () =>
         {
-            setTimeout(() =>
+            if (_inhibitClick === false)
             {
-                window.location.href = "index.html";
-            }, 500);
+                _inhibitClick = true;
+                
+                _stateBackAnimation = 1;
+                
+                setTimeout(() =>
+                {
+                    window.location.href = "index.html";
+                }, 1000);
+            }
         });
     }
     
     for (index = 0; index < _countTagButton; index++)
     {
         const HREF = _tagButtonGallery[index].getAttribute("href");
+        const INDEX = index;
         
         if (HREF !== null)
         {
             _tagButtonGallery[index].addEventListener("click", () =>
             {
-                setTimeout(() =>
+                if (_inhibitClick === false)
                 {
-                    window.location.href = HREF;
-                }, 500);
+                    _inhibitClick = true;
+                    
+                    _indexButton = INDEX;
+                    _stateButtonAnimation = 1;
+                    
+                    setTimeout(() =>
+                    {
+                        window.location.href = HREF;
+                    }, 1000);
+                }
             });
         }
     }
@@ -1946,15 +2069,24 @@ function href()
     for (index = 0; index < _countTagMediaImg; index++)
     {
         const HREF = _tagMediaGallery[index].getAttribute("href");
+        const INDEX = index;
         
         if (HREF !== null)
         {
-            _tagMediaGallery[index].addEventListener("click", () =>
+            _tagMediaGallery[INDEX].addEventListener("click", () =>
             {
-                setTimeout(() =>
+                if (_inhibitClick === false)
                 {
-                    window.location.href = HREF;
-                }, 500);
+                    _inhibitClick = true;
+                    
+                    _indexMedia = INDEX;
+                    _stateMediaAnimation = 1;
+                    
+                    setTimeout(() =>
+                    {
+                        window.location.href = HREF;
+                    }, 1000);
+                }
             });
         }
     }

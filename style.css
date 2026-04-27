@@ -387,7 +387,7 @@ body #tag-loading-bar
   text-align-last: center;
   left: 50dvw;
   right: auto;
-  top: calc(50dvh + 1px);
+  top: calc(50dvh - 1px);
   bottom: auto;
   width: 0dvw;
   min-width: auto;
@@ -728,7 +728,7 @@ body #tag-back
   text-align-last: right;
   left: auto;
   right: 5dvw;
-  top: 30px;
+  top: 23px;
   bottom: auto;
   width: auto;
   min-width: auto;
@@ -742,8 +742,8 @@ body #tag-back
   margin-bottom: 0px;
   padding-left: 0px;
   padding-right: 0px;
-  padding-top: 8px;
-  padding-bottom: 8px;
+  padding-top: 15px;
+  padding-bottom: 15px;
   background-color: transparent;
   background-image: none;
   background-attachment: local;
