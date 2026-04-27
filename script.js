@@ -1,5 +1,7 @@
-customElements.define("tag-loading-text", class extends HTMLElement{});
-customElements.define("tag-loading-bar", class extends HTMLElement{});
+customElements.define("tag-text-loading", class extends HTMLElement{});
+customElements.define("tag-bar-loading", class extends HTMLElement{});
+customElements.define("tag-overlay-transition", class extends HTMLElement{});
+customElements.define("tag-line-transition", class extends HTMLElement{});
 customElements.define("tag-canvas-particule", class extends HTMLElement{});
 customElements.define("tag-name", class extends HTMLElement{});
 customElements.define("tag-letter", class extends HTMLElement{});
@@ -22,8 +24,10 @@ customElements.define("tag-submit-contact-footer", class extends HTMLElement{});
 customElements.define("tag-response-contact", class extends HTMLElement{});
 
 let _stateLoading = 1;
-let _tagLoadingText = null;
-let _tagLoadingBar = null;
+let _tagTextLoading = null;
+let _tagBarLoading = null;
+let _tagOverlayTransition = null;
+let _tagLineTransition = null;
 let _tagCanvasParticule = null;
 let _webGL = null;
 let _orientationScreen = 1;
@@ -175,8 +179,11 @@ function tag()
     const TAG_MEDIA_IN_DOCUMENT = document.querySelectorAll("body tag-media-gallery");
     const TAG_IMG_IN_DOCUMENT = document.querySelectorAll("body img");
     
-    _tagLoadingText = document.getElementById("tag-loading-text");
-    _tagLoadingBar = document.getElementById("tag-loading-bar");
+    _tagTextLoading = document.getElementById("tag-text-loading");
+    _tagBarLoading = document.getElementById("tag-bar-loading");
+    
+    _tagOverlayTransition = document.getElementById("tag-overlay-transition");
+    _tagLineTransition = document.getElementById("tag-line-transition");
     
     _tagCanvasParticule = document.getElementById("tag-canvas-particule");
     
@@ -1509,12 +1516,12 @@ function loadingAnimation()
             fadeInQuadratic = 1;
         }
         
-        _tagLoadingText.textContent = Math.round(fadeInLinear * 100) + "%";
-        _tagLoadingText.style.opacity = fadeInLinear;
+        _tagTextLoading.textContent = Math.round(100 * fadeInLinear) + "%";
+        _tagTextLoading.style.opacity = fadeInLinear;
         
-        _tagLoadingBar.style.opacity = fadeInLinear;
-        _tagLoadingBar.style.left = (50 - (fadeInLinear * 45)) + "dvw";
-        _tagLoadingBar.style.width = (fadeInLinear * 90) + "dvw";
+        _tagBarLoading.style.opacity = fadeInLinear;
+        _tagBarLoading.style.left = (50 - (45 * fadeInLinear)) + "dvw";
+        _tagBarLoading.style.width = (90 * fadeInLinear) + "dvw";
         
         if (fadeIn < 1 || _stateLoading !== 2)
         {
@@ -1700,13 +1707,21 @@ function interfaceAnimation()
         {
             if (_stateMediaAnimation === 0)
             {
-                _tagMediaGallery[_indexMediaImg].style.opacity = 1;
-                _tagMediaGallery[_indexMediaImg].style.transform = "none";
-                
-                _tagImg[_indexMediaImg].style.filter = "grayscale(1)";
+                //VOID
             }
             else if (_stateMediaAnimation === 1)
             {
+                _tagOverlayTransition.style.opacity = 0;
+                _tagOverlayTransition.style.transform = "scaleX(0)";
+                _tagOverlayTransition.style.transformOrigin = "right";
+                
+                _tagLineTransition.style.opacity = 0;
+                _tagLineTransition.style.left = "100dvw";
+                _tagLineTransition.style.width = "15dvw";
+                
+                _tagMediaGallery[_indexMediaImg].style.opacity = 1;
+                _tagMediaGallery[_indexMediaImg].style.transform = "none";
+                
                 timePreviousRelative4 = performance.now();
                 timePreviousAbsolute4 = performance.now();
                 
@@ -1716,17 +1731,27 @@ function interfaceAnimation()
             {
                 if (fadeIn4 < 1)
                 {
+                    _tagOverlayTransition.style.opacity = fadeInLinear4;
+                    _tagOverlayTransition.style.transform = "scaleX(" + fadeInLinear4 + ")";
+                    
+                    _tagLineTransition.style.opacity = fadeInLinear4;
+                    _tagLineTransition.style.left = (100 - (100 * fadeInQuadratic4)) + "dvw";
+                    _tagLineTransition.style.width = (15 - (15 * fadeInQuadratic4)) + "dvw";
+                    
                     _tagMediaGallery[_indexMediaImg].style.opacity = 1 - (0.5 * fadeInLinear4);
                     _tagMediaGallery[_indexMediaImg].style.transform = "scale(" + (1 - (0.05 * fadeInQuadratic4)) + ")";
-                    
-                    _tagImg[_indexMediaImg].style.filter = "grayscale(" + (1 - (0.5 * fadeInLinear4)) + ")";
                 }
                 else
                 {
+                    _tagOverlayTransition.style.opacity = 1;
+                    _tagOverlayTransition.style.transform = "none";
+                    
+                    _tagLineTransition.style.opacity = 1;
+                    _tagLineTransition.style.left = "0dvw";
+                    _tagLineTransition.style.width = "0dvw";
+                    
                     _tagMediaGallery[_indexMediaImg].style.opacity = 0.5;
                     _tagMediaGallery[_indexMediaImg].style.transform = "scale(" + 0.95 + ")";
-                    
-                    _tagImg[_indexMediaImg].style.filter = "none";
                 }
             }
         }
@@ -1736,10 +1761,12 @@ function interfaceAnimation()
         {
             if (_stateButtonAnimation === 0)
             {
-                _tagButtonGallery[_indexButton].style.transform = "none";
+                //VOID
             }
             else if (_stateButtonAnimation === 1)
             {
+                _tagButtonGallery[_indexButton].style.transform = "none";
+                
                 timePreviousRelative4 = performance.now();
                 timePreviousAbsolute4 = performance.now();
                 
@@ -1824,13 +1851,13 @@ function interfaceAnimation()
         //TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG
         if (fadeIn < 1)
         {
-            _tagLoadingText.style.opacity = 1 - fadeInLinear;
-            _tagLoadingBar.style.opacity = 1 - fadeInLinear;
+            _tagTextLoading.style.opacity = 1 - fadeInLinear;
+            _tagBarLoading.style.opacity = 1 - fadeInLinear;
         }
         else
         {
-            _tagLoadingText.style.display = "none";
-            _tagLoadingBar.style.display = "none";
+            _tagTextLoading.style.display = "none";
+            _tagBarLoading.style.display = "none";
         }
         
         for (index = 0; index < _countTagLetter; index++)
@@ -1867,6 +1894,16 @@ function interfaceAnimation()
             }
             else if (_stateBackAnimation === 1)
             {
+                _tagOverlayTransition.style.opacity = 0;
+                _tagOverlayTransition.style.transform = "scaleX(0)";
+                _tagOverlayTransition.style.transformOrigin = "left";
+                
+                _tagLineTransition.style.opacity = 0;
+                _tagLineTransition.style.left = "0dvw";
+                _tagLineTransition.style.width = "15dvw";
+                
+                varAnimation = 0;
+                
                 timePreviousRelative4 = performance.now();
                 timePreviousAbsolute4 = performance.now();
                 
@@ -1874,7 +1911,28 @@ function interfaceAnimation()
             }
             else if (_stateBackAnimation === 2)
             {
-                varAnimation = fadeInQuadratic4;
+                if (fadeIn4 < 1)
+                {
+                    _tagOverlayTransition.style.opacity = fadeInLinear4;
+                    _tagOverlayTransition.style.transform = "scaleX(" + fadeInLinear4 + ")";
+                    
+                    _tagLineTransition.style.opacity = fadeInLinear4;
+                    _tagLineTransition.style.left = (100 * fadeInQuadratic4) + "dvw";
+                    _tagLineTransition.style.width = (15 - (15 * fadeInQuadratic4)) + "dvw";
+                    
+                    varAnimation = fadeInQuadratic4;
+                }
+                else
+                {
+                    _tagOverlayTransition.style.opacity = 1;
+                    _tagOverlayTransition.style.transform = "none";
+                    
+                    _tagLineTransition.style.opacity = 1;
+                    _tagLineTransition.style.left = "100dvw";
+                    _tagLineTransition.style.width = "0dvw";
+                    
+                    varAnimation = 1;
+                }
             }
             
             _tagBack.style.opacity = fadeInLinear;
@@ -1989,7 +2047,11 @@ function interfaceAnimation()
             fadeInQuadratic3 = 1;
         }
         
-        if (_stateResponseAnimation === 1)
+        if (_stateResponseAnimation === 0)
+        {
+            //VOID
+        }
+        else if (_stateResponseAnimation === 1)
         {
             timePreviousRelative2 = performance.now() - timeRetryDuringAnimation;
             timePreviousAbsolute2 = performance.now() - timeRetryDuringAnimation;
@@ -2218,6 +2280,22 @@ function reset()
             _stateButtonAnimation = 0;
             _stateMediaAnimation = 0;
             
+            _tagOverlayTransition.style.opacity = 0;
+            _tagOverlayTransition.style.transform = "scaleX(0)";
+            
+            _tagLineTransition.style.opacity = 0;
+            
+            if (_countTagButton > 0)
+            {
+                _tagButtonGallery[_indexButton].style.transform = "none";
+            }
+            
+            if (_countTagMediaImg > 0)
+            {
+                _tagMediaGallery[_indexMediaImg].style.opacity = 1;
+                _tagMediaGallery[_indexMediaImg].style.transform = "none";
+            }
+            
             _inhibitClick = false;
         }
     });
@@ -2227,9 +2305,9 @@ async function loading()
 {
     if (_stateLoading === 1)
     {
-        reset();
-        
         tag();
+        
+        reset();
         
         event();
         
