@@ -70,6 +70,7 @@ let _stateResponseServer = 0;
 let _stateMediaAnimation = 0;
 let _indexMediaImg = 0;
 let _inhibitClick = false;
+const _FUNCTION = {};
 
 function fitTextParentWidth(tag, fontSizeMin, fontSizeMax, letterSpacingMax, lineHeightMax)
 {
@@ -268,80 +269,6 @@ function tag()
     _tagResponseContact = document.getElementById("tag-response-contact");
 }
 
-function event()
-{
-    let clientY = 0;
-    let clientYPrevious = 0;
-    let deltaY = 0;
-    
-    //_tagCanvasParticule.addEventListener("touchstart", event =>
-    document.body.addEventListener("touchstart", event =>
-    {
-        const LENGTH_TOUCH = event.touches.length;
-        
-        if (LENGTH_TOUCH === 1)
-        {
-            clientY = event.touches[0].clientY;
-            clientYPrevious = clientY;
-        }
-        else if (LENGTH_TOUCH === 2)
-        {
-            clientY = (event.touches[0].clientY + event.touches[1].clientY) * 0.5;
-            clientYPrevious = clientY;
-        }
-        else
-        {
-            event.preventDefault();
-        }
-    },
-    {
-        passive: false
-    });
-    
-    //_tagCanvasParticule.addEventListener("touchmove", event =>
-    document.body.addEventListener("touchmove", event =>
-    {
-        const LENGTH_TOUCH = event.touches.length;
-        
-        if (LENGTH_TOUCH === 1)
-        {
-            clientY = event.touches[0].clientY;
-            
-            deltaY = clientY - clientYPrevious;
-            clientYPrevious = clientY;
-        }
-        else if (LENGTH_TOUCH === 2)
-        {
-            clientY = (event.touches[0].clientY + event.touches[1].clientY) * 0.5;
-            
-            deltaY = clientY - clientYPrevious;
-            clientYPrevious = clientY;
-        }
-        
-        if (deltaY !== 0)
-        {
-            _eventScroll += deltaY * 1.5;
-            event.preventDefault();
-        }
-    },
-    {
-        passive: false
-    });
-    
-    //_tagCanvasParticule.addEventListener("wheel", event =>
-    document.body.addEventListener("wheel", event =>
-    {
-        if (event.deltaY < 0)
-        {
-            _eventScroll += 50;
-        }
-        else if (event.deltaY > 0)
-        {
-            _eventScroll -= 50;
-        }
-    });
-}
-
 function imu()
 {
     let alphaAccelerometer = 0;
@@ -351,7 +278,7 @@ function imu()
     const TRAVEL_RXY = 1250;
     const TRAVEL_RZ = 500;
     
-    function imuRead(event)
+    _FUNCTION.imuRead = function (event)
     {
         const SMOOTH_TIME_R = 1 - Math.exp(-event.interval * SMOOTH_R);
         
@@ -366,13 +293,13 @@ function imu()
         {
             if (response === "granted")
             {
-                window.addEventListener("devicemotion", imuRead);
+                window.addEventListener("devicemotion", _FUNCTION.imuRead);
             }
         });
     }
     else
     {
-        window.addEventListener("devicemotion", imuRead);
+        window.addEventListener("devicemotion", _FUNCTION.imuRead);
     }
     
     function updateAccelerometer()
@@ -550,8 +477,7 @@ function particuleAnimation()
     let firstPointerMove = false;
     //firstPointerMove********************************************************************
     
-    //_tagCanvasParticule.addEventListener("touchstart", event =>
-    document.body.addEventListener("touchstart", event =>
+    _FUNCTION.touchstart = function (event)
     {
         const H_WINDOW = window.innerWidth;
         const V_WINDOW = window.innerHeight;
@@ -596,13 +522,11 @@ function particuleAnimation()
         
         //activeTouch = true;
         //activeTouchB = true;
-    },
-    {
-        passive: false
-    });
+    }
     
-    //_tagCanvasParticule.addEventListener("touchmove", event =>
-    document.body.addEventListener("touchmove", event =>
+    document.body.addEventListener("touchstart", _FUNCTION.touchstart, { passive: false });
+    
+    _FUNCTION.touchmove = function (event)
     {
         const H_WINDOW = window.innerWidth;
         const V_WINDOW = window.innerHeight;
@@ -644,29 +568,30 @@ function particuleAnimation()
         if (deltaX !== 0 || deltaY !== 0)
         {
             activeTouch = true;
+            _eventScroll += deltaY * 1.5;
             event.preventDefault();
         }
-    },
-    {
-        passive: false
-    });
+    }
     
-    //_tagCanvasParticule.addEventListener("touchend", () =>
-    document.body.addEventListener("touchend", () =>
+    document.body.addEventListener("touchmove", _FUNCTION.touchmove, { passive: false });
+    
+    _FUNCTION.touchend = function()
     {
         activeTouch = false;
         //activeTouchB = false;
-    });
+    }
     
-    //_tagCanvasParticule.addEventListener("touchcancel", () =>
-    document.body.addEventListener("touchcancel", () =>
+    document.body.addEventListener("touchend", _FUNCTION.touchend);
+    
+    _FUNCTION.touchcancel = function()
     {
         activeTouch = false;
         //activeTouchB = false;
-    });
+    }
     
-    //_tagCanvasParticule.addEventListener("pointerenter", event =>
-    document.body.addEventListener("pointerenter", event =>
+    document.body.addEventListener("touchcancel", _FUNCTION.touchcancel);
+    
+    _FUNCTION.pointerenter = function (event)
     {
         const H_WINDOW = window.innerWidth;
         const V_WINDOW = window.innerHeight;
@@ -689,31 +614,11 @@ function particuleAnimation()
         {
             activeTouchB = true;
         }*/
-    });
+    }
     
-    //_tagCanvasParticule.addEventListener("pointerdown", event =>
-    /*document.addEventListener("pointerdown", event =>
-    {
-        const H_WINDOW = window.innerWidth;
-        const V_WINDOW = window.innerHeight;
-        //const RECTANGLE = _tagCanvasParticule.getBoundingClientRect();
-        
-        //xTouch = (((event.clientX - RECTANGLE.left) / RECTANGLE.width) - 0.5) * H_WINDOW;
-        //yTouch = -(((event.clientY - RECTANGLE.top) / RECTANGLE.height) - 0.5) * V_WINDOW;
-        xTouch = ((event.clientX / H_WINDOW) - 0.5) * H_WINDOW;
-        yTouch = -((event.clientY / V_WINDOW) - 0.5) * V_WINDOW;
-        
-        xSmoothTouch = xTouch;
-        ySmoothTouch = yTouch;
-        xSmoothTouchPrevious = xTouch;
-        ySmoothTouchPrevious = yTouch;
-        
-        //activeTouch = true;
-        //activeTouchB = true;
-    });*/
+    document.body.addEventListener("pointerenter", _FUNCTION.pointerenter);
     
-    //_tagCanvasParticule.addEventListener("pointermove", event =>
-    document.body.addEventListener("pointermove", event =>
+    _FUNCTION.pointermove = function (event)
     {
         const H_WINDOW = window.innerWidth;
         const V_WINDOW = window.innerHeight;
@@ -745,29 +650,41 @@ function particuleAnimation()
         {
             activeTouchB = true;
         }*/
-    });
+    }
     
-    //_tagCanvasParticule.addEventListener("pointerup", () =>
-    /*document.addEventListener("pointerup", () =>
-    {
-        //activeTouchB = false;
-    });*/
+    document.body.addEventListener("pointermove", _FUNCTION.pointermove);
     
-    //_tagCanvasParticule.addEventListener("pointerleave", () =>
-    document.body.addEventListener("pointerleave", () =>
+    _FUNCTION.pointerleave = function()
     {
         firstPointerMove = false;
         activeTouch = false;
         //activeTouchB = false;
-    });
+    }
     
-    //_tagCanvasParticule.addEventListener("pointercancel", () =>
-    document.body.addEventListener("pointercancel", () =>
+    document.body.addEventListener("pointerleave", _FUNCTION.pointerleave);
+    
+    _FUNCTION.pointercancel = function()
     {
         firstPointerMove = false;
         activeTouch = false;
         //activeTouchB = false;
-    });
+    }
+    
+    document.body.addEventListener("pointercancel", _FUNCTION.pointercancel);
+    
+    _FUNCTION.wheel = function (event)
+    {
+        if (event.deltaY < 0)
+        {
+            _eventScroll += 50;
+        }
+        else if (event.deltaY > 0)
+        {
+            _eventScroll -= 50;
+        }
+    }
+    
+    document.body.addEventListener("wheel", _FUNCTION.wheel);
     
     function setupWebGL()
     {
@@ -1538,7 +1455,7 @@ function loadingAnimation()
 
 function windowResize()
 {
-    function updateSize()
+    _FUNCTION.resize = function()
     {
         const H_WINDOW = window.innerWidth;
         const V_WINDOW = window.innerHeight;
@@ -1555,13 +1472,13 @@ function windowResize()
         }
     }
     
-    updateSize();
-    window.addEventListener("resize", updateSize);
+    _FUNCTION.resize();
+    window.addEventListener("resize", _FUNCTION.resize);
 }
 
 function screenOrientation()
 {
-    function updateOrientation()
+    _FUNCTION.change = function()
     {
         const ORIENTATION_SCREEN = screen.orientation.type || "portrait-primary";
         
@@ -1583,8 +1500,8 @@ function screenOrientation()
         }
     }
     
-    updateOrientation();
-    screen.orientation.addEventListener("change", updateOrientation);
+    _FUNCTION.change();
+    screen.orientation.addEventListener("change", _FUNCTION.change);
 }
 
 function interfaceAnimation()
@@ -2139,7 +2056,7 @@ function href()
     
     if (_foundTagBack === true)
     {
-        _tagBack.addEventListener("click", () =>
+        _FUNCTION.clickBack = function()
         {
             if (_inhibitClick === false)
             {
@@ -2149,10 +2066,14 @@ function href()
                 
                 setTimeout(() =>
                 {
+                    console.log ("EVENT REMOVE");
+                    //eventRemove();
                     window.location.href = "index.html";
                 }, 1000);
             }
-        });
+        }
+        
+        _tagBack.addEventListener("click", _FUNCTION.clickBack);
     }
     
     for (index = 0; index < _countTagButton; index++)
@@ -2162,7 +2083,7 @@ function href()
         
         if (HREF !== null)
         {
-            _tagButtonGallery[index].addEventListener("click", () =>
+            _FUNCTION.clickButton = function()
             {
                 if (_inhibitClick === false)
                 {
@@ -2173,10 +2094,14 @@ function href()
                     
                     setTimeout(() =>
                     {
+                        console.log ("EVENT REMOVE");
+                        //eventRemove();
                         window.location.href = HREF;
                     }, 1000);
                 }
-            });
+            }
+            
+            _tagButtonGallery[INDEX].addEventListener("click", _FUNCTION.clickButton);
         }
     }
     
@@ -2187,7 +2112,7 @@ function href()
         
         if (HREF !== null)
         {
-            _tagMediaGallery[INDEX].addEventListener("click", () =>
+            _FUNCTION.clickMedia = function()
             {
                 if (_inhibitClick === false)
                 {
@@ -2198,10 +2123,14 @@ function href()
                     
                     setTimeout(() =>
                     {
+                        console.log ("EVENT REMOVE");
+                        //eventRemove();
                         window.location.href = HREF;
                     }, 1000);
                 }
-            });
+            }
+            
+            _tagMediaGallery[INDEX].addEventListener("click", _FUNCTION.clickMedia);
         }
     }
 }
@@ -2240,38 +2169,84 @@ function input()
         });
     }
     
-    _tagInputContactFooter.addEventListener("keydown", (event) =>
+    _FUNCTION.keydown = function (event)
     {
         if (event.key === "Enter" && (_stateResponseAnimation === 0 || _stateResponseAnimation === 4))
         {
             //_tagInputContactFooter.disabled = true;
             server();
         }
-    });
+    }
     
-    _tagSubmitContactFooter.addEventListener("click", () =>
+    _tagInputContactFooter.addEventListener("keydown", _FUNCTION.keydown);
+    
+    _FUNCTION.clickSubmit = function()
     {
         if (_stateResponseAnimation === 0 || _stateResponseAnimation === 4)
         {
             //_tagInputContactFooter.disabled = true;
             server();
         }
-    });
+    }
+    
+    _tagSubmitContactFooter.addEventListener("click", _FUNCTION.clickSubmit);
 }
 
-/*function loaded()
+function eventRemove()
 {
+    let index = 0;
     
-}*/
-
-/*function href(index)
-{
+    window.removeEventListener("devicemotion", _FUNCTION.imuRead);
     
-}*/
+    document.body.removeEventListener("touchstart", _FUNCTION.touchstart, { passive: false });
+    document.body.removeEventListener("touchmove", _FUNCTION.touchmove, { passive: false });
+    document.body.removeEventListener("touchend", _FUNCTION.touchend);
+    document.body.removeEventListener("touchcancel", _FUNCTION.touchcancel);
+    document.body.removeEventListener("pointerenter", _FUNCTION.pointerenter);
+    document.body.removeEventListener("pointermove", _FUNCTION.pointermove);
+    document.body.removeEventListener("pointerleave", _FUNCTION.pointerleave);
+    document.body.removeEventListener("pointercancel", _FUNCTION.pointercancel);
+    document.body.removeEventListener("wheel", _FUNCTION.wheel);
+    
+    window.removeEventListener("resize", _FUNCTION.resize);
+    screen.orientation.removeEventListener("change", _FUNCTION.change);
+    
+    if (_foundTagBack === true)
+    {
+        _tagBack.removeEventListener("click", _FUNCTION.clickBack);
+    }
+    
+    for (index = 0; index < _countTagButton; index++)
+    {
+        const HREF = _tagButtonGallery[index].getAttribute("href");
+        const INDEX = index;
+        
+        if (HREF !== null)
+        {
+            _tagButtonGallery[INDEX].removeEventListener("click", _FUNCTION.clickButton);
+        }
+    }
+    
+    for (index = 0; index < _countTagMediaImg; index++)
+    {
+        const HREF = _tagMediaGallery[index].getAttribute("href");
+        const INDEX = index;
+        
+        if (HREF !== null)
+        {
+            _tagMediaGallery[INDEX].removeEventListener("click", _FUNCTION.clickMedia);
+        }
+    }
+    
+    _tagInputContactFooter.removeEventListener("keydown", _FUNCTION.keydown);
+    _tagSubmitContactFooter.removeEventListener("click", _FUNCTION.clickSubmit);
+    
+    window.removeEventListener("pageshow", _FUNCTION.pageshow);
+}
 
 function reset()
 {
-    window.addEventListener("pageshow", event =>
+    _FUNCTION.pageshow = function()
     {
         if (event.persisted === true)
         {
@@ -2298,7 +2273,9 @@ function reset()
             
             _inhibitClick = false;
         }
-    });
+    }
+    
+    window.addEventListener("pageshow", _FUNCTION.pageshow);
 }
 
 async function loading()
@@ -2307,9 +2284,8 @@ async function loading()
     {
         tag();
         
+        eventRemove();
         reset();
-        
-        event();
         
         loadingAnimation();
         
@@ -2331,9 +2307,7 @@ async function loading()
         
         href();
         input();
-        
-        //loaded();
     }
 }
 
-window.addEventListener("load", loading);
+window.addEventListener("load", loading, { once: true });
