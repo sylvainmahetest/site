@@ -1,7 +1,9 @@
-customElements.define("tag-text-loading", class extends HTMLElement{});
-customElements.define("tag-bar-loading", class extends HTMLElement{});
-customElements.define("tag-overlay-transition", class extends HTMLElement{});
-customElements.define("tag-line-transition", class extends HTMLElement{});
+//customElements.define("tag-text-loading", class extends HTMLElement{});
+//customElements.define("tag-bar-loading", class extends HTMLElement{});
+customElements.define("tag-overlay-transition-enter", class extends HTMLElement{});
+customElements.define("tag-line-transition-enter", class extends HTMLElement{});
+customElements.define("tag-overlay-transition-leave", class extends HTMLElement{});
+customElements.define("tag-line-transition-leave", class extends HTMLElement{});
 customElements.define("tag-canvas-particule", class extends HTMLElement{});
 customElements.define("tag-name", class extends HTMLElement{});
 customElements.define("tag-letter", class extends HTMLElement{});
@@ -23,11 +25,13 @@ customElements.define("tag-input-contact-footer", class extends HTMLElement{});
 customElements.define("tag-submit-contact-footer", class extends HTMLElement{});
 customElements.define("tag-response-contact", class extends HTMLElement{});
 
-let _stateLoading = 1;
-let _tagTextLoading = null;
-let _tagBarLoading = null;
-let _tagOverlayTransition = null;
-let _tagLineTransition = null;
+//let _stateLoading = 1;
+//let _tagTextLoading = null;
+//let _tagBarLoading = null;
+let _tagOverlayTransitionEnter = null;
+let _tagLineTransitionEnter = null;
+let _tagOverlayTransitionLeave = null;
+let _tagLineTransitionLeave = null;
 let _tagCanvasParticule = null;
 let _webGL = null;
 let _orientationScreen = 1;
@@ -180,11 +184,13 @@ function tag()
     const TAG_MEDIA_IN_DOCUMENT = document.querySelectorAll("body tag-media-gallery");
     const TAG_IMG_IN_DOCUMENT = document.querySelectorAll("body img");
     
-    _tagTextLoading = document.getElementById("tag-text-loading");
-    _tagBarLoading = document.getElementById("tag-bar-loading");
+    //_tagTextLoading = document.getElementById("tag-text-loading");
+    //_tagBarLoading = document.getElementById("tag-bar-loading");
     
-    _tagOverlayTransition = document.getElementById("tag-overlay-transition");
-    _tagLineTransition = document.getElementById("tag-line-transition");
+    _tagOverlayTransitionEnter = document.getElementById("tag-overlay-transition-enter");
+    _tagLineTransitionEnter = document.getElementById("tag-line-transition-enter");
+    _tagOverlayTransitionLeave = document.getElementById("tag-overlay-transition-leave");
+    _tagLineTransitionLeave = document.getElementById("tag-line-transition-leave");
     
     _tagCanvasParticule = document.getElementById("tag-canvas-particule");
     
@@ -525,7 +531,7 @@ function particuleAnimation()
     }
     
     document.body.addEventListener("touchstart", _FUNCTION.touchstart, { passive: false });
-    
+    let inhibitTouchMove = false;
     _FUNCTION.touchmove = function (event)
     {
         const H_WINDOW = window.innerWidth;
@@ -533,44 +539,51 @@ function particuleAnimation()
         const LENGTH_TOUCH = event.touches.length;
         //const RECTANGLE = _tagCanvasParticule.getBoundingClientRect();
         
-        if (LENGTH_TOUCH === 1)
+        if (inhibitTouchMove === false)
         {
-            clientX = event.touches[0].clientX;
-            clientY = event.touches[0].clientY;
+            inhibitTouchMove = true;
             
-            deltaX = clientX - clientXPrevious;
-            deltaY = clientY - clientYPrevious;
-            clientXPrevious = clientX;
-            clientYPrevious = clientY;
-            //xTouch = (((event.touches[0].clientX - RECTANGLE.left) / RECTANGLE.width) - 0.5) * H_WINDOW;
-            //yTouch = -(((event.touches[0].clientY - RECTANGLE.top) / RECTANGLE.height) - 0.5) * V_WINDOW;
-            xTouch = ((clientX / H_WINDOW) - 0.5) * H_WINDOW;
-            yTouch = -((clientY / V_WINDOW) - 0.5) * V_WINDOW;
-        }
-        else if (LENGTH_TOUCH === 2)
-        {
-            clientX = (event.touches[0].clientX + event.touches[1].clientX) * 0.5;
-            clientY = (event.touches[0].clientY + event.touches[1].clientY) * 0.5;
+            if (LENGTH_TOUCH === 1)
+            {
+                clientX = event.touches[0].clientX;
+                clientY = event.touches[0].clientY;
+                
+                deltaX = clientX - clientXPrevious;
+                deltaY = clientY - clientYPrevious;
+                clientXPrevious = clientX;
+                clientYPrevious = clientY;
+                //xTouch = (((event.touches[0].clientX - RECTANGLE.left) / RECTANGLE.width) - 0.5) * H_WINDOW;
+                //yTouch = -(((event.touches[0].clientY - RECTANGLE.top) / RECTANGLE.height) - 0.5) * V_WINDOW;
+                xTouch = ((clientX / H_WINDOW) - 0.5) * H_WINDOW;
+                yTouch = -((clientY / V_WINDOW) - 0.5) * V_WINDOW;
+            }
+            else if (LENGTH_TOUCH === 2)
+            {
+                clientX = (event.touches[0].clientX + event.touches[1].clientX) * 0.5;
+                clientY = (event.touches[0].clientY + event.touches[1].clientY) * 0.5;
+                
+                deltaX = clientX - clientXPrevious;
+                deltaY = clientY - clientYPrevious;
+                clientXPrevious = clientX;
+                clientYPrevious = clientY;
+                //xTouch = (((((event.touches[0].clientX + event.touches[1].clientX) * 0.5) - RECTANGLE.left) / RECTANGLE.width) - 0.5) * H_WINDOW;
+                //yTouch = -(((((event.touches[0].clientY + event.touches[1].clientY) * 0.5) - RECTANGLE.top) / RECTANGLE.height) - 0.5) * V_WINDOW;
+                xTouch = ((clientX / H_WINDOW) - 0.5) * H_WINDOW;
+                yTouch = -((clientY / V_WINDOW) - 0.5) * V_WINDOW;
+            }
             
-            deltaX = clientX - clientXPrevious;
-            deltaY = clientY - clientYPrevious;
-            clientXPrevious = clientX;
-            clientYPrevious = clientY;
-            //xTouch = (((((event.touches[0].clientX + event.touches[1].clientX) * 0.5) - RECTANGLE.left) / RECTANGLE.width) - 0.5) * H_WINDOW;
-            //yTouch = -(((((event.touches[0].clientY + event.touches[1].clientY) * 0.5) - RECTANGLE.top) / RECTANGLE.height) - 0.5) * V_WINDOW;
-            xTouch = ((clientX / H_WINDOW) - 0.5) * H_WINDOW;
-            yTouch = -((clientY / V_WINDOW) - 0.5) * V_WINDOW;
+            //activeTouch = true;
+            //activeTouchB = true;
+            
+            if (deltaX !== 0 || deltaY !== 0)
+            {
+                activeTouch = true;
+                _eventScroll += deltaY * 1.5;
+                event.preventDefault();
+            }
         }
         
-        //activeTouch = true;
-        //activeTouchB = true;
-        
-        if (deltaX !== 0 || deltaY !== 0)
-        {
-            activeTouch = true;
-            _eventScroll += deltaY * 1.5;
-            event.preventDefault();
-        }
+        inhibitTouchMove = false;
     }
     
     document.body.addEventListener("touchmove", _FUNCTION.touchmove, { passive: false });
@@ -617,39 +630,45 @@ function particuleAnimation()
     }
     
     document.body.addEventListener("pointerenter", _FUNCTION.pointerenter);
-    
+    let inhibitPointerMove = false;
     _FUNCTION.pointermove = function (event)
     {
         const H_WINDOW = window.innerWidth;
         const V_WINDOW = window.innerHeight;
         //const RECTANGLE = _tagCanvasParticule.getBoundingClientRect();
         
-        //xTouch = (((event.clientX - RECTANGLE.left) / RECTANGLE.width) - 0.5) * H_WINDOW;
-        //yTouch = -(((event.clientY - RECTANGLE.top) / RECTANGLE.height) - 0.5) * V_WINDOW;
-        xTouch = ((event.clientX / H_WINDOW) - 0.5) * H_WINDOW;
-        yTouch = -((event.clientY / V_WINDOW) - 0.5) * V_WINDOW;
-        //console.log("xTouch = " + xTouch);
-        
-        if (firstPointerMove === false)
+        if (inhibitPointerMove === false)
         {
-            xSmoothTouch = xTouch;
-            ySmoothTouch = yTouch;
-            xSmoothTouchPrevious = xTouch;
-            ySmoothTouchPrevious = yTouch;
+            inhibitPointerMove = true;
+            //xTouch = (((event.clientX - RECTANGLE.left) / RECTANGLE.width) - 0.5) * H_WINDOW;
+            //yTouch = -(((event.clientY - RECTANGLE.top) / RECTANGLE.height) - 0.5) * V_WINDOW;
+            xTouch = ((event.clientX / H_WINDOW) - 0.5) * H_WINDOW;
+            yTouch = -((event.clientY / V_WINDOW) - 0.5) * V_WINDOW;
+            //console.log("xTouch = " + xTouch);
             
-            firstPointerMove = true;
-        }
-        else
-        {
-            activeTouch = true;
+            if (firstPointerMove === false)
+            {
+                xSmoothTouch = xTouch;
+                ySmoothTouch = yTouch;
+                xSmoothTouchPrevious = xTouch;
+                ySmoothTouchPrevious = yTouch;
+                
+                firstPointerMove = true;
+            }
+            else
+            {
+                activeTouch = true;
+            }
+            
+            //activeTouch = true;
+            
+            /*if (event.buttons & 1 === 1)
+            {
+                activeTouchB = true;
+            }*/
         }
         
-        //activeTouch = true;
-        
-        /*if (event.buttons & 1 === 1)
-        {
-            activeTouchB = true;
-        }*/
+        inhibitPointerMove = false;
     }
     
     document.body.addEventListener("pointermove", _FUNCTION.pointermove);
@@ -1399,7 +1418,7 @@ function particuleAnimation()
     updateAnimation(timePreviousRelative);
 }
 
-function loadingAnimation()
+/*function loadingAnimation()
 {
     let timePreviousAbsolute = 0;
     let fadeIn = 0;
@@ -1451,7 +1470,7 @@ function loadingAnimation()
     }
     
     updateAnimation(timePreviousAbsolute);
-}
+}*/
 
 function windowResize()
 {
@@ -1564,25 +1583,17 @@ function interfaceAnimation()
         
         fadeIn = (time - timePreviousAbsolute) * 0.001;
         
-        fadeInLinear = fadeIn;
-        
-        if (fadeInLinear > 1)
-        {
-            fadeInLinear = 1;
-        }
-        
         if (fadeIn < 1)
         {
-            fadeInQuadratic = 1 - Math.pow(1 - fadeIn, 2);
-            
-            if (fadeInQuadratic > 1)
-            {
-                fadeInQuadratic = 1;
-            }
+            fadeInLinear = fadeIn;
+            fadeInQuadratic = Math.min(1, Math.max(0, 1 - Math.pow(1 - fadeIn, 2)));
+            fadeInQuadratic1 = Math.min(1, Math.max(0, Math.pow(fadeIn, 2)));
         }
         else
         {
+            fadeInLinear = 1;
             fadeInQuadratic = 1;
+            fadeInQuadratic1 = 1;
         }
         
         ////////////////////////////////////////////////////////////////////////HREF ANIMATION
@@ -1592,30 +1603,15 @@ function interfaceAnimation()
         
         fadeIn4 = (time - timePreviousAbsolute4) * 0.001;
         
-        fadeInLinear4 = fadeIn4;
-        
-        if (fadeInLinear4 > 1)
-        {
-            fadeInLinear4 = 1;
-        }
-        
         if (fadeIn4 < 1)
         {
-            fadeInQuadratic4 = 1 - Math.pow(1 - fadeIn4, 2);
-            fadeInQuadratic5 = Math.pow(fadeIn4, 2);
-            
-            if (fadeInQuadratic4 > 1)
-            {
-                fadeInQuadratic4 = 1;
-            }
-            
-            if (fadeInQuadratic5 > 1)
-            {
-                fadeInQuadratic5 = 1;
-            }
+            fadeInLinear4 = fadeIn4;
+            fadeInQuadratic4 = Math.min(1, Math.max(0, 1 - Math.pow(1 - fadeIn4, 2)));
+            fadeInQuadratic5 = Math.min(1, Math.max(0, Math.pow(fadeIn4, 2)));
         }
         else
         {
+            fadeInLinear4 = 1;
             fadeInQuadratic4 = 1;
             fadeInQuadratic5 = 1;
         }
@@ -1628,13 +1624,13 @@ function interfaceAnimation()
             }
             else if (_stateMediaAnimation === 1)
             {
-                _tagOverlayTransition.style.opacity = 0;
-                _tagOverlayTransition.style.transform = "scaleX(0)";
-                _tagOverlayTransition.style.transformOrigin = "right";
+                _tagOverlayTransitionLeave.style.opacity = 0;
+                _tagOverlayTransitionLeave.style.transform = "scaleX(0)";
+                _tagOverlayTransitionLeave.style.transformOrigin = "right";
                 
-                _tagLineTransition.style.opacity = 0;
-                _tagLineTransition.style.left = "100dvw";
-                _tagLineTransition.style.width = "15dvw";
+                _tagLineTransitionLeave.style.opacity = 0;
+                _tagLineTransitionLeave.style.left = "100dvw";
+                _tagLineTransitionLeave.style.width = "15dvw";
                 
                 _tagMediaGallery[_indexMediaImg].style.opacity = 1;
                 _tagMediaGallery[_indexMediaImg].style.transform = "none";
@@ -1648,24 +1644,24 @@ function interfaceAnimation()
             {
                 if (fadeIn4 < 1)
                 {
-                    _tagOverlayTransition.style.opacity = fadeInLinear4;
-                    _tagOverlayTransition.style.transform = "scaleX(" + fadeInLinear4 + ")";
+                    _tagOverlayTransitionLeave.style.opacity = fadeInLinear4;
+                    _tagOverlayTransitionLeave.style.transform = "scaleX(" + fadeInLinear4 + ")";
                     
-                    _tagLineTransition.style.opacity = fadeInLinear4;
-                    _tagLineTransition.style.left = (100 - (100 * fadeInQuadratic4)) + "dvw";
-                    _tagLineTransition.style.width = (15 - (15 * fadeInQuadratic4)) + "dvw";
+                    _tagLineTransitionLeave.style.opacity = fadeInLinear4;
+                    _tagLineTransitionLeave.style.left = (100 - (100 * fadeInQuadratic4)) + "dvw";
+                    _tagLineTransitionLeave.style.width = (15 - (15 * fadeInQuadratic4)) + "dvw";
                     
                     _tagMediaGallery[_indexMediaImg].style.opacity = 1 - (0.5 * fadeInLinear4);
                     _tagMediaGallery[_indexMediaImg].style.transform = "scale(" + (1 - (0.05 * fadeInQuadratic4)) + ")";
                 }
                 else
                 {
-                    _tagOverlayTransition.style.opacity = 1;
-                    _tagOverlayTransition.style.transform = "none";
+                    _tagOverlayTransitionLeave.style.opacity = 1;
+                    _tagOverlayTransitionLeave.style.transform = "none";
                     
-                    _tagLineTransition.style.opacity = 1;
-                    _tagLineTransition.style.left = "0dvw";
-                    _tagLineTransition.style.width = "0dvw";
+                    _tagLineTransitionLeave.style.opacity = 1;
+                    _tagLineTransitionLeave.style.left = "0dvw";
+                    _tagLineTransitionLeave.style.width = "0dvw";
                     
                     _tagMediaGallery[_indexMediaImg].style.opacity = 0.5;
                     _tagMediaGallery[_indexMediaImg].style.transform = "scale(" + 0.95 + ")";
@@ -1768,13 +1764,21 @@ function interfaceAnimation()
         //TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG
         if (fadeIn < 1)
         {
-            _tagTextLoading.style.opacity = 1 - fadeInLinear;
-            _tagBarLoading.style.opacity = 1 - fadeInLinear;
+            //_tagTextLoading.style.opacity = 1 - fadeInLinear;
+            //_tagBarLoading.style.opacity = 1 - fadeInLinear;
+            _tagOverlayTransitionEnter.style.opacity = /*1 - fadeInLinear*/1 - (0.2 * fadeInLinear);
+            _tagOverlayTransitionEnter.style.transform = "scaleX(" + (1 - fadeInQuadratic) + ")";
+            
+            _tagLineTransitionEnter.style.opacity = 1 - fadeInLinear;
+            _tagLineTransitionEnter.style.left = (100 - (100 * fadeInLinear)) + "dvw";
+            _tagLineTransitionEnter.style.width = (15 - (15 * fadeInLinear)) + "dvw";
         }
         else
         {
-            _tagTextLoading.style.display = "none";
-            _tagBarLoading.style.display = "none";
+            //_tagTextLoading.style.display = "none";
+            //_tagBarLoading.style.display = "none";
+            _tagOverlayTransitionEnter.style.display = "none";
+            _tagLineTransitionEnter.style.display = "none";
         }
         
         for (index = 0; index < _countTagLetter; index++)
@@ -1811,13 +1815,13 @@ function interfaceAnimation()
             }
             else if (_stateBackAnimation === 1)
             {
-                _tagOverlayTransition.style.opacity = 0;
-                _tagOverlayTransition.style.transform = "scaleX(0)";
-                _tagOverlayTransition.style.transformOrigin = "left";
+                _tagOverlayTransitionLeave.style.opacity = 0;
+                _tagOverlayTransitionLeave.style.transform = "scaleX(0)";
+                _tagOverlayTransitionLeave.style.transformOrigin = "left";
                 
-                _tagLineTransition.style.opacity = 0;
-                _tagLineTransition.style.left = "0dvw";
-                _tagLineTransition.style.width = "15dvw";
+                _tagLineTransitionLeave.style.opacity = 0;
+                _tagLineTransitionLeave.style.left = "0dvw";
+                _tagLineTransitionLeave.style.width = "15dvw";
                 
                 varAnimation = 0;
                 
@@ -1830,23 +1834,23 @@ function interfaceAnimation()
             {
                 if (fadeIn4 < 1)
                 {
-                    _tagOverlayTransition.style.opacity = fadeInLinear4;
-                    _tagOverlayTransition.style.transform = "scaleX(" + fadeInLinear4 + ")";
+                    _tagOverlayTransitionLeave.style.opacity = fadeInLinear4;
+                    _tagOverlayTransitionLeave.style.transform = "scaleX(" + fadeInLinear4 + ")";
                     
-                    _tagLineTransition.style.opacity = fadeInLinear4;
-                    _tagLineTransition.style.left = (100 * fadeInQuadratic4) + "dvw";
-                    _tagLineTransition.style.width = (15 - (15 * fadeInQuadratic4)) + "dvw";
+                    _tagLineTransitionLeave.style.opacity = fadeInLinear4;
+                    _tagLineTransitionLeave.style.left = (100 * fadeInQuadratic4) + "dvw";
+                    _tagLineTransitionLeave.style.width = (15 - (15 * fadeInQuadratic4)) + "dvw";
                     
                     varAnimation = fadeInQuadratic4;
                 }
                 else
                 {
-                    _tagOverlayTransition.style.opacity = 1;
-                    _tagOverlayTransition.style.transform = "none";
+                    _tagOverlayTransitionLeave.style.opacity = 1;
+                    _tagOverlayTransitionLeave.style.transform = "none";
                     
-                    _tagLineTransition.style.opacity = 1;
-                    _tagLineTransition.style.left = "100dvw";
-                    _tagLineTransition.style.width = "0dvw";
+                    _tagLineTransitionLeave.style.opacity = 1;
+                    _tagLineTransitionLeave.style.left = "100dvw";
+                    _tagLineTransitionLeave.style.width = "0dvw";
                     
                     varAnimation = 1;
                 }
@@ -1936,30 +1940,15 @@ function interfaceAnimation()
         
         fadeIn2 = (time - timePreviousAbsolute2) * 0.001;
         
-        fadeInLinear2 = fadeIn2;
-        
-        if (fadeInLinear2 > 1)
+        if (fadeIn2 < 1)
         {
-            fadeInLinear2 = 1;
-        }
-        
-        if (fadeIn2 <= 1)
-        {
-            fadeInQuadratic2 = 1 - Math.pow(1 - fadeIn2, 2);
-            fadeInQuadratic3 = Math.pow(fadeIn2, 2);
-            
-            if (fadeInQuadratic2 > 1)
-            {
-                fadeInQuadratic2 = 1;
-            }
-            
-            if (fadeInQuadratic3 > 1)
-            {
-                fadeInQuadratic3 = 1;
-            }
+            fadeInLinear2 = fadeIn2;
+            fadeInQuadratic2 = Math.min(1, Math.max(0, 1 - Math.pow(1 - fadeIn2, 2)));
+            fadeInQuadratic3 = Math.min(1, Math.max(0, Math.pow(fadeIn2, 2)));
         }
         else
         {
+            fadeInLinear2 = 1;
             fadeInQuadratic2 = 1;
             fadeInQuadratic3 = 1;
         }
@@ -2066,8 +2055,6 @@ function href()
                 
                 setTimeout(() =>
                 {
-                    console.log ("EVENT REMOVE");
-                    //eventRemove();
                     window.location.href = "index.html";
                 }, 1000);
             }
@@ -2094,8 +2081,6 @@ function href()
                     
                     setTimeout(() =>
                     {
-                        console.log ("EVENT REMOVE");
-                        //eventRemove();
                         window.location.href = HREF;
                     }, 1000);
                 }
@@ -2123,8 +2108,6 @@ function href()
                     
                     setTimeout(() =>
                     {
-                        console.log ("EVENT REMOVE");
-                        //eventRemove();
                         window.location.href = HREF;
                     }, 1000);
                 }
@@ -2255,10 +2238,12 @@ function reset()
             _stateButtonAnimation = 0;
             _stateMediaAnimation = 0;
             
-            _tagOverlayTransition.style.opacity = 0;
-            _tagOverlayTransition.style.transform = "scaleX(0)";
+            _tagOverlayTransitionEnter.style.display = "none";
+            _tagLineTransitionEnter.style.display = "none";
+            _tagOverlayTransitionLeave.style.opacity = 0;
+            _tagOverlayTransitionLeave.style.transform = "scaleX(0)";
             
-            _tagLineTransition.style.opacity = 0;
+            _tagLineTransitionLeave.style.opacity = 0;
             
             if (_countTagButton > 0)
             {
@@ -2280,19 +2265,21 @@ function reset()
 
 async function loading()
 {
-    if (_stateLoading === 1)
+    /*if (_stateLoading === 1)
     {
         tag();
         
         eventRemove();
         reset();
         
-        loadingAnimation();
+        //loadingAnimation();
         
         await document.fonts.load("0px fontA");
         await document.fonts.ready;
         
         _stateLoading = 2;
+        
+        loading();
     }
     else if (_stateLoading === 2)
     {
@@ -2307,7 +2294,26 @@ async function loading()
         
         href();
         input();
-    }
+    }*/
+    tag();
+    
+    eventRemove();
+    reset();
+    
+    await document.fonts.load("0px fontA");
+    await document.fonts.ready;
+    
+    imu();
+    
+    particuleAnimation();
+    
+    windowResize();
+    screenOrientation();
+    
+    interfaceAnimation();
+    
+    href();
+    input();
 }
 
 window.addEventListener("load", loading, { once: true });
