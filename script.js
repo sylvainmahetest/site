@@ -483,6 +483,79 @@ function particuleAnimation()
     let firstPointerMove = false;
     //firstPointerMove********************************************************************
     
+    
+    let fadeInLinear = 0;
+    let fadeInQuadratic = 0;
+    let index = 0;
+    let bottomHeader = 0;
+    let topGallery = 0;
+    let topFooter = 0;
+    let scrollMax = 0;
+    let smoothAll = 0;
+    const SMOOTH_ALL = 0.01;
+    //let translateSmooth = 0;
+    let opacitySmooth = 1;
+    let scaleSmooth = 1;
+    let opacity = 1;
+    let scale = 1;
+    let ratioMediaImg1 = 0;
+    let ratioMediaImg2 = 0;
+    let offsetImg = 0;
+    let widthPerLetter = 0;
+    let opacityLetter = 0;
+    let widthLetter = 0;
+    let opacityTranslateScale = 0;
+    let opacityTranslateScaleSmooth = 0;
+    //TAG RESPONSE
+    let timePreviousRelative2 = 0;
+    let timePreviousAbsolute2 = 0;
+    let fadeIn2 = 0;
+    let fadeInLinear2 = 0;
+    let fadeInQuadratic2 = 0;
+    let fadeInQuadratic3 = 0;
+    let timeRetryDuringAnimation = 0;
+    //TAG RESPONSE
+    //HREF ANIMATION
+    let timePreviousRelative4 = 0;
+    let timePreviousAbsolute4 = 0;
+    let fadeIn4 = 0;
+    let fadeInLinear4 = 0;
+    let fadeInQuadratic4 = 0;
+    let fadeInQuadratic5 = 0;
+    //HREF ANIMATION
+    
+    //RESIZE WIP
+    //RESIZE WIP
+    //let RECTANGLE_GALLERY = null;
+    //let RECTANGLE_FOOTER = null;
+    let widthTagOverlayGallery = 0;
+    let heightTagOverlayGallery = 0;
+    let heightTagOverlayFooter = 0;
+    //let RECTANGLE_IMG = [];
+    
+
+    function updateRectangle()
+    {
+        //RECTANGLE_GALLERY = _tagOverlayGallery.getBoundingClientRect();
+        //RECTANGLE_FOOTER = _tagOverlayFooter.getBoundingClientRect();
+        
+        widthTagOverlayGallery = _tagOverlayGallery.clientWidth;
+        heightTagOverlayGallery = _tagOverlayGallery.clientHeight;
+        heightTagOverlayFooter = _tagOverlayFooter.clientHeight;
+        
+        /*for (index = 0; index < _countTagMediaImg; index++)
+        {
+            RECTANGLE_IMG [index] = _tagImg[index].getBoundingClientRect();
+        }*/
+    }
+    
+    updateRectangle();
+    setInterval (updateRectangle, 250);
+    
+    
+    
+    
+    
     _FUNCTION.touchstart = function (event)
     {
         const H_WINDOW = window.innerWidth;
@@ -695,11 +768,11 @@ function particuleAnimation()
     {
         if (event.deltaY < 0)
         {
-            _eventScroll += 50;
+            _eventScroll += 75;
         }
         else if (event.deltaY > 0)
         {
-            _eventScroll -= 50;
+            _eventScroll -= 75;
         }
     }
     
@@ -1070,15 +1143,492 @@ function particuleAnimation()
     
     timePreviousRelative = performance.now();
     timePreviousAbsolute = performance.now();
-    
+   // let smootAll = 0;
+    //const SMOOTH_ALL = 0.01;
     function updateAnimation(time)
     {
+    	//time = performance.now();
         const H_SCALE = window.innerWidth * 0.5;
         const V_SCALE = window.innerHeight * 0.5;
         const DPR = window.devicePixelRatio || 1;
         const TIME_DELTA = Math.min((time - timePreviousRelative) * 0.001, 0.04);
-        
+        const V_WINDOW = window.innerHeight;
+        //const RECTANGLE_HEADER = _tagOverlayHeader.getBoundingClientRect();
+        //const RECTANGLE_GALLERY = _tagOverlayGallery.getBoundingClientRect();
+        //const RECTANGLE_FOOTER = _tagOverlayFooter.getBoundingClientRect();
         timePreviousRelative = time;
+        
+        fadeIn = (time - timePreviousAbsolute) * 0.001;
+        
+        smoothAll = 1 - Math.pow(SMOOTH_ALL, TIME_DELTA);
+        _translateSmooth += (_eventScroll - _translateSmooth) * smoothAll;
+        
+        
+        if (fadeIn < 1)
+        {
+            fadeInLinear = fadeIn;
+            fadeInQuadratic = Math.min(1, Math.max(0, 1 - Math.pow(1 - fadeIn, 2)));
+            fadeInQuadratic1 = Math.min(1, Math.max(0, Math.pow(fadeIn, 2)));
+        }
+        else
+        {
+            fadeInLinear = 1;
+            fadeInQuadratic = 1;
+            fadeInQuadratic1 = 1;
+        }
+        
+        ////////////////////////////////////////////////////////////////////////HREF ANIMATION
+        //const TIME_DELTA4 = Math.min((time - timePreviousRelative4) * 0.001, 0.04);
+        
+        timePreviousRelative4 = time;
+        
+        fadeIn4 = (time - timePreviousAbsolute4) * 0.001;
+        
+        if (fadeIn4 < 1)
+        {
+            fadeInLinear4 = fadeIn4;
+            fadeInQuadratic4 = Math.min(1, Math.max(0, 1 - Math.pow(1 - fadeIn4, 2)));
+            fadeInQuadratic5 = Math.min(1, Math.max(0, Math.pow(fadeIn4, 2)));
+        }
+        else
+        {
+            fadeInLinear4 = 1;
+            fadeInQuadratic4 = 1;
+            fadeInQuadratic5 = 1;
+        }
+        
+        if (_countTagMediaImg > 0)
+        {
+            if (_stateMediaAnimation === 0)
+            {
+                //VOID
+            }
+            else if (_stateMediaAnimation === 1)
+            {
+                opacityTagOverlayTransitionLeave = 0;
+                transformTagOverlayTransitionLeave = "scaleX(0)";
+                transformOriginTagOverlayTransitionLeave = "right";
+                
+                opacityTagLineTransitionLeave = 0;
+                leftTagLineTransitionLeave = "100dvw";
+                widthTagLineTransitionLeave = "15dvw";
+                
+                opacityTagMediaGallery[_indexMediaImg] = 1;
+                transformTagMediaGallery[_indexMediaImg] = "none";
+                
+                timePreviousRelative4 = performance.now();
+                timePreviousAbsolute4 = performance.now();
+                
+                _stateMediaAnimation = 2;
+            }
+            else if (_stateMediaAnimation === 2)
+            {
+                if (fadeIn4 < 1)
+                {
+                    opacityTagOverlayTransitionLeave = fadeInLinear4;
+                    transformTagOverlayTransitionLeave = "scaleX(" + fadeInLinear4 + ")";
+                    
+                    opacityTagLineTransitionLeave = fadeInLinear4 * (1 - fadeInQuadratic5);
+                    leftTagLineTransitionLeave = (100 - (100 * fadeInQuadratic4)) + "dvw";
+                    widthTagLineTransitionLeave = (15 - (15 * fadeInQuadratic4)) + "dvw";
+                    
+                    opacityTagMediaGallery[_indexMediaImg] = 1 - (0.5 * fadeInLinear4);
+                    transformTagMediaGallery[_indexMediaImg] = "scale(" + (1 - (0.05 * fadeInQuadratic4)) + ")";
+                }
+                else
+                {
+                    opacityTagOverlayTransitionLeave = 1;
+                    transformTagOverlayTransitionLeave = "none";
+                    
+                    opacityTagLineTransitionLeave = 0;
+                    leftTagLineTransitionLeave = "0dvw";
+                    widthTagLineTransitionLeave = "0dvw";
+                    
+                    opacityTagMediaGallery[_indexMediaImg] = 0.5;
+                    transformTagMediaGallery[_indexMediaImg] = "scale(" + 0.95 + ")";
+                }
+            }
+        }
+        ////////////////////////////////////////////////////////////////////////HREF ANIMATION
+        ////////////////////////////////////////BUTTON ANIMATION
+        if (_countTagButton > 0)
+        {
+            if (_stateButtonAnimation === 0)
+            {
+                //VOID
+            }
+            else if (_stateButtonAnimation === 1)
+            {
+                transformTagButtonGallery[_indexButton] = "none";
+                
+                timePreviousRelative4 = performance.now();
+                timePreviousAbsolute4 = performance.now();
+                
+                _stateButtonAnimation = 2;
+            }
+            else if (_stateButtonAnimation === 2)
+            {
+                if (fadeIn4 < 1)
+                {
+                    transformTagButtonGallery[_indexButton] = "scale(" + (1 + (0.15 * fadeInQuadratic4)) + ")";
+                }
+                else
+                {
+                    transformTagButtonGallery[_indexButton] = "scale(" + 1.15 + ")";
+                }
+            }
+        }
+        ////////////////////////////////////////BUTTON ANIMATION
+        
+        //bottomHeader = 160 + RECTANGLE_HEADER.height;
+        
+        if (_foundTagBack === false)
+        {
+            topGallery = V_WINDOW;//VERSION GALLERY
+        }
+        else
+        {
+            topGallery = 160;//VERSION PAGE
+        }
+        
+        //topFooter = RECTANGLE_FOOTER.height + 30;
+        topFooter = heightTagOverlayFooter + 30;
+        
+        if (_foundTagBack === false)
+        {
+            //scrollMax = RECTANGLE_GALLERY.height + 100 + topFooter;//VERSION GALLERY
+            scrollMax = heightTagOverlayGallery + 100 + topFooter;//VERSION GALLERY
+        }
+        else
+        {
+            //scrollMax = ((160 + RECTANGLE_GALLERY.height) - V_WINDOW) + 100 + topFooter;//VERSION PAGE
+            scrollMax = ((160 + heightTagOverlayGallery) - V_WINDOW) + 100 + topFooter;//VERSION PAGE
+        }
+        
+        if (scrollMax < 0)
+        {
+            scrollMax = 0;
+        }
+        
+        if (_eventScroll > 0)
+        {
+            _eventScroll = 0;
+        }
+        else if (_eventScroll < -scrollMax)
+        {
+            _eventScroll = -scrollMax;
+        }
+        
+        if (_eventScroll === 0)
+        {
+            opacity = 1;
+            scale = 1;
+        }
+        //else if (_eventScroll < -bottomHeader)
+        else if (_eventScroll < -500)
+        {
+            opacity = 0;
+            scale = 0.85;
+        }
+        else
+        {
+            //opacity = 1 + (1 / (bottomHeader / _eventScroll));
+            opacity = 1 + (1 / (500 / _eventScroll));
+            //scale = 1 + (0.15 / (bottomHeader / _eventScroll));
+            scale = 1 + (0.15 / (500 / _eventScroll));
+        }
+        
+      smoothAll = 1 - Math.pow(SMOOTH_ALL, TIME_DELTA);
+     //   _translateSmooth += (_eventScroll - _translateSmooth) * smoothAll;
+        opacitySmooth += (opacity - opacitySmooth) * smoothAll;
+        scaleSmooth += (scale - scaleSmooth) * smoothAll;
+        
+        //_translateSmooth = translateSmooth;
+        
+        //TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG
+        if (fadeIn < 1)
+        {
+            //_tagTextLoading.style.opacity = 1 - fadeInLinear;
+            //_tagBarLoading.style.opacity = 1 - fadeInLinear;
+            opacityTagOverlayTransitionEnter = /*1 - fadeInLinear*/1 - (0.2 * fadeInLinear);
+            transformTagOverlayTransitionEnter = "scaleX(" + (1 - fadeInQuadratic) + ")";
+            
+            opacityTagLineTransitionEnter = (1 - fadeInLinear) * fadeInQuadratic;
+            leftdisplayTagLineTransitionEnter = (100 - (100 * fadeInLinear)) + "dvw";
+            widthdisplayTagLineTransitionEnter = (15 - (15 * fadeInLinear)) + "dvw";
+        }
+        else
+        {
+            //_tagTextLoading.style.display = "none";
+            //_tagBarLoading.style.display = "none";
+            displayTagOverlayTransitionEnter = "none";
+            displayTagLineTransitionEnter = "none";
+        }
+        
+        for (index = 0; index < _countTagLetter; index++)
+        {
+            //widthPerLetter = bottomHeader / _countTagLetter;
+            widthPerLetter = 500 / _countTagLetter;//VERSION GALLERY ET VERSION PAGE
+            opacityLetter = 1 - (-_translateSmooth / (widthPerLetter + (widthPerLetter * (_countTagLetter - index))));
+            
+            if (opacityLetter < 0)
+            {
+                opacityLetter = 0;
+            }
+            else if (opacityLetter > 1)
+            {
+                opacityLetter = 1;
+            }
+            
+            widthLetter = _widthLetter[index] * opacityLetter;
+            
+            opacityTagLetter[index] = opacityLetter;
+            widthTagLetter[index] = widthLetter + "px";
+        }
+        
+        opacityTagName = fadeInLinear;
+        transformTagName = "translate(0px, " + (-50 * (1 - fadeInQuadratic)) + "px)";
+        
+        if (_foundTagBack === true)
+        {
+            let varAnimation = 0;
+            
+            if (_stateBackAnimation === 0)
+            {
+                varAnimation = 0;
+            }
+            else if (_stateBackAnimation === 1)
+            {
+                opacityTagOverlayTransitionLeave = 0;
+                transformTagOverlayTransitionLeave = "scaleX(0)";
+                transformOriginTagOverlayTransitionLeave = "left";
+                
+                opacityTagLineTransitionLeave = 0;
+                leftTagLineTransitionLeave = "0dvw";
+                widthTagLineTransitionLeave = "15dvw";
+                
+                varAnimation = 0;
+                
+                timePreviousRelative4 = performance.now();
+                timePreviousAbsolute4 = performance.now();
+                
+                _stateBackAnimation = 2;
+            }
+            else if (_stateBackAnimation === 2)
+            {
+                if (fadeIn4 < 1)
+                {
+                    opacityTagOverlayTransitionLeave = fadeInLinear4;
+                    transformTagOverlayTransitionLeave = "scaleX(" + fadeInLinear4 + ")";
+                    
+                    opacityTagLineTransitionLeave = fadeInLinear4 * (1 - fadeInQuadratic5);
+                    leftTagLineTransitionLeave = (100 * fadeInQuadratic4) + "dvw";
+                    widthTagLineTransitionLeave = (15 - (15 * fadeInQuadratic4)) + "dvw";
+                    
+                    varAnimation = fadeInQuadratic4;
+                }
+                else
+                {
+                    opacityTagOverlayTransitionLeave = 1;
+                    transformTagOverlayTransitionLeave = "none";
+                    
+                    opacityTagLineTransitionLeave = 0;
+                    leftTagLineTransitionLeave = "100dvw";
+                    widthTagLineTransitionLeave = "0dvw";
+                    
+                    varAnimation = 1;
+                }
+            }
+            
+            opacityTagBack = fadeInLinear;
+            transformTagBack = "translate(" + ((50 * (1 - fadeInQuadratic)) + (-15 * varAnimation)) + "px, 0px)";
+        }
+        
+        if (_foundTagOverlayHeader === true)
+        {
+            opacityTagOverlayHeader = opacitySmooth;
+            transformTagOverlayHeader = "translate(0px, " + (-400 * (1 - scaleSmooth)) + "px)";
+            
+            opacityTagOvertitleHeader = fadeInLinear;
+            transformTagOvertitleHeader = "translate(" + (-10 * (1 - fadeInQuadratic)) + "px, 0px)";
+            
+            opacityTagTitleHeader = fadeInLinear;
+            transformTagTitleHeader = "translate(" + (-30 * (1 - fadeInQuadratic)) + "px, 0px)";
+            
+            opacityTagSubtitleHeader = fadeInLinear;
+            transformTagSubtitleHeader = "translate(" + (-50 * (1 - fadeInQuadratic)) + "px, 0px)";
+            
+            opacityTagScrollDownHeader = fadeInLinear;
+            transformTagScrollDownHeader = "translate(" + (-35 * (1 - fadeInQuadratic)) + "px, " + (-35 * (1 - fadeInQuadratic)) + "px)";
+        }
+        
+        topTagOverlayGallery = topGallery + "px";
+        opacityTagOverlayGallery = fadeInLinear;
+        transformTagOverlayGallery = "translate(0px, " + (_translateSmooth) + "px)";
+        
+        if (_foundTagBack === true)
+        {
+            transformTagOvermaintitleGallery = "translate(" + (-10 * (1 - fadeInQuadratic)) + "px, 0px)";
+            transformTagMaintitleGallery = "translate(" + (-30 * (1 - fadeInQuadratic)) + "px, 0px)";
+        }
+        
+        //ratioMediaImg1 = Math.min(RECTANGLE_GALLERY.width, 800) * 0.7;
+        //WIP
+        ratioMediaImg1 = Math.min(widthTagOverlayGallery, 800) * 0.7;
+        //console.log("RECTANGLE_GALLERY.width = " + RECTANGLE_GALLERY.width + " clientWidth = " + _tagOverlayGallery.clientWidth);
+        
+        for (index = 0; index < _countTagMediaImg; index++)
+        {
+            heightTagMediaGallery[index] = ratioMediaImg1 + "px";
+        }
+        
+        ratioMediaImg2 = ratioMediaImg1 * 0.5;
+        
+        for (index = 0; index < _countTagMediaImg; index++)
+        {
+            //const RECTANGLE_IMG = _tagImg[index].getBoundingClientRect();
+            
+            if (ratioMediaImg2 < V_WINDOW)
+            {
+                //offsetImg = 100 * ((RECTANGLE_IMG.top + ratioMediaImg2) / V_WINDOW);
+                let calc = _tagImg[index].offsetParent.offsetParent.offsetTop + _tagImg[index].offsetParent.offsetTop + _translateSmooth;
+                offsetImg = 100 * ((calc + ratioMediaImg2) / V_WINDOW);
+                /*if (index === 5)
+                {
+                    calc = _tagImg[index].offsetParent.offsetParent.offsetTop + _tagImg[index].offsetParent.offsetTop + _translateSmooth;
+                    console.log("RECTANGLE_IMG.top = " + RECTANGLE_IMG.top + " calc = " + calc);
+                }*/
+                //offsetImg = 100 * ((calc + ratioMediaImg2) / V_WINDOW);
+            }
+            else
+            {
+                offsetImg = 50;
+            }
+            
+            objectPositionTagImg[index] = "50% " + offsetImg + "%";
+        }
+        
+        //TAG FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER
+        if (_eventScroll >= -scrollMax + 100)//VERSION GALLERY ET VERSION PAGE
+        {
+            opacityTranslateScale = 0;
+        }
+        else
+        {
+            opacityTranslateScale = 1 - ((scrollMax + _eventScroll) / 100);
+            //console.log("opacityTranslateScale = " + opacityTranslateScale + " _eventScroll = " + _eventScroll);
+        }
+        
+        opacityTranslateScaleSmooth += (opacityTranslateScale - opacityTranslateScaleSmooth) * smoothAll;
+        
+        opacityTagLineFooter = opacityTranslateScaleSmooth;
+        transformTagLineFooter = "translate(0px, " + (20 * (1 - opacityTranslateScaleSmooth)) + "px) scaleX(" + opacityTranslateScaleSmooth + ")";
+        
+        opacityTagContactFooter = opacityTranslateScaleSmooth;
+        transformTagContactFooter = "translate(0px, " + (100 * (1 - opacityTranslateScaleSmooth)) + "px)";
+        //TAG FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER
+        
+        //TAG RESPONSE
+        const TIME_DELTA2 = Math.min((time - timePreviousRelative2) * 0.001, 0.04);
+        
+        timePreviousRelative2 = time;
+        
+        fadeIn2 = (time - timePreviousAbsolute2) * 0.001;
+        
+        if (fadeIn2 < 1)
+        {
+            fadeInLinear2 = fadeIn2;
+            fadeInQuadratic2 = Math.min(1, Math.max(0, 1 - Math.pow(1 - fadeIn2, 2)));
+            fadeInQuadratic3 = Math.min(1, Math.max(0, Math.pow(fadeIn2, 2)));
+        }
+        else
+        {
+            fadeInLinear2 = 1;
+            fadeInQuadratic2 = 1;
+            fadeInQuadratic3 = 1;
+        }
+        
+        if (_stateResponseAnimation === 0)
+        {
+            //VOID
+        }
+        else if (_stateResponseAnimation === 1)
+        {
+            timePreviousRelative2 = performance.now() - timeRetryDuringAnimation;
+            timePreviousAbsolute2 = performance.now() - timeRetryDuringAnimation;
+            
+            //_tagResponseContact.style.opacity = 0;
+            //_tagResponseContact.style.transform = "translate(0px, 50px)";
+            
+            backgroundColorTagResponseContact = "var(--colorF)";
+            textContentTagResponseContact = String.fromCodePoint("8635") + " Proceed, please wait...";
+            
+            _stateResponseAnimation = 2;
+        }
+        else if (_stateResponseAnimation === 2)
+        {
+            opacityTagResponseContact = fadeInLinear2 * opacityTranslateScaleSmooth;
+            transformTagResponseContact = "translate(0px, " + ((50 * (1 - fadeInQuadratic2)) + (100 * (1 - opacityTranslateScaleSmooth))) + "px)";
+            
+            if (time - timePreviousAbsolute2 >= 2000)
+            {
+                if (_stateResponseServer === 1)
+                {
+                    _tagInputContactFooter.value = "";
+                    
+                    backgroundColorTagResponseContact = "var(--colorG)";
+                    textContentTagResponseContact = String.fromCodePoint("8594") + " Your email has been sent !";
+                }
+                else if (_stateResponseServer === 2)
+                {
+                    backgroundColorTagResponseContact = "var(--colorH)";
+                    textContentTagResponseContact = String.fromCodePoint("9888") + " An error occured, please try again.";
+                }
+                
+                if (_stateResponseServer === 1 || _stateResponseServer === 2)
+                {
+                    timePreviousRelative2 = performance.now();
+                    timePreviousAbsolute2 = performance.now();
+                    
+                    _stateResponseAnimation = 3;
+                }
+            }
+        }
+        else if (_stateResponseAnimation === 3)
+        {
+            opacityTagResponseContact = opacityTranslateScaleSmooth;
+            transformTagResponseContact = "translate(0px, " + (100 * (1 - opacityTranslateScaleSmooth)) + "px)";
+            
+            if (time - timePreviousAbsolute2 >= 1000)
+            {
+                //_tagInputContactFooter.disabled = false;
+                
+                timePreviousRelative2 = performance.now();
+                timePreviousAbsolute2 = performance.now();
+                
+                timeRetryDuringAnimation = 1000;
+                
+                _stateResponseAnimation = 4;
+            }
+        }
+        else if (_stateResponseAnimation === 4)
+        {
+            opacityTagResponseContact = (1 - fadeInLinear2) * opacityTranslateScaleSmooth;
+            transformTagResponseContact = "translate(0px, " + ((50 * fadeInQuadratic3) + (100 * (1 - opacityTranslateScaleSmooth))) + "px)";
+            
+            timeRetryDuringAnimation = 1000 - (time - timePreviousAbsolute2);
+            
+            if (time - timePreviousAbsolute2 >= 1000)
+            {
+                opacityTagResponseContact = 0;
+                transformTagResponseContact = "translate(0px, 50px)";
+                
+                _stateResponseAnimation = 0;
+            }
+        }
+        //TAG RESPONSE
+        
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         
         //STATE
         /*if (performance.now() > timeState)
@@ -1359,7 +1909,7 @@ function particuleAnimation()
             
             magnitude = Math.min(SAFE_SQRT + Math.sqrt((xBlur * xBlur) + (yBlur * yBlur)), 1);
             
-            fadeIn = (time - timePreviousAbsolute) * 0.001;
+           // fadeIn = (time - timePreviousAbsolute) * 0.001;
             
             if (fadeIn > 1)
             {
@@ -1387,6 +1937,92 @@ function particuleAnimation()
             newRandomizeAttractor = 0;
         }*/
         
+        
+        _tagOverlayTransitionEnter.style.display = displayTagOverlayTransitionEnter;
+        _tagOverlayTransitionEnter.style.opacity = opacityTagOverlayTransitionEnter;
+        _tagOverlayTransitionEnter.style.transform = transformTagOverlayTransitionEnter;
+        
+        _tagLineTransitionEnter.style.display = displayTagLineTransitionEnter;
+        _tagLineTransitionEnter.style.opacity = opacityTagLineTransitionEnter;
+        _tagLineTransitionEnter.style.left = leftdisplayTagLineTransitionEnter;
+        _tagLineTransitionEnter.style.width = widthdisplayTagLineTransitionEnter;
+        
+        _tagOverlayTransitionLeave.style.opacity = opacityTagOverlayTransitionLeave;
+        _tagOverlayTransitionLeave.style.transform = transformTagOverlayTransitionLeave;
+        _tagOverlayTransitionLeave.style.transformOrigin = transformOriginTagOverlayTransitionLeave;
+        
+        _tagLineTransitionLeave.style.opacity = opacityTagLineTransitionLeave;
+        _tagLineTransitionLeave.style.left = leftTagLineTransitionLeave;
+        _tagLineTransitionLeave.style.width = widthTagLineTransitionLeave;
+        
+        _tagName.style.opacity = opacityTagName;
+        _tagName.style.transform = transformTagName;
+        
+        for (index = 0; index < _countTagLetter; index++)
+        {
+          _tagLetter[index].style.opacity = opacityTagLetter[index];
+          _tagLetter[index].style.width = widthTagLetter[index];
+        }
+        
+        if (_foundTagBack === true)
+        {
+            _tagBack.style.opacity = opacityTagBack;
+            _tagBack.style.transform = transformTagBack;
+        }
+        
+        if (_foundTagOverlayHeader === true)
+        {
+           _tagOverlayHeader.style.opacity = opacityTagOverlayHeader;
+           _tagOverlayHeader.style.transform = transformTagOverlayHeader;
+            
+            _tagOvertitleHeader.style.opacity = opacityTagOvertitleHeader;
+            _tagOvertitleHeader.style.transform = transformTagOvertitleHeader;
+            
+            _tagTitleHeader.style.opacity = opacityTagTitleHeader;
+            _tagTitleHeader.style.transform = transformTagTitleHeader;
+            
+            _tagSubtitleHeader.style.opacity = opacityTagSubtitleHeader;
+            _tagSubtitleHeader.style.transform = transformTagSubtitleHeader;
+            
+            _tagScrollDownHeader.style.opacity = opacityTagScrollDownHeader;
+            _tagScrollDownHeader.style.transform = transformTagScrollDownHeader;
+        }
+        
+        _tagOverlayGallery.style.top = topTagOverlayGallery;
+        _tagOverlayGallery.style.opacity = opacityTagOverlayGallery;
+        _tagOverlayGallery.style.transform = transformTagOverlayGallery;
+        
+        if (_foundTagBack === true)
+        {
+            _tagOvermaintitleGallery.style.transform = transformTagOvermaintitleGallery;
+            _tagMaintitleGallery.style.transform = transformTagMaintitleGallery;
+        }
+        
+        for (index = 0; index < _countTagMediaImg; index++)
+        {
+            _tagMediaGallery[index].style.opacity = opacityTagMediaGallery[index];
+            _tagMediaGallery[index].style.height = heightTagMediaGallery[index];
+            _tagMediaGallery[index].style.transform = transformTagMediaGallery[index];
+            
+            _tagImg[index].style.objectPosition = objectPositionTagImg[index];
+        }
+        
+        for (index = 0; index < _countTagButton; index++)
+        {
+            _tagButtonGallery[index].style.transform = transformTagButtonGallery[index];
+        }
+        
+        _tagLineFooter.style.opacity = opacityTagLineFooter;
+        _tagLineFooter.style.transform = transformTagLineFooter;
+        
+        _tagContactFooter.style.opacity = opacityTagContactFooter;
+        _tagContactFooter.style.transform = transformTagContactFooter;
+        
+        _tagResponseContact.textContent = textContentTagResponseContact;
+        _tagResponseContact.style.opacity = opacityTagResponseContact;
+        _tagResponseContact.style.backgroundColor = backgroundColorTagResponseContact;
+        _tagResponseContact.style.transform = transformTagResponseContact;
+        
         //DRAW
         _webGL.bindBuffer(_webGL.ARRAY_BUFFER, bufferPosition);
         _webGL.bufferSubData(_webGL.ARRAY_BUFFER, 0, positionRender);
@@ -1399,6 +2035,7 @@ function particuleAnimation()
         
         _webGL.clear(_webGL.COLOR_BUFFER_BIT | _webGL.DEPTH_BUFFER_BIT | _webGL.STENCIL_BUFFER_BIT);
         _webGL.drawArrays(_webGL.POINTS, 0, COUNT_PARTICLE);
+        
         
         requestAnimationFrame(updateAnimation);
     }
@@ -1415,6 +2052,7 @@ function particuleAnimation()
     startBufferDiameterGradient();
     startBufferColorAlpha();
     
+    //setInterval (updateAnimation, 10);
     updateAnimation(timePreviousRelative);
 }
 
@@ -1523,520 +2161,97 @@ function screenOrientation()
     screen.orientation.addEventListener("change", _FUNCTION.change);
 }
 
+    //VARIABLE TAG//////////////////////////////////////////////////
+    let displayTagOverlayTransitionEnter = 0;
+    let opacityTagOverlayTransitionEnter = 0;
+    let transformTagOverlayTransitionEnter = 0;
+    let displayTagLineTransitionEnter = 0;
+    let opacityTagLineTransitionEnter = 0;
+    let leftdisplayTagLineTransitionEnter = 0;
+    let widthdisplayTagLineTransitionEnter = 0;
+    let opacityTagOverlayTransitionLeave = 0;
+    let transformTagOverlayTransitionLeave = 0;
+    let transformOriginTagOverlayTransitionLeave = 0;
+    let opacityTagLineTransitionLeave = 0;
+    let leftTagLineTransitionLeave = 0;
+    let widthTagLineTransitionLeave = 0;
+    let opacityTagName = 0;
+    let transformTagName = 0;
+    let opacityTagLetter = []
+    let widthTagLetter = [];
+    let opacityTagBack = 0;
+    let transformTagBack = 0;
+    let opacityTagOverlayHeader = 0;
+    let transformTagOverlayHeader = 0;
+    let opacityTagOvertitleHeader = 0;
+    let transformTagOvertitleHeader = 0;
+    let opacityTagTitleHeader = 0;
+    let transformTagTitleHeader = 0;
+    let opacityTagSubtitleHeader = 0;
+    let transformTagSubtitleHeader = 0;
+    let opacityTagScrollDownHeader = 0;
+    let transformTagScrollDownHeader = 0;
+    let topTagOverlayGallery = 0;
+    let opacityTagOverlayGallery = 0;
+    let transformTagOverlayGallery = 0;
+    let transformTagOvermaintitleGallery = 0;
+    let transformTagMaintitleGallery = 0;
+    let opacityTagMediaGallery = [];
+    let heightTagMediaGallery = [];
+    let transformTagMediaGallery = [];
+    let objectPositionTagImg = [];
+    let transformTagButtonGallery = [];
+    let opacityTagLineFooter = 0;
+    let transformTagLineFooter = 0;
+    let opacityTagContactFooter = 0;
+    let transformTagContactFooter = 0;
+    let textContentTagResponseContact = 0;
+    let opacityTagResponseContact = 0;
+    let backgroundColorTagResponseContact = 0;
+    let transformTagResponseContact = 0;
+    //VARIABLE TAG//////////////////////////////////////////////////
+    
+
 function interfaceAnimation()
 {
-    let timePreviousRelative = 0;
-    let timePreviousAbsolute = 0;
-    let fadeIn = 0;
-    let fadeInLinear = 0;
-    let fadeInQuadratic = 0;
-    let index = 0;
-    let bottomHeader = 0;
-    let topGallery = 0;
-    let topFooter = 0;
-    let scrollMax = 0;
-    let smoothAll = 0;
-    const SMOOTH_ALL = 0.01;
-    //let translateSmooth = 0;
-    let opacitySmooth = 1;
-    let scaleSmooth = 1;
-    let opacity = 1;
-    let scale = 1;
-    let ratioMediaImg1 = 0;
-    let ratioMediaImg2 = 0;
-    let offsetImg = 0;
-    let widthPerLetter = 0;
-    let opacityLetter = 0;
-    let widthLetter = 0;
-    let opacityTranslateScale = 0;
-    let opacityTranslateScaleSmooth = 0;
-    //TAG RESPONSE
-    let timePreviousRelative2 = 0;
-    let timePreviousAbsolute2 = 0;
-    let fadeIn2 = 0;
-    let fadeInLinear2 = 0;
-    let fadeInQuadratic2 = 0;
-    let fadeInQuadratic3 = 0;
-    let timeRetryDuringAnimation = 0;
-    //TAG RESPONSE
-    //HREF ANIMATION
-    let timePreviousRelative4 = 0;
-    let timePreviousAbsolute4 = 0;
-    let fadeIn4 = 0;
-    let fadeInLinear4 = 0;
-    let fadeInQuadratic4 = 0;
-    let fadeInQuadratic5 = 0;
-    //HREF ANIMATION
     
-    timePreviousRelative = performance.now();
-    timePreviousAbsolute = performance.now();
     
-    function updateAnimation(time)
+    
+    
+    _FUNCTION.pageshow = function()
     {
-        const TIME_DELTA = Math.min((time - timePreviousRelative) * 0.001, 0.04);
-        const V_WINDOW = window.innerHeight;
-        //const RECTANGLE_HEADER = _tagOverlayHeader.getBoundingClientRect();
-        const RECTANGLE_GALLERY = _tagOverlayGallery.getBoundingClientRect();
-        const RECTANGLE_FOOTER = _tagOverlayFooter.getBoundingClientRect();
-        
-        timePreviousRelative = time;
-        
-        fadeIn = (time - timePreviousAbsolute) * 0.001;
-        
-        if (fadeIn < 1)
+        if (event.persisted === true)
         {
-            fadeInLinear = fadeIn;
-            fadeInQuadratic = Math.min(1, Math.max(0, 1 - Math.pow(1 - fadeIn, 2)));
-            fadeInQuadratic1 = Math.min(1, Math.max(0, Math.pow(fadeIn, 2)));
-        }
-        else
-        {
-            fadeInLinear = 1;
-            fadeInQuadratic = 1;
-            fadeInQuadratic1 = 1;
-        }
-        
-        ////////////////////////////////////////////////////////////////////////HREF ANIMATION
-        const TIME_DELTA4 = Math.min((time - timePreviousRelative4) * 0.001, 0.04);
-        
-        timePreviousRelative4 = time;
-        
-        fadeIn4 = (time - timePreviousAbsolute4) * 0.001;
-        
-        if (fadeIn4 < 1)
-        {
-            fadeInLinear4 = fadeIn4;
-            fadeInQuadratic4 = Math.min(1, Math.max(0, 1 - Math.pow(1 - fadeIn4, 2)));
-            fadeInQuadratic5 = Math.min(1, Math.max(0, Math.pow(fadeIn4, 2)));
-        }
-        else
-        {
-            fadeInLinear4 = 1;
-            fadeInQuadratic4 = 1;
-            fadeInQuadratic5 = 1;
-        }
-        
-        if (_countTagMediaImg > 0)
-        {
-            if (_stateMediaAnimation === 0)
-            {
-                //VOID
-            }
-            else if (_stateMediaAnimation === 1)
-            {
-                _tagOverlayTransitionLeave.style.opacity = 0;
-                _tagOverlayTransitionLeave.style.transform = "scaleX(0)";
-                _tagOverlayTransitionLeave.style.transformOrigin = "right";
-                
-                _tagLineTransitionLeave.style.opacity = 0;
-                _tagLineTransitionLeave.style.left = "100dvw";
-                _tagLineTransitionLeave.style.width = "15dvw";
-                
-                _tagMediaGallery[_indexMediaImg].style.opacity = 1;
-                _tagMediaGallery[_indexMediaImg].style.transform = "none";
-                
-                timePreviousRelative4 = performance.now();
-                timePreviousAbsolute4 = performance.now();
-                
-                _stateMediaAnimation = 2;
-            }
-            else if (_stateMediaAnimation === 2)
-            {
-                if (fadeIn4 < 1)
-                {
-                    _tagOverlayTransitionLeave.style.opacity = fadeInLinear4;
-                    _tagOverlayTransitionLeave.style.transform = "scaleX(" + fadeInLinear4 + ")";
-                    
-                    _tagLineTransitionLeave.style.opacity = fadeInLinear4;
-                    _tagLineTransitionLeave.style.left = (100 - (100 * fadeInQuadratic4)) + "dvw";
-                    _tagLineTransitionLeave.style.width = (15 - (15 * fadeInQuadratic4)) + "dvw";
-                    
-                    _tagMediaGallery[_indexMediaImg].style.opacity = 1 - (0.5 * fadeInLinear4);
-                    _tagMediaGallery[_indexMediaImg].style.transform = "scale(" + (1 - (0.05 * fadeInQuadratic4)) + ")";
-                }
-                else
-                {
-                    _tagOverlayTransitionLeave.style.opacity = 1;
-                    _tagOverlayTransitionLeave.style.transform = "none";
-                    
-                    _tagLineTransitionLeave.style.opacity = 1;
-                    _tagLineTransitionLeave.style.left = "0dvw";
-                    _tagLineTransitionLeave.style.width = "0dvw";
-                    
-                    _tagMediaGallery[_indexMediaImg].style.opacity = 0.5;
-                    _tagMediaGallery[_indexMediaImg].style.transform = "scale(" + 0.95 + ")";
-                }
-            }
-        }
-        ////////////////////////////////////////////////////////////////////////HREF ANIMATION
-        ////////////////////////////////////////BUTTON ANIMATION
-        if (_countTagButton > 0)
-        {
-            if (_stateButtonAnimation === 0)
-            {
-                //VOID
-            }
-            else if (_stateButtonAnimation === 1)
-            {
-                _tagButtonGallery[_indexButton].style.transform = "none";
-                
-                timePreviousRelative4 = performance.now();
-                timePreviousAbsolute4 = performance.now();
-                
-                _stateButtonAnimation = 2;
-            }
-            else if (_stateButtonAnimation === 2)
-            {
-                if (fadeIn4 < 1)
-                {
-                    _tagButtonGallery[_indexButton].style.transform = "scale(" + (1 + (0.15 * fadeInQuadratic4)) + ")";
-                }
-                else
-                {
-                    _tagButtonGallery[_indexButton].style.transform = "scale(" + 1.15 + ")";
-                }
-            }
-        }
-        ////////////////////////////////////////BUTTON ANIMATION
-        
-        //bottomHeader = 160 + RECTANGLE_HEADER.height;
-        
-        if (_foundTagBack === false)
-        {
-            topGallery = V_WINDOW;//VERSION GALLERY
-        }
-        else
-        {
-            topGallery = 160;//VERSION PAGE
-        }
-        
-        topFooter = RECTANGLE_FOOTER.height + 30;
-        
-        if (_foundTagBack === false)
-        {
-            scrollMax = RECTANGLE_GALLERY.height + 100 + topFooter;//VERSION GALLERY
-        }
-        else
-        {
-            scrollMax = ((160 + RECTANGLE_GALLERY.height) - V_WINDOW) + 100 + topFooter;//VERSION PAGE
-        }
-        
-        if (scrollMax < 0)
-        {
-            scrollMax = 0;
-        }
-        
-        if (_eventScroll > 0)
-        {
-            _eventScroll = 0;
-        }
-        else if (_eventScroll < -scrollMax)
-        {
-            _eventScroll = -scrollMax;
-        }
-        
-        if (_eventScroll === 0)
-        {
-            opacity = 1;
-            scale = 1;
-        }
-        //else if (_eventScroll < -bottomHeader)
-        else if (_eventScroll < -500)
-        {
-            opacity = 0;
-            scale = 0.85;
-        }
-        else
-        {
-            //opacity = 1 + (1 / (bottomHeader / _eventScroll));
-            opacity = 1 + (1 / (500 / _eventScroll));
-            //scale = 1 + (0.15 / (bottomHeader / _eventScroll));
-            scale = 1 + (0.15 / (500 / _eventScroll));
-        }
-        
-        smoothAll = 1 - Math.pow(SMOOTH_ALL, TIME_DELTA);
-        _translateSmooth += (_eventScroll - _translateSmooth) * smoothAll;
-        opacitySmooth += (opacity - opacitySmooth) * smoothAll;
-        scaleSmooth += (scale - scaleSmooth) * smoothAll;
-        
-        //_translateSmooth = translateSmooth;
-        
-        //TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG TAG
-        if (fadeIn < 1)
-        {
-            //_tagTextLoading.style.opacity = 1 - fadeInLinear;
-            //_tagBarLoading.style.opacity = 1 - fadeInLinear;
-            _tagOverlayTransitionEnter.style.opacity = /*1 - fadeInLinear*/1 - (0.2 * fadeInLinear);
-            _tagOverlayTransitionEnter.style.transform = "scaleX(" + (1 - fadeInQuadratic) + ")";
+            _stateBackAnimation = 0;
+            _stateButtonAnimation = 0;
+            _stateMediaAnimation = 0;
             
-            _tagLineTransitionEnter.style.opacity = 1 - fadeInLinear;
-            _tagLineTransitionEnter.style.left = (100 - (100 * fadeInLinear)) + "dvw";
-            _tagLineTransitionEnter.style.width = (15 - (15 * fadeInLinear)) + "dvw";
-        }
-        else
-        {
-            //_tagTextLoading.style.display = "none";
-            //_tagBarLoading.style.display = "none";
-            _tagOverlayTransitionEnter.style.display = "none";
-            _tagLineTransitionEnter.style.display = "none";
-        }
-        
-        for (index = 0; index < _countTagLetter; index++)
-        {
-            //widthPerLetter = bottomHeader / _countTagLetter;
-            widthPerLetter = 500 / _countTagLetter;//VERSION GALLERY ET VERSION PAGE
-            opacityLetter = 1 - (-_translateSmooth / (widthPerLetter + (widthPerLetter * (_countTagLetter - index))));
+            displayTagOverlayTransitionEnter = "none";
             
-            if (opacityLetter < 0)
+            displayTagLineTransitionEnter = "none";
+            
+            opacityTagOverlayTransitionLeave = 0;
+            transformTagOverlayTransitionLeave = "scaleX(0)";
+            
+            opacityTagLineTransitionLeave = 0;
+            widthTagLineTransitionLeave = "15dvw";
+            
+            if (_countTagMediaImg > 0)
             {
-                opacityLetter = 0;
-            }
-            else if (opacityLetter > 1)
-            {
-                opacityLetter = 1;
+                opacityTagMediaGallery[_indexMediaImg] = 1;
+                transformTagMediaGallery[_indexMediaImg] = "none";
             }
             
-            widthLetter = _widthLetter[index] * opacityLetter;
-            
-            _tagLetter[index].style.opacity = opacityLetter;
-            _tagLetter[index].style.width = widthLetter + "px";
-        }
-        
-        _tagName.style.opacity = fadeInLinear;
-        _tagName.style.transform = "translate(0px, " + (-50 * (1 - fadeInQuadratic)) + "px)";
-        
-        if (_foundTagBack === true)
-        {
-            let varAnimation = 0;
-            
-            if (_stateBackAnimation === 0)
+            if (_countTagButton > 0)
             {
-                varAnimation = 0;
-            }
-            else if (_stateBackAnimation === 1)
-            {
-                _tagOverlayTransitionLeave.style.opacity = 0;
-                _tagOverlayTransitionLeave.style.transform = "scaleX(0)";
-                _tagOverlayTransitionLeave.style.transformOrigin = "left";
-                
-                _tagLineTransitionLeave.style.opacity = 0;
-                _tagLineTransitionLeave.style.left = "0dvw";
-                _tagLineTransitionLeave.style.width = "15dvw";
-                
-                varAnimation = 0;
-                
-                timePreviousRelative4 = performance.now();
-                timePreviousAbsolute4 = performance.now();
-                
-                _stateBackAnimation = 2;
-            }
-            else if (_stateBackAnimation === 2)
-            {
-                if (fadeIn4 < 1)
-                {
-                    _tagOverlayTransitionLeave.style.opacity = fadeInLinear4;
-                    _tagOverlayTransitionLeave.style.transform = "scaleX(" + fadeInLinear4 + ")";
-                    
-                    _tagLineTransitionLeave.style.opacity = fadeInLinear4;
-                    _tagLineTransitionLeave.style.left = (100 * fadeInQuadratic4) + "dvw";
-                    _tagLineTransitionLeave.style.width = (15 - (15 * fadeInQuadratic4)) + "dvw";
-                    
-                    varAnimation = fadeInQuadratic4;
-                }
-                else
-                {
-                    _tagOverlayTransitionLeave.style.opacity = 1;
-                    _tagOverlayTransitionLeave.style.transform = "none";
-                    
-                    _tagLineTransitionLeave.style.opacity = 1;
-                    _tagLineTransitionLeave.style.left = "100dvw";
-                    _tagLineTransitionLeave.style.width = "0dvw";
-                    
-                    varAnimation = 1;
-                }
+                transformTagButtonGallery[_indexButton] = "none";
             }
             
-            _tagBack.style.opacity = fadeInLinear;
-            _tagBack.style.transform = "translate(" + ((50 * (1 - fadeInQuadratic)) + (-15 * varAnimation)) + "px, 0px)";
+            _inhibitClick = false;
         }
-        
-        if (_foundTagOverlayHeader === true)
-        {
-            _tagOverlayHeader.style.opacity = opacitySmooth;
-            _tagOverlayHeader.style.transform = "scale(" + scaleSmooth + ")";
-            
-            _tagOvertitleHeader.style.opacity = fadeInLinear;
-            _tagOvertitleHeader.style.transform = "translate(" + (-10 * (1 - fadeInQuadratic)) + "px, 0px)";
-            
-            _tagTitleHeader.style.opacity = fadeInLinear;
-            _tagTitleHeader.style.transform = "translate(" + (-30 * (1 - fadeInQuadratic)) + "px, 0px)";
-            
-            _tagSubtitleHeader.style.opacity = fadeInLinear;
-            _tagSubtitleHeader.style.transform = "translate(" + (-50 * (1 - fadeInQuadratic)) + "px, 0px)";
-            
-            _tagScrollDownHeader.style.opacity = fadeInLinear;
-            _tagScrollDownHeader.style.transform = "translate(" + (-35 * (1 - fadeInQuadratic)) + "px, " + (-35 * (1 - fadeInQuadratic)) + "px)";
-        }
-        
-        _tagOverlayGallery.style.top = topGallery + "px";
-        _tagOverlayGallery.style.opacity = fadeInLinear;
-        _tagOverlayGallery.style.transform = "translate(0px, " + (_translateSmooth) + "px)";
-        
-        if (_foundTagBack === true)
-        {
-            _tagOvermaintitleGallery.style.transform = "translate(" + (-10 * (1 - fadeInQuadratic)) + "px, 0px)";
-            _tagMaintitleGallery.style.transform = "translate(" + (-30 * (1 - fadeInQuadratic)) + "px, 0px)";
-        }
-        
-        ratioMediaImg1 = Math.min(RECTANGLE_GALLERY.width, 800) * 0.7;
-        
-        for (index = 0; index < _countTagMediaImg; index++)
-        {
-            _tagMediaGallery[index].style.height = ratioMediaImg1 + "px";
-        }
-        
-        ratioMediaImg2 = ratioMediaImg1 * 0.5;
-        
-        for (index = 0; index < _countTagMediaImg; index++)
-        {
-            const RECTANGLE_IMG = _tagImg[index].getBoundingClientRect();
-            
-            if (ratioMediaImg2 < V_WINDOW)
-            {
-                offsetImg = 100 * ((RECTANGLE_IMG.top + ratioMediaImg2) / V_WINDOW);
-            }
-            else
-            {
-                offsetImg = 50;
-            }
-            
-            _tagImg[index].style.objectPosition = "50% " + offsetImg + "%";
-        }
-        
-        //TAG FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER
-        if (_eventScroll >= -scrollMax + 100)//VERSION GALLERY ET VERSION PAGE
-        {
-            opacityTranslateScale = 0;
-        }
-        else
-        {
-            opacityTranslateScale = 1 - ((scrollMax + _eventScroll) / 100);
-            //console.log("opacityTranslateScale = " + opacityTranslateScale + " _eventScroll = " + _eventScroll);
-        }
-        
-        opacityTranslateScaleSmooth += (opacityTranslateScale - opacityTranslateScaleSmooth) * smoothAll;
-        
-        _tagLineFooter.style.opacity = opacityTranslateScaleSmooth;
-        _tagLineFooter.style.transform = "translate(0px, " + (20 * (1 - opacityTranslateScaleSmooth)) + "px) scaleX(" + opacityTranslateScaleSmooth + ")";
-        
-        _tagContactFooter.style.opacity = opacityTranslateScaleSmooth;
-        _tagContactFooter.style.transform = "translate(0px, " + (100 * (1 - opacityTranslateScaleSmooth)) + "px)";
-        //TAG FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER
-        
-        //TAG RESPONSE
-        const TIME_DELTA2 = Math.min((time - timePreviousRelative2) * 0.001, 0.04);
-        
-        timePreviousRelative2 = time;
-        
-        fadeIn2 = (time - timePreviousAbsolute2) * 0.001;
-        
-        if (fadeIn2 < 1)
-        {
-            fadeInLinear2 = fadeIn2;
-            fadeInQuadratic2 = Math.min(1, Math.max(0, 1 - Math.pow(1 - fadeIn2, 2)));
-            fadeInQuadratic3 = Math.min(1, Math.max(0, Math.pow(fadeIn2, 2)));
-        }
-        else
-        {
-            fadeInLinear2 = 1;
-            fadeInQuadratic2 = 1;
-            fadeInQuadratic3 = 1;
-        }
-        
-        if (_stateResponseAnimation === 0)
-        {
-            //VOID
-        }
-        else if (_stateResponseAnimation === 1)
-        {
-            timePreviousRelative2 = performance.now() - timeRetryDuringAnimation;
-            timePreviousAbsolute2 = performance.now() - timeRetryDuringAnimation;
-            
-            //_tagResponseContact.style.opacity = 0;
-            //_tagResponseContact.style.transform = "translate(0px, 50px)";
-            
-            _tagResponseContact.style.backgroundColor = "var(--colorF)";
-            _tagResponseContact.textContent = String.fromCodePoint("8635") + " Proceed, please wait...";
-            
-            _stateResponseAnimation = 2;
-        }
-        else if (_stateResponseAnimation === 2)
-        {
-            _tagResponseContact.style.opacity = fadeInLinear2 * opacityTranslateScaleSmooth;
-            _tagResponseContact.style.transform = "translate(0px, " + ((50 * (1 - fadeInQuadratic2)) + (100 * (1 - opacityTranslateScaleSmooth))) + "px)";
-            
-            if (time - timePreviousAbsolute2 >= 2000)
-            {
-                if (_stateResponseServer === 1)
-                {
-                    _tagInputContactFooter.value = "";
-                    
-                    _tagResponseContact.style.backgroundColor = "var(--colorG)";
-                    _tagResponseContact.textContent = String.fromCodePoint("8594") + " Your email has been sent !";
-                }
-                else if (_stateResponseServer === 2)
-                {
-                    _tagResponseContact.style.backgroundColor = "var(--colorH)";
-                    _tagResponseContact.textContent = String.fromCodePoint("9888") + " An error occured, please try again.";
-                }
-                
-                if (_stateResponseServer === 1 || _stateResponseServer === 2)
-                {
-                    timePreviousRelative2 = performance.now();
-                    timePreviousAbsolute2 = performance.now();
-                    
-                    _stateResponseAnimation = 3;
-                }
-            }
-        }
-        else if (_stateResponseAnimation === 3)
-        {
-            _tagResponseContact.style.opacity = opacityTranslateScaleSmooth;
-            _tagResponseContact.style.transform = "translate(0px, " + (100 * (1 - opacityTranslateScaleSmooth)) + "px)";
-            
-            if (time - timePreviousAbsolute2 >= 1000)
-            {
-                //_tagInputContactFooter.disabled = false;
-                
-                timePreviousRelative2 = performance.now();
-                timePreviousAbsolute2 = performance.now();
-                
-                timeRetryDuringAnimation = 1000;
-                
-                _stateResponseAnimation = 4;
-            }
-        }
-        else if (_stateResponseAnimation === 4)
-        {
-            _tagResponseContact.style.opacity = (1 - fadeInLinear2) * opacityTranslateScaleSmooth;
-            _tagResponseContact.style.transform = "translate(0px, " + ((50 * fadeInQuadratic3) + (100 * (1 - opacityTranslateScaleSmooth))) + "px)";
-            
-            timeRetryDuringAnimation = 1000 - (time - timePreviousAbsolute2);
-            
-            if (time - timePreviousAbsolute2 >= 1000)
-            {
-                _tagResponseContact.style.opacity = 0;
-                _tagResponseContact.style.transform = "translate(0px, 50px)";
-                
-                _stateResponseAnimation = 0;
-            }
-        }
-        //TAG RESPONSE
-        
-        requestAnimationFrame(updateAnimation);
     }
     
-    updateAnimation(timePreviousRelative);
+    window.addEventListener("pageshow", _FUNCTION.pageshow);
 }
 
 function href()
@@ -2227,7 +2442,7 @@ function eventRemove()
     window.removeEventListener("pageshow", _FUNCTION.pageshow);
 }
 
-function reset()
+/*function reset()
 {
     _FUNCTION.pageshow = function()
     {
@@ -2238,7 +2453,7 @@ function reset()
             _stateButtonAnimation = 0;
             _stateMediaAnimation = 0;
             
-            _tagOverlayTransitionEnter.style.display = "none";
+            *//*_tagOverlayTransitionEnter.style.display = "none";
             _tagLineTransitionEnter.style.display = "none";
             _tagOverlayTransitionLeave.style.opacity = 0;
             _tagOverlayTransitionLeave.style.transform = "scaleX(0)";
@@ -2254,6 +2469,27 @@ function reset()
             {
                 _tagMediaGallery[_indexMediaImg].style.opacity = 1;
                 _tagMediaGallery[_indexMediaImg].style.transform = "none";
+            }*//*
+            
+            displayTagOverlayTransitionEnter = "none";
+            
+            displayTagLineTransitionEnter = "none";
+            
+            opacityTagOverlayTransitionLeave = 0;
+            transformTagOverlayTransitionLeave = "scaleX(0)";
+            
+            opacityTagLineTransitionLeave = 0;
+            widthTagLineTransitionLeave = "15dvw";
+            
+            if (_countTagMediaImg > 0)
+            {
+                opacityTagMediaGallery[_indexMediaImg] = 1;
+                transformTagMediaGallery[_indexMediaImg] = "none";
+            }
+            
+            if (_countTagButton > 0)
+            {
+                transformTagButtonGallery[_indexButton] = "none";
             }
             
             _inhibitClick = false;
@@ -2261,7 +2497,7 @@ function reset()
     }
     
     window.addEventListener("pageshow", _FUNCTION.pageshow);
-}
+}*/
 
 async function loading()
 {
@@ -2298,7 +2534,7 @@ async function loading()
     tag();
     
     eventRemove();
-    reset();
+    //reset();
     
     await document.fonts.load("0px fontA");
     await document.fonts.ready;
