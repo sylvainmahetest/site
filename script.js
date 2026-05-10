@@ -1491,7 +1491,8 @@ function windowResize()
 		
 		if (_foundTagBack === false)
 		{
-			fitTextParentWidthWindowHeight(160, _tagTitleHeader, 30, 20, 100, 0, 110);
+			//fitTextParentWidthWindowHeight(160, _tagTitleHeader, 30, 20, 100, 0, 110);
+			fitTextParentWidthWindowHeight(160, _tagTitleHeader, 30, 24, 90, 0, 90);
 		}
 		
 		if (_foundTagBack === true)

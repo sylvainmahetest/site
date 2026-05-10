@@ -1523,7 +1523,7 @@ body #tag-title-header
 	vertical-align: top;
 	text-align: left;
 	text-align-last: left;
-	left: 0px;
+	left: -30%;
 	right: auto;
 	top: 0px;
 	bottom: auto;
@@ -1537,7 +1537,7 @@ body #tag-title-header
 	margin-right: 0px;
 	margin-top: 40px;
 	margin-bottom: 0px;
-	padding-left: 0px;
+	padding-left: 30%;
 	padding-right: 0px;
 	padding-top: 0px;
 	padding-bottom: 0px;
