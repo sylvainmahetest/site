@@ -2,15 +2,11 @@
 {
 	--colorA: rgb(0, 0, 0);
 	
-	--colorB: rgb(12, 12, 12);
-	--colorC: rgba(12, 12, 12, 0.5);
-	--colorD: rgba(12, 12, 12, 0.75);
+	--colorB: rgb(12.75, 12.75, 12.75);
+	--colorC: rgba(12.75, 12.75, 12.75, 0.5);
+	--colorD: rgba(12.75, 12.75, 12.75, 0.75);
 	
 	--colorE: rgb(150, 150, 150);
-	
-	--colorF: rgb(80, 80, 80);
-	--colorG: rgb(5, 160, 80);
-	--colorH: rgb(160, 5, 80);
 	
 	--colorZ: rgb(255, 255, 255);
 }
