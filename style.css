@@ -1891,7 +1891,7 @@ body #tag-overlay-gallery
 	padding-right: 0px;
 	padding-top: 0px;
 	padding-bottom: 0px;
-	background-color: transparent;
+	background-color: transparent/*#ff0000*/;
 	background-image: none;
 	background-attachment: local;
 	background-clip: border-box;
@@ -2117,7 +2117,7 @@ body #tag-maintitle-gallery
 	padding-right: 0px;
 	padding-top: 0px;
 	padding-bottom: 0px;
-	background-color: transparent;
+	background-color: transparent/*#00ff00*/;
 	background-image: none;
 	background-attachment: local;
 	background-clip: border-box;
@@ -2145,10 +2145,10 @@ body #tag-maintitle-gallery
 	border-bottom-color: transparent;
 	box-shadow: none;
 	font-family: "fontA";
-	font-size: 75px;
+	font-size: /*75px*/1px;
 	font-weight: 400;
 	letter-spacing: 0px;
-	line-height: 85px;
+	line-height: /*85px*/0px;
 	font-style: normal;
 	text-decoration-line: none;
 	text-decoration-thickness: 0px;
@@ -2160,9 +2160,9 @@ body #tag-maintitle-gallery
 	writing-mode: horizontal-tb;
 	color: var(--colorZ);
 	caret-color: transparent;
-	white-space: pre-wrap;
-	word-break: break-word;
-	overflow-wrap: break-word;
+	white-space: /*pre-wrap*/pre;
+	word-break: /*break-word*/keep-all;
+	overflow-wrap: /*break-word*/normal;
 	overflow-x: visible;
 	overflow-y: visible;
 	scrollbar-width: none;

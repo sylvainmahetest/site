@@ -81,7 +81,8 @@ const _ANIMATION_FRAME = {};
 
 function fitTextParentWidth(tag, fontSizeMin, fontSizeMax, letterSpacingMax, lineHeightMax)
 {
-	const PARENT = tag.parentElement;
+	/*const PARENT = tag.parentElement;*/
+	const PARENT = tag;
 	const RATIO_LETTER_SPACING = letterSpacingMax / fontSizeMax;
 	const RATIO_LINE_HEIGHT = lineHeightMax / fontSizeMax;
 	
@@ -107,7 +108,8 @@ function fitTextParentWidth(tag, fontSizeMin, fontSizeMax, letterSpacingMax, lin
 
 function fitTextParentWidthWindowHeight(topTag, tag, bottomTag, fontSizeMin, fontSizeMax, letterSpacingMax, lineHeightMax)
 {
-	const PARENT = tag.parentElement;
+	/*const PARENT = tag.parentElement;*/
+	const PARENT = tag;
 	//const RECTANGLE_HEADER = _tagOverlayHeader.getBoundingClientRect();
 	const RATIO_LETTER_SPACING = letterSpacingMax / fontSizeMax;
 	const RATIO_LINE_HEIGHT = lineHeightMax / fontSizeMax;
@@ -1492,7 +1494,15 @@ function windowResize()
 		if (_foundTagBack === false)
 		{
 			//fitTextParentWidthWindowHeight(160, _tagTitleHeader, 30, 20, 100, 0, 110);
-			fitTextParentWidthWindowHeight(160, _tagTitleHeader, 30, 24, 90, 0, 90);
+			//fitTextParentWidthWindowHeight(160, _tagTitleHeader, 30, 24, 90, 0, 90);
+			
+			/*topTag, tag, bottomTag, fontSizeMin, fontSizeMax, letterSpacingMax, lineHeightMax)*/
+			fitTextParentWidthWindowHeight(160, _tagTitleHeader, 50, 24, 90, 0, 90);
+		}
+		
+		if (_foundTagBack === true)
+		{
+		    fitTextParentWidth(_tagMaintitleGallery, 10, 75, 0, 85);
 		}
 		
 		if (_foundTagBack === true)
