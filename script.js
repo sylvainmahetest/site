@@ -899,7 +899,7 @@ function particuleAnimation()
 			{
 				diameterStart[indexParticule] = randomFloat(2, 3);
 				gradientStart[indexParticule] = 0.49;
-				alphaStart[indexParticule] = /*0.1*/0.2;
+				alphaStart[indexParticule] = /*0.1*/0.4;
 				mass[indexParticule] = randomFloat(1, 1.1);
 				proximity[indexParticule] = 2;
 				
@@ -911,7 +911,7 @@ function particuleAnimation()
 			{
 				diameterStart[indexParticule] = randomFloat(5, 6);
 				gradientStart[indexParticule] = 0.49;
-				alphaStart[indexParticule] = /*0.04*/0.08;
+				alphaStart[indexParticule] = /*0.04*/0.16;
 				mass[indexParticule] = randomFloat(1, 1.1);
 				proximity[indexParticule] = randomFloat(1.7, 2);
 				
@@ -923,7 +923,7 @@ function particuleAnimation()
 			{
 				diameterStart[indexParticule] = randomFloat(15, 20);
 				gradientStart[indexParticule] = 0;
-				alphaStart[indexParticule] = /*0.008*/0.016;
+				alphaStart[indexParticule] = /*0.008*/0.032;
 				mass[indexParticule] = randomFloat(1.1, 2);
 				proximity[indexParticule] = randomFloat(1, 2);
 				
@@ -935,7 +935,7 @@ function particuleAnimation()
 			{
 				diameterStart[indexParticule] = randomFloat(30, 50);
 				gradientStart[indexParticule] = 0;
-				alphaStart[indexParticule] = /*0.008*/0.016;
+				alphaStart[indexParticule] = /*0.008*/0.032;
 				mass[indexParticule] = randomFloat(2, 3);
 				proximity[indexParticule] = randomFloat(1, 2);
 				
@@ -950,7 +950,7 @@ function particuleAnimation()
 			{
 				diameterStart[indexParticule] = randomFloat(2, 3);
 				gradientStart[indexParticule] = 0;
-				alphaStart[indexParticule] = /*0.1*/0.2;
+				alphaStart[indexParticule] = /*0.1*/0.4;
 				mass[indexParticule] = randomFloat(1, 1.1);
 				proximity[indexParticule] = randomFloat(1, 1.1);
 			}
@@ -959,7 +959,7 @@ function particuleAnimation()
 			{
 				diameterStart[indexParticule] = randomFloat(5, 6);
 				gradientStart[indexParticule] = 0;
-				alphaStart[indexParticule] = /*0.04*/0.08;
+				alphaStart[indexParticule] = /*0.04*/0.16;
 				mass[indexParticule] = randomFloat(1, 1.1);
 				proximity[indexParticule] = randomFloat(1, 1.25);
 			}
@@ -968,7 +968,7 @@ function particuleAnimation()
 			{
 				diameterStart[indexParticule] = randomFloat(15, 20);
 				gradientStart[indexParticule] = 0;
-				alphaStart[indexParticule] = /*0.006*/0.012;
+				alphaStart[indexParticule] = /*0.006*/0.024;
 				mass[indexParticule] = randomFloat(1.1, 2);
 				proximity[indexParticule] = randomFloat(1, 1.5);
 			}
@@ -977,7 +977,7 @@ function particuleAnimation()
 			{
 				diameterStart[indexParticule] = randomFloat(30, 50);
 				gradientStart[indexParticule] = 0;
-				alphaStart[indexParticule] = /*0.006*/0.012;
+				alphaStart[indexParticule] = /*0.006*/0.024;
 				mass[indexParticule] = randomFloat(2, 3);
 				proximity[indexParticule] = randomFloat(1, 2);
 			}
