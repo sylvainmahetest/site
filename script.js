@@ -81,8 +81,8 @@ const _ANIMATION_FRAME = {};
 
 function fitTextParentWidth(tag, fontSizeMin, fontSizeMax, letterSpacingMax, lineHeightMax)
 {
-	/*const PARENT = tag.parentElement;*/
-	const PARENT = tag;
+	const PARENT = tag.parentElement;
+	/*const PARENT = tag;*/
 	const RATIO_LETTER_SPACING = letterSpacingMax / fontSizeMax;
 	const RATIO_LINE_HEIGHT = lineHeightMax / fontSizeMax;
 	
