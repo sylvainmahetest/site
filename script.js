@@ -189,6 +189,13 @@ function tag()
 	const TAG_MEDIA_IN_DOCUMENT = document.querySelectorAll("body tag-media-gallery");
 	const TAG_IMG_IN_DOCUMENT = document.querySelectorAll("body img");
 	
+	_tagBack = document.getElementById("tag-back");
+	
+	if (_tagBack === null)
+	{
+		_foundTagBack = false;
+	}
+	
 	//_tagTextLoading = document.getElementById("tag-text-loading");
 	//_tagBarLoading = document.getElementById("tag-bar-loading");
 	
@@ -201,6 +208,12 @@ function tag()
 	
 	_tagName = document.getElementById("tag-name");
 	
+	if (_foundTagBack === true)
+	{
+	    _tagName.style.cursor = "pointer";
+        _tagName.style.pointerEvents = "auto";
+	}
+	
 	TAG_LETTER_IN_DOCUMENT.forEach((tag, index) =>
 	{
 		const RECTANGLE_LETTER = tag.getBoundingClientRect();
@@ -210,13 +223,6 @@ function tag()
 		
 		_countTagLetter++;
 	});
-	
-	_tagBack = document.getElementById("tag-back");
-	
-	if (_tagBack === null)
-	{
-		_foundTagBack = false;
-	}
 	
 	if (_foundTagBack === false)
 	{
@@ -239,10 +245,10 @@ function tag()
 	{
 		_tagButtonGallery[index] = tag;
 		
-		if (_tagButtonGallery[index].getAttribute("href") === null)
+		if (_tagButtonGallery[index].getAttribute("href") !== null)
 		{
-			_tagButtonGallery[index].style.cursor = "auto";
-			_tagButtonGallery[index].style.pointerEvents = "none";
+			_tagButtonGallery[index].style.cursor = "pointer";
+			_tagButtonGallery[index].style.pointerEvents = "auto";
 		}
 		
 		_countTagButton++;
@@ -252,10 +258,10 @@ function tag()
 	{
 		_tagMediaGallery[index] = tag;
 		
-		if (_tagMediaGallery[index].getAttribute("href") === null)
+		if (_tagMediaGallery[index].getAttribute("href") !== null)
 		{
-			_tagMediaGallery[index].style.cursor = "auto";
-			_tagMediaGallery[index].style.pointerEvents = "none";
+			_tagMediaGallery[index].style.cursor = "pointer";
+			_tagMediaGallery[index].style.pointerEvents = "auto";
 		}
 		
 		_countTagMediaImg++;
@@ -2381,6 +2387,27 @@ function href()
 	
 	if (_foundTagBack === true)
 	{
+		_FUNCTION.clickName = function()
+		{
+			if (_inhibitClick === false)
+			{
+				_inhibitClick = true;
+				
+				_stateBackAnimation = 1;
+				
+				setTimeout(() =>
+				{
+					clean();
+					window.location.href = "index.html";
+				}, 1100);
+			}
+		}
+		
+		_tagName.addEventListener("click", _FUNCTION.clickName);
+	}
+	
+	if (_foundTagBack === true)
+	{
 		_FUNCTION.clickBack = function()
 		{
 			if (_inhibitClick === false)
@@ -2552,6 +2579,11 @@ function clean()
 	
 	window.removeEventListener("resize", _FUNCTION.resize);
 	screen.orientation.removeEventListener("change", _FUNCTION.change);
+	
+	if (_foundTagBack === true)
+	{
+		_tagName.removeEventListener("click", _FUNCTION.clickName);
+	}
 	
 	if (_foundTagBack === true)
 	{

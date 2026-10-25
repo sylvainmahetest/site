@@ -2408,8 +2408,8 @@ body tag-button-gallery
 	transform: none;
 	filter: none;
 	user-select: none;
-	cursor: pointer;
-	pointer-events: auto;
+	cursor: auto;
+	pointer-events: none;
 	-webkit-tap-highlight-color: transparent;
 	-webkit-touch-callout: none;
 }
@@ -3432,8 +3432,8 @@ body tag-media-gallery
 	transform: none;
 	filter: none;
 	user-select: none;
-	cursor: pointer;
-	pointer-events: auto;
+	cursor: auto;
+	pointer-events: none;
 	-webkit-tap-highlight-color: transparent;
 	-webkit-touch-callout: none;
 }
