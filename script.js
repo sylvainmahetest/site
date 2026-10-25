@@ -536,7 +536,9 @@ function particuleAnimation()
 	}
 	
 	document.body.addEventListener("touchstart", _FUNCTION.touchstart, { passive: false });
+	
 	let inhibitTouchMove = false;
+	
 	_FUNCTION.touchmove = function (event)
 	{
 		const H_WINDOW = window.innerWidth;
@@ -635,7 +637,9 @@ function particuleAnimation()
 	}
 	
 	document.body.addEventListener("pointerenter", _FUNCTION.pointerenter);
+	
 	let inhibitPointerMove = false;
+	
 	_FUNCTION.pointermove = function (event)
 	{
 		const H_WINDOW = window.innerWidth;
@@ -710,10 +714,26 @@ function particuleAnimation()
 	
 	document.body.addEventListener("wheel", _FUNCTION.wheel);
 	
+	//////////////////////////////////
+	_FUNCTION.keydown1 = function (event)
+	{
+		if (event.key === "ArrowDown")
+		{
+			_eventScroll -= 75;
+		}
+		else if (event.key === "ArrowUp")
+		{
+			_eventScroll += 75;
+		}
+	}
+	
+	document.body.addEventListener("keydown", _FUNCTION.keydown1);
+	/////////////////////////////////
+	
 	function setupWebGL()
 	{
 		_webGL = _tagCanvasParticule.getContext("webgl");
-		_webGL.clearColor(0.05, 0.05, 0.05, 1);
+		_webGL.clearColor(0.075, 0.075, 0.075, 1);
 		_webGL.enable(_webGL.BLEND);
 		_webGL.blendFunc(_webGL.SRC_ALPHA, _webGL.ONE_MINUS_SRC_ALPHA);
 		
@@ -1687,13 +1707,13 @@ function interfaceAnimation()
 		{
 			fadeInLinear = fadeIn;
 			fadeInQuadratic = Math.min(1, Math.max(0, 1 - Math.pow(1 - fadeIn, 2)));
-			fadeInQuadratic1 = Math.min(1, Math.max(0, Math.pow(fadeIn, 2)));
+			//fadeInQuadratic1 = Math.min(1, Math.max(0, Math.pow(fadeIn, 2)));
 		}
 		else
 		{
 			fadeInLinear = 1;
 			fadeInQuadratic = 1;
-			fadeInQuadratic1 = 1;
+			//fadeInQuadratic1 = 1;
 		}
 		
 		////////////////////////////////////////////////////////////////////////HREF ANIMATION
@@ -1794,6 +1814,33 @@ function interfaceAnimation()
 				else
 				{
 					transformTagButtonGallery[_indexButton] = "scale(" + 1.15 + ")";
+					
+					//timePreviousRelative4 = performance.now();
+				    //timePreviousAbsolute4 = performance.now();
+				    
+				    //_stateButtonAnimation = 3;
+				}
+			}
+			else if (_stateButtonAnimation === 3)
+			{
+			    //transformTagButtonGallery[_indexButton] = "scale(" + 1 + ")";
+			    timePreviousRelative4 = performance.now();
+				timePreviousAbsolute4 = performance.now();
+				
+				_stateButtonAnimation = 4;
+			}
+			else if (_stateButtonAnimation === 4)
+			{
+			    if (fadeIn4 < 0.5)
+				{
+					transformTagButtonGallery[_indexButton] = "scale(" + (1 + (0.15 * (1 - (fadeInLinear4 * 2)))) + ")";
+				}
+				else
+				{
+					transformTagButtonGallery[_indexButton] = "scale(" + 1 + ")";
+					
+					_stateButtonAnimation = 0;
+					_inhibitClick = false;
 				}
 			}
 		}
@@ -2318,6 +2365,14 @@ function interfaceAnimation()
 	}
 	
 	window.addEventListener("pageshow", _FUNCTION.pageshow, { once: true });
+	
+	/*_FUNCTION.focus = function()
+    {
+        //_stateButtonAnimation = 3;
+        //_inhibitClick = false;
+    }
+    
+    window.addEventListener("focus", _FUNCTION.focus);*/
 }
 
 function href()
@@ -2348,6 +2403,7 @@ function href()
 	for (index = 0; index < _countTagButton; index++)
 	{
 		const HREF = _tagButtonGallery[index].getAttribute("href");
+		const TYPE = _tagButtonGallery[index].getAttribute("data-type");
 		const INDEX = index;
 		
 		if (HREF !== null)
@@ -2363,8 +2419,26 @@ function href()
 					
 					setTimeout(() =>
 					{
-						clean();
-						window.location.href = HREF;
+					    if (TYPE === "link")
+					    {
+						    clean();
+						    window.location.href = HREF;
+						}
+						else if (TYPE === "download")
+					    {
+						    //clean();
+						    window.location.href = HREF;
+						    
+						    //_inhibitClick = false;
+						    _stateButtonAnimation = 3;
+						}
+						else if (TYPE === "video")
+					    {
+						    clean();
+						    window.location.href = HREF;
+						    
+						    //_inhibitClick = false;
+						}
 					}, 1100);
 				}
 			}
@@ -2436,7 +2510,7 @@ function input()
 		});
 	}
 	
-	_FUNCTION.keydown = function (event)
+	_FUNCTION.keydown2 = function (event)
 	{
 		if (event.key === "Enter" && (_stateResponseAnimation === 0 || _stateResponseAnimation === 4))
 		{
@@ -2445,7 +2519,7 @@ function input()
 		}
 	}
 	
-	_tagInputContactFooter.addEventListener("keydown", _FUNCTION.keydown);
+	_tagInputContactFooter.addEventListener("keydown", _FUNCTION.keydown2);
 	
 	_FUNCTION.clickSubmit = function()
 	{
@@ -2474,6 +2548,7 @@ function clean()
 	document.body.removeEventListener("pointerleave", _FUNCTION.pointerleave);
 	document.body.removeEventListener("pointercancel", _FUNCTION.pointercancel);
 	document.body.removeEventListener("wheel", _FUNCTION.wheel);
+	document.body.removeEventListener("keydown", _FUNCTION.keydown1);
 	
 	window.removeEventListener("resize", _FUNCTION.resize);
 	screen.orientation.removeEventListener("change", _FUNCTION.change);
@@ -2505,10 +2580,12 @@ function clean()
 		}
 	}
 	
-	_tagInputContactFooter.removeEventListener("keydown", _FUNCTION.keydown);
+	_tagInputContactFooter.removeEventListener("keydown", _FUNCTION.keydown2);
 	_tagSubmitContactFooter.removeEventListener("click", _FUNCTION.clickSubmit);
 	
 	//window.removeEventListener("pageshow", _FUNCTION.pageshow);
+	
+	//window.removeEventListener("focus", _FUNCTION.focus);
 	
 	if (_INTERVAL.updateRectangle !== null)
 	{

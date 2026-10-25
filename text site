@@ -1,0 +1,36 @@
+2 joysticks 10 bit (2 axis)
+4 trims 2 bit (3 positions)
+1 switch 1 bit (2 positions)
+3 auxiliary switch 2 bit (3 positions)
+1 rotary auxiliary button 10 bit (1 axis)
+1 rotary menu button 10 bit (1 axis)
+1 button 1 bit (2 positions)
+1 power on/off switch 1 bit (2 positions)
+1 display
+1 buzzer
+
+2.4GHz 100mW radio frequency
+32 bit communication trame
+
+fail-safe
+watchdog
+
+5 tx system-defined parameters
+15 rx system-defined parameters
+16 user-defined parameters
+
+alarm tx battery low
+alarm rx battery low
+alarm timer
+
+channel trims
+channel range
+channel curve
+channel reverse
+
+potentiometer calibration
+
+system lock
+
+easy copy/paste/save parameters
+external programming connector
