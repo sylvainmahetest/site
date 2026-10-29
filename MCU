@@ -1,0 +1,10 @@
+ATmega164P (16384 bytes Flash &#8213; 512 bytes EEPROM &#8213; 1024 bytes SRAM)
+ATmega324P (32768 bytes Flash &#8213; 1024 bytes EEPROM &#8213; 2048 bytes SRAM)
+ATmega644P (65536 bytes Flash &#8213; 2048 bytes EEPROM &#8213; 4096 bytes SRAM)
+ATmega1284P (131072 bytes Flash &#8213; 4096 bytes EEPROM &#8213; 16384 bytes SRAM)
+
+<tag-paragraph-gallery>The board supports four interchangeable MCU with different Flash, EEPROM, and SRAM capacities&#160;:
+&#8226;&#160;ATmega164P (16384 bytes Flash, 512 bytes EEPROM, 1024 bytes SRAM)
+&#8226;&#160;ATmega324P (32768 bytes Flash, 1024 bytes EEPROM, 2048 bytes SRAM)
+&#8226;&#160;ATmega644P (65536 bytes Flash, 2048 bytes EEPROM, 4096 bytes SRAM)
+&#8226;&#160;ATmega1284P (131072 bytes Flash, 4096 bytes EEPROM, 16384 bytes SRAM)</tag-paragraph-gallery>
