@@ -57,6 +57,15 @@ let _countTagButton = 0;
 let _tagMediaGallery = [];
 let _tagImg = [];
 let _countTagMediaImg = 0;
+
+
+
+let _tagOverlayVideo = null;
+let _tagMediaVideo = null;
+let _tagVideo = null;
+
+
+
 let _eventScroll = 0;
 let _tagExploretitleGallery = null;
 let _tagOverlayFooter = null;
@@ -70,11 +79,19 @@ let _translateSmooth = 0;
 let _stateBackAnimation = 0;
 let _stateButtonAnimation = 0;
 let _indexButton = 0;
-let _stateResponseAnimation = 0;
-let _stateResponseServer = 0;
 let _stateMediaAnimation = 0;
 let _indexMediaImg = 0;
-let _inhibitClick = false;
+
+let _stateVideoAnimation = 0;
+let _foundTagVideo = true;
+
+let _stateResponseAnimation = 0;
+let _stateResponseServer = 0;
+
+let _inhibitNavigation = false;
+let _inhibitVideo = false;
+let _inhibitAll = false;
+
 const _FUNCTION = {};
 const _INTERVAL = {};
 const _ANIMATION_FRAME = {};
@@ -190,10 +207,19 @@ function tag()
 	const TAG_IMG_IN_DOCUMENT = document.querySelectorAll("body img");
 	
 	_tagBack = document.getElementById("tag-back");
-	
+	//_tagBack.style.cursor = "pointer";
+    //_tagBack.style.pointerEvents = "auto";
+    
 	if (_tagBack === null)
 	{
 		_foundTagBack = false;
+	}
+	
+	_tagVideo = document.querySelector("body video");
+	
+	if (_tagVideo === null)
+	{
+		_foundTagVideo = false;
 	}
 	
 	//_tagTextLoading = document.getElementById("tag-text-loading");
@@ -271,6 +297,12 @@ function tag()
 	{
 		_tagImg[index] = tag;
 	});
+	
+	if (_foundTagVideo === true)
+	{
+	    _tagOverlayVideo = document.getElementById("tag-overlay-video");
+	    _tagMediaVideo = document.getElementById("tag-media-video");
+	}
 	
 	if (_foundTagBack === true)
 	{
@@ -1615,6 +1647,15 @@ function interfaceAnimation()
 	let fadeInQuadratic5 = 0;
 	//HREF ANIMATION
 	
+	//VIDEO ANIMATION
+	let timePreviousRelative6 = 0;
+	let timePreviousAbsolute6 = 0;
+	let fadeIn6 = 0;
+	let fadeInLinear6 = 0;
+	let fadeInQuadratic6 = 0;
+	let fadeInQuadratic7 = 0;
+	//VIDEO ANIMATION
+	
 	//RESIZE WIP
 	//RESIZE WIP
 	//let RECTANGLE_GALLERY = null;
@@ -1640,10 +1681,18 @@ function interfaceAnimation()
 	let widthTagLineTransitionLeave = 0;
 	let opacityTagName = 0;
 	let transformTagName = 0;
+	//NEW FOR VIDEO
+	let cursorTagName = 0;
+	let pointerEventsTagName = 0;
+	//NEW FOR VIDEO
 	let opacityTagLetter = []
 	let widthTagLetter = [];
 	let opacityTagBack = 0;
 	let transformTagBack = 0;
+	//NEW FOR VIDEO
+	let cursorTagBack = 0;
+	let pointerEventsTagBack = 0;
+	//NEW FOR VIDEO
 	let opacityTagOverlayHeader = 0;
 	let transformTagOverlayHeader = 0;
 	let opacityTagOvertitleHeader = 0;
@@ -1664,14 +1713,36 @@ function interfaceAnimation()
 	let transformTagMediaGallery = [];
 	let objectPositionTagImg = [];
 	let transformTagButtonGallery = [];
+	//NEW FOR VIDEO
+	let cursorTagButtonGallery = 0;
+	let pointerEventsTagButtonGallery = 0;
+	//NEW FOR VIDEO
+	//NEW FOR VIDEO
+	let cursorTagMediaGallery = 0;
+	let pointerEventsTagMediaGallery = 0;
+	//NEW FOR VIDEO
+	//NEW FOR VIDEO
+	let opacityTagOverlayVideo = 0;
+	let transformTagMediaVideo = 0;
+	let cursorTagMediaVideo = 0;
+	let pointerEventsTagMediaVideo = 0;
+	//NEW FOR VIDEO
+	
 	let opacityTagLineFooter = 0;
 	let transformTagLineFooter = 0;
 	let opacityTagContactFooter = 0;
 	let transformTagContactFooter = 0;
+	//NEW FOR VIDEO
+	let cursorTagInputContactFooter = 0;
+	let pointerEventsTagInputContactFooter = 0;
+	let cursorTagSubmitContactFooter = 0;
+	let pointerEventsTagSubmitContactFooter = 0;
+	//NEW FOR VIDEO
 	let textContentTagResponseContact = 0;
 	let opacityTagResponseContact = 0;
 	let backgroundColorTagResponseContact = 0;
 	let transformTagResponseContact = 0;
+	
 	//VARIABLE TAG//////////////////////////////////////////////////
 	
 	function updateRectangle()
@@ -1846,11 +1917,160 @@ function interfaceAnimation()
 					transformTagButtonGallery[_indexButton] = "scale(" + 1 + ")";
 					
 					_stateButtonAnimation = 0;
-					_inhibitClick = false;
+					_inhibitNavigation = false;
 				}
 			}
 		}
 		////////////////////////////////////////BUTTON ANIMATION
+		////////////////////////////////////////VIDEO ANIMATION
+		timePreviousRelative6 = time;
+		
+		fadeIn6 = (time - timePreviousAbsolute6) * 0.001;
+		
+		if (fadeIn6 < 1)
+		{
+			fadeInLinear6 = fadeIn6;
+			fadeInQuadratic6 = Math.min(1, Math.max(0, 1 - Math.pow(1 - fadeIn6, 2)));
+			fadeInQuadratic7 = Math.min(1, Math.max(0, Math.pow(fadeIn6, 2)));
+		}
+		else
+		{
+			fadeInLinear6 = 1;
+			fadeInQuadratic6 = 1;
+			fadeInQuadratic7 = 1;
+		}
+		
+		if (_foundTagVideo === true)
+		{
+		    if (_stateVideoAnimation === 0)
+		    {
+			    //VOID
+		    }
+		    else if (_stateVideoAnimation === 1)
+		    {
+			    //NEW FOR VIDEO
+		        cursorTagName = "auto";
+                pointerEventsTagName = "none";
+		        cursorTagBack = "auto";
+                pointerEventsTagBack = "none";
+                
+			    cursorTagMediaGallery = "auto";
+	            pointerEventsTagMediaGallery = "none";
+	            
+	            transformTagButtonGallery[_indexButton] = "none";
+	            cursorTagButtonGallery = "auto";
+	            pointerEventsTagButtonGallery = "none";
+	            
+	            opacityTagOverlayVideo = 0;
+			    transformTagMediaVideo = "translateY(-50%) scale(" + 0.5 + ")";
+			    cursorTagMediaVideo = "auto";
+	            pointerEventsTagMediaVideo = "none";
+	            
+	            cursorTagInputContactFooter = "auto";
+	            pointerEventsTagInputContactFooter = "none";
+	            cursorTagSubmitContactFooter = "auto";
+	            pointerEventsTagSubmitContactFooter = "none";
+		        //NEW FOR VIDEO
+		        
+			    timePreviousRelative6 = performance.now();
+			    timePreviousAbsolute6 = performance.now();
+			    
+			    _stateVideoAnimation = 2;
+		    }
+		    else if (_stateVideoAnimation === 2)
+			{
+				if (fadeIn6 < 1)
+				{
+				    transformTagButtonGallery[_indexButton] = "scale(" + (1 + (0.15 * fadeInQuadratic6)) + ")";
+				    
+					opacityTagOverlayVideo = fadeInLinear6;
+					transformTagMediaVideo = "translateY(-50%) scale(" + (0.5 + (0.6 * fadeInQuadratic6)) + ")";
+				}
+				else
+				{
+					//NEW FOR VIDEO
+		            /*cursorTagName = "pointer";
+                    pointerEventsTagName = "auto";
+                    cursorTagBack = "pointer";
+                    pointerEventsTagBack = "auto";
+                    
+			        cursorTagMediaGallery = "pointer";
+	                pointerEventsTagMediaGallery = "auto";
+	                */
+	                transformTagButtonGallery[_indexButton] = "scale(" + 1.15 + ")";
+	                /*
+	                cursorTagButtonGallery = "pointer";
+	                pointerEventsTagButtonGallery = "auto";
+	                */
+	                opacityTagOverlayVideo = 1;
+					transformTagMediaVideo = "translateY(-50%) scale(" + 1.1 + ")";
+	                cursorTagMediaVideo = "pointer";
+	                pointerEventsTagMediaVideo = "auto";
+	                /*
+	                cursorTagInputContactFooter = "text";
+	                pointerEventsTagInputContactFooter = "auto";
+	                cursorTagSubmitContactFooter = "pointer";
+	                pointerEventsTagSubmitContactFooter = "auto";*/
+		            //NEW FOR VIDEO
+					//timePreviousRelative4 = performance.now();
+				    //timePreviousAbsolute4 = performance.now();
+				    
+				    //_stateButtonAnimation = 3;
+				    _inhibitVideo = false;
+				}
+			}
+			else if (_stateVideoAnimation === 3)
+			{
+			    //transformTagButtonGallery[_indexButton] = "scale(" + 1 + ")";
+			    timePreviousRelative6 = performance.now();
+				timePreviousAbsolute6 = performance.now();
+				
+				cursorTagMediaVideo = "auto";
+	            pointerEventsTagMediaVideo = "none";
+				
+				_stateVideoAnimation = 4;
+			}
+			else if (_stateVideoAnimation === 4)
+			{
+			    if (fadeIn6 < 1)
+				{
+				    transformTagButtonGallery[_indexButton] = "scale(" + (1 + (0.15 * (1 - fadeInLinear6))) + ")";
+				    
+					opacityTagOverlayVideo = 1 - fadeInLinear6;
+					transformTagMediaVideo = "translateY(-50%) scale(" + (1 + (0.1 * (1 - fadeInQuadratic7))) + ")";
+				}
+				else
+				{
+				    cursorTagName = "pointer";
+                    pointerEventsTagName = "auto";
+		            cursorTagBack = "pointer";
+                    pointerEventsTagBack = "auto";
+                    
+			        cursorTagMediaGallery = "pointer";
+	                pointerEventsTagMediaGallery = "auto";
+	                
+	                transformTagButtonGallery[_indexButton] = "scale(" + 1 + ")";
+	                cursorTagButtonGallery = "pointer";
+	                pointerEventsTagButtonGallery = "auto";
+	                
+					opacityTagOverlayVideo = 0;
+			        transformTagMediaVideo = "translateY(-50%) scale(" + 1 + ")";
+			        
+			        cursorTagInputContactFooter = "text";
+	                pointerEventsTagInputContactFooter = "auto";
+	                cursorTagSubmitContactFooter = "pointer";
+	                pointerEventsTagSubmitContactFooter = "auto";
+			        
+					_stateVideoAnimation = 0;
+					_inhibitNavigation = false;
+					_inhibitVideo = false;
+					_inhibitAll = false;
+				}
+			}
+		}
+		////////////////////////////////////////VIDEO ANIMATION
+		
+		
 		
 		//bottomHeader = 160 + RECTANGLE_HEADER.height;
 		
@@ -2132,7 +2352,7 @@ function interfaceAnimation()
 			//_tagResponseContact.style.opacity = 0;
 			//_tagResponseContact.style.transform = "translate(0px, 50px)";
 			
-			backgroundColorTagResponseContact = "var(--colorF)";
+			backgroundColorTagResponseContact = "var(--colorG)";
 			textContentTagResponseContact = String.fromCodePoint("8635") + " Proceed, please wait...";
 			
 			_stateResponseAnimation = 2;
@@ -2148,12 +2368,12 @@ function interfaceAnimation()
 				{
 					_tagInputContactFooter.value = "";
 					
-					backgroundColorTagResponseContact = "var(--colorG)";
+					backgroundColorTagResponseContact = "var(--colorH)";
 					textContentTagResponseContact = String.fromCodePoint("8594") + " Your email has been sent !";
 				}
 				else if (_stateResponseServer === 2)
 				{
-					backgroundColorTagResponseContact = "var(--colorH)";
+					backgroundColorTagResponseContact = "var(--colorI)";
 					textContentTagResponseContact = String.fromCodePoint("9888") + " An error occured, please try again.";
 				}
 				
@@ -2234,6 +2454,10 @@ function interfaceAnimation()
 		
 		_tagName.style.opacity = opacityTagName;
 		_tagName.style.transform = transformTagName;
+		//NEW FOR VIDEO
+		_tagName.style.cursor = cursorTagName;
+        _tagName.style.pointerEvents = pointerEventsTagName;
+		//NEW FOR VIDEO
 		
 		for (index = 0; index < _countTagLetter; index++)
 		{
@@ -2245,6 +2469,10 @@ function interfaceAnimation()
 		{
 			_tagBack.style.opacity = opacityTagBack;
 			_tagBack.style.transform = transformTagBack;
+		    //NEW FOR VIDEO
+			_tagBack.style.cursor = cursorTagBack;
+            _tagBack.style.pointerEvents = pointerEventsTagBack;
+            //NEW FOR VIDEO
 		}
 		
 		if (_foundTagBack === false)
@@ -2277,23 +2505,62 @@ function interfaceAnimation()
 		
 		for (index = 0; index < _countTagMediaImg; index++)
 		{
+		    const HREF = _tagMediaGallery[index].getAttribute("href");
+		    
 			_tagMediaGallery[index].style.opacity = opacityTagMediaGallery[index];
+			//_tagMediaGallery[index].style.opacity = 0;
 			_tagMediaGallery[index].style.height = heightTagMediaGallery[index];
 			_tagMediaGallery[index].style.transform = transformTagMediaGallery[index];
+			//NEW FOR VIDEO
+			if (HREF !== null)
+			{
+			    _tagMediaGallery[index].style.cursor = cursorTagMediaGallery;
+	            _tagMediaGallery[index].style.pointerEvents = pointerEventsTagMediaGallery;
+	        }
+	        //NEW FOR VIDEO
 			
 			_tagImg[index].style.objectPosition = objectPositionTagImg[index];
 		}
 		
 		for (index = 0; index < _countTagButton; index++)
 		{
+		    const HREF = _tagButtonGallery[index].getAttribute("href");
+		    
 			_tagButtonGallery[index].style.transform = transformTagButtonGallery[index];
+			
+			//NEW FOR VIDEO
+			if (HREF !== null)
+			{
+			    _tagButtonGallery[index].style.cursor = cursorTagButtonGallery;
+	            _tagButtonGallery[index].style.pointerEvents = pointerEventsTagButtonGallery;
+	        }
+	        //NEW FOR VIDEO
 		}
+		
+		//TAG VIDEO
+		//NEW FOR VIDEO
+		if (_foundTagVideo === true)
+		{
+		    _tagOverlayVideo.style.opacity = opacityTagOverlayVideo;
+		    _tagMediaVideo.style.transform = transformTagMediaVideo;
+		    _tagMediaVideo.style.cursor = cursorTagMediaVideo;
+		    _tagMediaVideo.style.pointerEvents = pointerEventsTagMediaVideo;
+		}
+		//NEW FOR VIDEO
+		//TAG VIDEO
 		
 		_tagLineFooter.style.opacity = opacityTagLineFooter;
 		_tagLineFooter.style.transform = transformTagLineFooter;
 		
 		_tagContactFooter.style.opacity = opacityTagContactFooter;
 		_tagContactFooter.style.transform = transformTagContactFooter;
+		
+		//NEW FOR VIDEO
+	    _tagInputContactFooter.style.cursor = cursorTagInputContactFooter;
+	    _tagInputContactFooter.style.pointerEvents = pointerEventsTagInputContactFooter;
+	    _tagSubmitContactFooter.style.cursor = cursorTagSubmitContactFooter;
+	    _tagSubmitContactFooter.style.pointerEvents = pointerEventsTagSubmitContactFooter;
+		//NEW FOR VIDEO
 		
 		_tagResponseContact.textContent = textContentTagResponseContact;
 		_tagResponseContact.style.opacity = opacityTagResponseContact;
@@ -2328,7 +2595,7 @@ function interfaceAnimation()
 			_tagLineTransitionEnter.style.left = "100dvw";
 			_tagLineTransitionEnter.style.width = "15dvw";*/
 			
-			/*_inhibitClick = true;
+			/*_inhibitNavigation = true;
 			
 			_stateBackAnimation = 1;
 			
@@ -2366,7 +2633,7 @@ function interfaceAnimation()
 				transformTagButtonGallery[_indexButton] = "none";
 			}
 			
-			_inhibitClick = false;*/
+			_inhibitNavigation = false;*/
 		}
 	}
 	
@@ -2375,7 +2642,7 @@ function interfaceAnimation()
 	/*_FUNCTION.focus = function()
     {
         //_stateButtonAnimation = 3;
-        //_inhibitClick = false;
+        //_inhibitNavigation = false;
     }
     
     window.addEventListener("focus", _FUNCTION.focus);*/
@@ -2389,9 +2656,9 @@ function href()
 	{
 		_FUNCTION.clickName = function()
 		{
-			if (_inhibitClick === false)
+			if (_inhibitNavigation === false)
 			{
-				_inhibitClick = true;
+				_inhibitNavigation = true;
 				
 				_stateBackAnimation = 1;
 				
@@ -2410,9 +2677,9 @@ function href()
 	{
 		_FUNCTION.clickBack = function()
 		{
-			if (_inhibitClick === false)
+			if (_inhibitNavigation === false)
 			{
-				_inhibitClick = true;
+				_inhibitNavigation = true;
 				
 				_stateBackAnimation = 1;
 				
@@ -2437,12 +2704,28 @@ function href()
 		{
 			_FUNCTION.clickButton = function()
 			{
-				if (_inhibitClick === false)
+				if (_inhibitNavigation === false)
 				{
-					_inhibitClick = true;
+					_inhibitNavigation = true;
 					
 					_indexButton = INDEX;
-					_stateButtonAnimation = 1;
+					
+					if (TYPE === "link" || TYPE === "download")
+					{
+					    _stateButtonAnimation = 1;
+					}
+					else if (TYPE === "video")
+					{
+					    _inhibitVideo = true;
+					    _inhibitAll = true;
+					    
+					    _tagVideo.src = HREF;
+					    
+					    _stateVideoAnimation = 1;
+					    //_tagOverlayVideo.style.opacity = 1;
+					    //_tagOverlayVideo
+                        //_tagMediaVideo
+					}
 					
 					setTimeout(() =>
 					{
@@ -2456,15 +2739,19 @@ function href()
 						    //clean();
 						    window.location.href = HREF;
 						    
-						    //_inhibitClick = false;
+						    //_inhibitNavigation = false;
 						    _stateButtonAnimation = 3;
 						}
 						else if (TYPE === "video")
 					    {
-						    clean();
-						    window.location.href = HREF;
+					        _tagVideo.play();
+					        //_stateButtonAnimation = 3;
+					        //_tagVideo.src = HREF;
+						    //clean();
+						    //window.location.href = HREF;
 						    
-						    //_inhibitClick = false;
+						    //_inhibitNavigation = false;
+						    
 						}
 					}, 1100);
 				}
@@ -2483,9 +2770,9 @@ function href()
 		{
 			_FUNCTION.clickMedia = function()
 			{
-				if (_inhibitClick === false)
+				if (_inhibitNavigation === false)
 				{
-					_inhibitClick = true;
+					_inhibitNavigation = true;
 					
 					_indexMediaImg = INDEX;
 					_stateMediaAnimation = 1;
@@ -2500,6 +2787,26 @@ function href()
 			
 			_tagMediaGallery[INDEX].addEventListener("click", _FUNCTION.clickMedia);
 		}
+	}
+}
+
+function exitVideo()
+{
+    if (_foundTagVideo === true)
+	{
+        _FUNCTION.clickVideo = function()
+	    {
+		    if (_inhibitVideo === false)
+		    {
+			    //_inhibitNavigation = true;
+			    //_inhibitVideo = true;
+			    //_inhibitAll = true;
+			    
+			    _stateVideoAnimation = 3;
+		    }
+	    }
+	    
+	    _tagMediaVideo.addEventListener("click", _FUNCTION.clickVideo);
 	}
 }
 
@@ -2612,6 +2919,11 @@ function clean()
 		}
 	}
 	
+	if (_foundTagVideo === true)
+	{
+	    _tagMediaVideo.removeEventListener("click", _FUNCTION.clickVideo);
+	}
+	
 	_tagInputContactFooter.removeEventListener("keydown", _FUNCTION.keydown2);
 	_tagSubmitContactFooter.removeEventListener("click", _FUNCTION.clickSubmit);
 	
@@ -2717,7 +3029,7 @@ function clean()
 				transformTagButtonGallery[_indexButton] = "none";
 			}
 			
-			_inhibitClick = false;
+			_inhibitNavigation = false;
 		}
 	}
 	
@@ -2774,6 +3086,7 @@ async function loading()
 	interfaceAnimation();
 	
 	href();
+	exitVideo();
 	input();
 }
 
