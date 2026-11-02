@@ -77,12 +77,13 @@ let _tagResponseContact = null;
 let _foundTagBack = true;
 let _translateSmooth = 0;
 let _stateBackAnimation = 0;
-let _stateButtonAnimation = 0;
+let _stateButtonLinkAnimation = 0;
+let _stateButtonDownloadAnimation = 0;
+let _stateButtonVideoAnimation = 0;
 let _indexButton = 0;
 let _stateMediaAnimation = 0;
 let _indexMediaImg = 0;
 
-let _stateVideoAnimation = 0;
 let _foundTagVideo = true;
 
 let _stateResponseAnimation = 0;
@@ -1656,6 +1657,15 @@ function interfaceAnimation()
 	let fadeInQuadratic7 = 0;
 	//VIDEO ANIMATION
 	
+	//BUTTON DOWNLOAD ANIMATION
+	let timePreviousRelative8 = 0;
+	let timePreviousAbsolute8 = 0;
+	let fadeIn8 = 0;
+	let fadeInLinear8 = 0;
+	let fadeInQuadratic8 = 0;
+	let fadeInQuadratic9 = 0;
+	//BUTTON DOWNLOAD ANIMATION
+	
 	//RESIZE WIP
 	//RESIZE WIP
 	//let RECTANGLE_GALLERY = null;
@@ -1866,23 +1876,23 @@ function interfaceAnimation()
 			}
 		}
 		////////////////////////////////////////////////////////////////////////HREF ANIMATION
-		////////////////////////////////////////BUTTON ANIMATION
+		////////////////////////////////////////BUTTON LINK ANIMATION
 		if (_countTagButton > 0)
 		{
-			if (_stateButtonAnimation === 0)
+			if (_stateButtonLinkAnimation === 0)
 			{
 				//VOID
 			}
-			else if (_stateButtonAnimation === 1)
+			else if (_stateButtonLinkAnimation === 1)
 			{
 				transformTagButtonGallery[_indexButton] = "none";
 				
 				timePreviousRelative4 = performance.now();
 				timePreviousAbsolute4 = performance.now();
 				
-				_stateButtonAnimation = 2;
+				_stateButtonLinkAnimation = 2;
 			}
-			else if (_stateButtonAnimation === 2)
+			else if (_stateButtonLinkAnimation === 2)
 			{
 				if (fadeIn4 < 1)
 				{
@@ -1891,38 +1901,80 @@ function interfaceAnimation()
 				else
 				{
 					transformTagButtonGallery[_indexButton] = "scale(" + 1.15 + ")";
-					
-					//timePreviousRelative4 = performance.now();
-				    //timePreviousAbsolute4 = performance.now();
-				    
-				    //_stateButtonAnimation = 3;
 				}
 			}
-			else if (_stateButtonAnimation === 3)
+		}
+		////////////////////////////////////////BUTTON LINK ANIMATION
+		////////////////////////////////////////BUTTON DOWNLOAD ANIMATION
+		timePreviousRelative8 = time;
+		
+		fadeIn8 = (time - timePreviousAbsolute8) * 0.001;
+		
+		if (fadeIn8 < 1)
+		{
+			fadeInLinear8 = fadeIn8;
+			fadeInQuadratic8 = Math.min(1, Math.max(0, 1 - Math.pow(1 - fadeIn8, 2)));
+			fadeInQuadratic9 = Math.min(1, Math.max(0, Math.pow(fadeIn8, 2)));
+		}
+		else
+		{
+			fadeInLinear8 = 1;
+			fadeInQuadratic8 = 1;
+			fadeInQuadratic9 = 1;
+		}
+		
+		if (_countTagButton > 0)
+		{
+			if (_stateButtonDownloadAnimation === 0)
 			{
-			    //transformTagButtonGallery[_indexButton] = "scale(" + 1 + ")";
-			    timePreviousRelative4 = performance.now();
-				timePreviousAbsolute4 = performance.now();
-				
-				_stateButtonAnimation = 4;
+				//VOID
 			}
-			else if (_stateButtonAnimation === 4)
+			else if (_stateButtonDownloadAnimation === 1)
 			{
-			    if (fadeIn4 < 0.5)
+				transformTagButtonGallery[_indexButton] = "none";
+				
+				timePreviousRelative8 = performance.now();
+				timePreviousAbsolute8 = performance.now();
+				
+				_stateButtonDownloadAnimation = 2;
+			}
+			else if (_stateButtonDownloadAnimation === 2)
+			{
+				if (fadeIn8 < 0.1)
 				{
-					transformTagButtonGallery[_indexButton] = "scale(" + (1 + (0.15 * (1 - (fadeInLinear4 * 2)))) + ")";
+					transformTagButtonGallery[_indexButton] = "scale(" + (1 + (0.05 * (fadeInLinear8 * 10))) + ")";
+				}
+				else
+				{
+					transformTagButtonGallery[_indexButton] = "scale(" + 1.05 + ")";
+				}
+			}
+			else if (_stateButtonDownloadAnimation === 3)
+			{
+			    transformTagButtonGallery[_indexButton] = "scale(" + 1.05 + ")";
+			    
+			    timePreviousRelative8 = performance.now();
+				timePreviousAbsolute8 = performance.now();
+				
+				_stateButtonDownloadAnimation = 4;
+			}
+			else if (_stateButtonDownloadAnimation === 4)
+			{
+			    if (fadeIn8 < 0.1)
+				{
+					transformTagButtonGallery[_indexButton] = "scale(" + (1 + (0.05 * (1 - (fadeInLinear8 * 10)))) + ")";
 				}
 				else
 				{
 					transformTagButtonGallery[_indexButton] = "scale(" + 1 + ")";
 					
-					_stateButtonAnimation = 0;
+					_stateButtonDownloadAnimation = 0;
 					_inhibitNavigation = false;
 				}
 			}
 		}
-		////////////////////////////////////////BUTTON ANIMATION
-		////////////////////////////////////////VIDEO ANIMATION
+		////////////////////////////////////////BUTTON DOWNLOAD ANIMATION
+		////////////////////////////////////////BUTTON VIDEO ANIMATION
 		timePreviousRelative6 = time;
 		
 		fadeIn6 = (time - timePreviousAbsolute6) * 0.001;
@@ -1942,11 +1994,11 @@ function interfaceAnimation()
 		
 		if (_foundTagVideo === true)
 		{
-		    if (_stateVideoAnimation === 0)
+		    if (_stateButtonVideoAnimation === 0)
 		    {
 			    //VOID
 		    }
-		    else if (_stateVideoAnimation === 1)
+		    else if (_stateButtonVideoAnimation === 1)
 		    {
 			    //NEW FOR VIDEO
 		        cursorTagName = "auto";
@@ -1975,9 +2027,9 @@ function interfaceAnimation()
 			    timePreviousRelative6 = performance.now();
 			    timePreviousAbsolute6 = performance.now();
 			    
-			    _stateVideoAnimation = 2;
+			    _stateButtonVideoAnimation = 2;
 		    }
-		    else if (_stateVideoAnimation === 2)
+		    else if (_stateButtonVideoAnimation === 2)
 			{
 				if (fadeIn6 < 1)
 				{
@@ -2019,18 +2071,22 @@ function interfaceAnimation()
 				    _inhibitVideo = false;
 				}
 			}
-			else if (_stateVideoAnimation === 3)
+			else if (_stateButtonVideoAnimation === 3)
 			{
+				transformTagButtonGallery[_indexButton] = "scale(" + 1.15 + ")";
+			    
+			    opacityTagOverlayVideo = 1;
+				transformTagMediaVideo = "translateY(-50%) scale(" + 1.1 + ")";
+                cursorTagMediaVideo = "auto";
+                pointerEventsTagMediaVideo = "none";
+				
 			    //transformTagButtonGallery[_indexButton] = "scale(" + 1 + ")";
 			    timePreviousRelative6 = performance.now();
 				timePreviousAbsolute6 = performance.now();
 				
-				cursorTagMediaVideo = "auto";
-	            pointerEventsTagMediaVideo = "none";
-				
-				_stateVideoAnimation = 4;
+				_stateButtonVideoAnimation = 4;
 			}
-			else if (_stateVideoAnimation === 4)
+			else if (_stateButtonVideoAnimation === 4)
 			{
 			    if (fadeIn6 < 1)
 				{
@@ -2061,7 +2117,7 @@ function interfaceAnimation()
 	                cursorTagSubmitContactFooter = "pointer";
 	                pointerEventsTagSubmitContactFooter = "auto";
 			        
-					_stateVideoAnimation = 0;
+					_stateButtonVideoAnimation = 0;
 					_inhibitNavigation = false;
 					_inhibitVideo = false;
 					_inhibitAll = false;
@@ -2575,8 +2631,10 @@ function interfaceAnimation()
 	
 	_FUNCTION.pageshow = function()
 	{
+	    console.log("PAGE SHOW");
 		if (event.persisted === true)
 		{
+		    console.log("PAGE SHOW : event.persisted");
 			/*displayTagOverlayTransitionEnter = "visible";
 			opacityTagOverlayTransitionEnter = 1;
 			transformTagOverlayTransitionEnter = "none";
@@ -2637,7 +2695,8 @@ function interfaceAnimation()
 		}
 	}
 	
-	window.addEventListener("pageshow", _FUNCTION.pageshow, { once: true });
+	//window.addEventListener("pageshow", _FUNCTION.pageshow, { once: true });
+	window.addEventListener("pageshow", _FUNCTION.pageshow);
 	
 	/*_FUNCTION.focus = function()
     {
@@ -2702,7 +2761,92 @@ function href()
 		
 		if (HREF !== null)
 		{
-			_FUNCTION.clickButton = function()
+		    if (TYPE === "link")
+		    {
+		        _FUNCTION.clickButtonLink = function()
+			    {
+			        if (_inhibitNavigation === false)
+				    {
+					    _inhibitNavigation = true;
+					    
+					    _indexButton = INDEX;
+					    
+					    _stateButtonLinkAnimation = 1;
+					    
+					    setTimeout(() =>
+					    {
+					        clean();
+						    window.location.href = HREF;
+					    }, 1100);
+					}
+			    }
+			    
+			    _tagButtonGallery[INDEX].addEventListener("click", _FUNCTION.clickButtonLink);
+			}
+			else if (TYPE === "download")
+		    {
+		        _FUNCTION.clickButtonDownload = function()
+			    {
+			        if (_inhibitNavigation === false)
+				    {
+					    _inhibitNavigation = true;
+					    
+					    _indexButton = INDEX;
+					    
+					    _stateButtonDownloadAnimation = 1;
+					    
+					    setTimeout(() =>
+					    {
+					        window.location.href = HREF;
+						    _stateButtonDownloadAnimation = 3;
+					    }, 200);
+					}
+			    }
+			    
+			    _tagButtonGallery[INDEX].addEventListener("click", _FUNCTION.clickButtonDownload);
+			}
+			else if (TYPE === "video")
+		    {
+		        _FUNCTION.clickButtonVideo = function()
+			    {
+			        if (_inhibitNavigation === false)
+				    {
+					    _inhibitNavigation = true;
+					    
+					    _indexButton = INDEX;
+					    
+					    _inhibitVideo = true;
+					    _inhibitAll = true;
+					    
+					    _tagVideo.src = HREF;
+					    
+					    _stateButtonVideoAnimation = 1;
+					    
+					    setTimeout(() =>
+					    {
+					        _tagVideo.play();
+					    }, 1100);
+					}
+			    }
+			    
+			    _tagButtonGallery[INDEX].addEventListener("click", _FUNCTION.clickButtonVideo);
+			}
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			/*
+			_FUNCTION.clickButtonLink = function()
 			{
 				if (_inhibitNavigation === false)
 				{
@@ -2721,7 +2865,7 @@ function href()
 					    
 					    _tagVideo.src = HREF;
 					    
-					    _stateVideoAnimation = 1;
+					    _stateButtonVideoAnimation = 1;
 					    //_tagOverlayVideo.style.opacity = 1;
 					    //_tagOverlayVideo
                         //_tagMediaVideo
@@ -2758,6 +2902,7 @@ function href()
 			}
 			
 			_tagButtonGallery[INDEX].addEventListener("click", _FUNCTION.clickButton);
+			*/
 		}
 	}
 	
@@ -2801,8 +2946,9 @@ function exitVideo()
 			    //_inhibitNavigation = true;
 			    //_inhibitVideo = true;
 			    //_inhibitAll = true;
+			    _tagVideo.pause();
 			    
-			    _stateVideoAnimation = 3;
+			    _stateButtonVideoAnimation = 3;
 		    }
 	    }
 	    
@@ -2900,11 +3046,23 @@ function clean()
 	for (index = 0; index < _countTagButton; index++)
 	{
 		const HREF = _tagButtonGallery[index].getAttribute("href");
+		const TYPE = _tagButtonGallery[index].getAttribute("data-type");
 		const INDEX = index;
 		
 		if (HREF !== null)
 		{
-			_tagButtonGallery[INDEX].removeEventListener("click", _FUNCTION.clickButton);
+		    if (TYPE === "link")
+		    {
+			    _tagButtonGallery[INDEX].removeEventListener("click", _FUNCTION.clickButtonLink);
+			}
+			else if (TYPE === "download")
+		    {
+			    _tagButtonGallery[INDEX].removeEventListener("click", _FUNCTION.clickButtonDownload);
+			}
+			else if (TYPE === "video")
+		    {
+			    _tagButtonGallery[INDEX].removeEventListener("click", _FUNCTION.clickButtonVideo);
+			}
 		}
 	}
 	

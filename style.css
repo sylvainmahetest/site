@@ -3996,7 +3996,7 @@ body img
 	image-orientation: none;
 	transform-origin: center;
 	transform: none;
-	filter: grayscale(1);
+	filter: grayscale(0.75);
 	user-select: none;
 	cursor: auto;
 	pointer-events: none;
@@ -4561,7 +4561,7 @@ body video
 	image-orientation: none;
 	transform-origin: center;
 	transform: none;
-	filter: grayscale(1);
+	filter: grayscale(0.75);
 	user-select: none;
 	cursor: auto;
 	pointer-events: none;
