@@ -741,13 +741,39 @@ function particuleAnimation()
 	
 	_FUNCTION.wheel = function (event)
 	{
-		if (event.deltaY < 0)
-		{
-			_eventScroll += 75;
+	    if (event.deltaMode === 1)
+	    {
+	        if (event.deltaY != 0)
+	        {
+			    _eventScroll -= event.deltaY * 10;
+		    }
+		    /*
+		    if (event.deltaY < 0)
+		    {
+			    _eventScroll -= event.deltaY * 10;
+			    //_eventScroll += 75;
+		    }
+		    else if (event.deltaY > 0)
+		    {
+			    _eventScroll -= event.deltaY * 10;
+			    //_eventScroll -= 75;
+		    }*/
 		}
-		else if (event.deltaY > 0)
+		else
 		{
-			_eventScroll -= 75;
+		    if (event.deltaY != 0)
+	        {
+			    _eventScroll += event.deltaY * 0.5;
+		    }
+		    /*
+		    if (event.deltaY < 0)
+		    {
+			    _eventScroll += event.deltaY * 0.5;
+		    }
+		    else if (event.deltaY > 0)
+		    {
+			    _eventScroll += event.deltaY * 0.5;
+		    }*/
 		}
 	}
 	
